@@ -1,0 +1,143 @@
+# Model specification: Stages 1-4
+
+Status: provisional design approved by the user on 2026-10-23. Distribution
+primitives, completed BPCS data validation, likelihood evaluation, and profile/
+direct MLE estimation are implemented. Uncertainty, experimental simulation,
+Bayesian estimation, and real-data analysis remain deferred.
+The repository root is the project root; existing `Readme.md` is updated in place and `References/` retains its original
+capitalization. The filesystem treats README.md and Readme.md as the same path.
+
+## Evidence and design decisions
+
+The original project statement from `../Readme.md` is preserved verbatim in
+`PROJECT_STATEMENT.md`. It requires MLEs, independent
+or joint Bayesian priors, unrestricted and order-restricted estimation, a full
+simulation study, and validation using suitable datasets. It supplies no block
+counts, sample sizes, schedules, parameter-sharing rules, cause-observation
+rules, restriction direction, or named reliability targets. No separate detailed
+project statement was found. All three reference PDFs are available locally.
+
+| Item | Provisional decision explicitly supplied by the user | Literature context |
+| --- | --- | --- |
+| Blocks | Any configurable k; start later testing with k=2 | Reference 1 — Wang et al. (2023), Section 2.1, Eq. (4), allows k facilities |
+| Units/failures | Configurable n_i and m_i, 1 <= m_i <= n_i | Reference 1 — Wang et al. (2023), Section 2.1 |
+| Withdrawals | Fixed configurable R_i=(r_i1,...,r_i,m_i), nonnegative integers; n_i=m_i+sum_j r_ij for a completed block | Progressive Type-II experiment within each block; Reference 1 — Wang et al. (2023), Section 2.1 |
+| Sharing | One a>0 across blocks and causes; separate b_i1,b_i2>0 for every block | Our Kumaraswamy adaptation; not a stated requirement in the project statement |
+| Causes | Exactly two independent latent causes; all recorded causes initially known, coded 1 or 2 | Reference 2 — Wang (2018), Section 2, independence and complete causes; Reference 1 — Wang et al. (2023), Eq. (4) |
+| Restrictions | Baseline unrestricted beyond positivity; optional b_i1 <= b_i2 later if justified | Project requires eventual order-restricted analysis; it does not specify an order |
+| Targets | Per-block survival, hazard, median time to failure (MTF), and cause-specific failure probabilities | User-selected targets; do not substitute IEED formulas |
+
+Here MTF means **median**, not mean, time to failure.
+No research-study n_i, m_i, R_i, true parameter values, or mission times have been
+selected. Stage 2 provides a hand-constructed k=2 teaching example with different
+block sizes and schedules; its numbers do not fix future experiment designs.
+Neither equality of block sizes/schedules nor pooling of b values is assumed.
+The implementation accepts any positive k.
+
+## Probability model
+
+For block i=1,...,k and unit u=1,...,n_i, let
+
+\[
+T_{iu1}\sim Kw(a,b_{i1}),\qquad T_{iu2}\sim Kw(a,b_{i2}),
+\quad X_{iu}=\min(T_{iu1},T_{iu2}),\quad
+\delta_{iu}=\arg\min_{c\in\{1,2\}}T_{iuc}.
+\]
+
+All latent lifetimes are independent across causes, units, and blocks.
+Units are identically distributed within a block, but generally not across
+blocks. Shared a is a fixed unknown parameter, not a random effect. It is a
+modeling restriction, not a consequence of independence. Both a and b are shape
+parameters. There are 1+2k free parameters in this provisional baseline.
+The three-parameter model is the k=1 special case.
+
+Support is 0<t<1 on a fixed dimensionless scale. Continuous latent times imply
+ties have probability zero. Rounded observed ties require a future measurement
+model or documented treatment. No data-dependent maximum scaling is authorized.
+If a real dataset needs a transformation, its bounds, units, and likelihood
+Jacobian must be justified before fitting.
+
+Write B_i=b_i1+b_i2. Then X_iu ~ Kw(a,B_i), with
+
+\[
+S_i(t)=(1-t^a)^{B_i},\qquad
+h_i(t)=\frac{aB_i t^{a-1}}{1-t^a},\qquad
+\operatorname{MTF}_i=(1-2^{-1/B_i})^{1/a}.
+\]
+
+Cause probabilities are P(delta=c)=b_ic/B_i. Cumulative incidence is
+P(X<=t,delta=c)=(b_ic/B_i)[1-S_i(t)]. These refer to observed competing failures;
+the latent CDF for cause c is different. Stage 1 is implemented per block with
+`CompetingRisks(a,b_i1,b_i2)`; its `.minimum` exposes S_i, h_i, and MTF through
+`.sf(t)`, `.hazard(t)`, and `.median()`.
+
+## Likelihood structure implemented in Stage 3
+
+Implemented observation fields: `block`, `time`, `cause`, `withdrawals`, accompanied
+by explicit block metadata n_i, m_i, R_i. `src/censoring.py` supplies immutable
+`BlockScheme`, `Observation`, `BlockData`, and `BPCSExperiment` objects. Completed
+blocks validate risk-set transitions, scheme/row agreement, strictly ordered
+interior failure times, and fully observed causes. Block IDs must be unique in
+the experiment; times may overlap across blocks. See `BPCS_GUIDE.md` for the
+step-by-step example and validation contracts.
+
+`Observation.cause=None` reserves an unknown-cause representation, but current
+`BlockData` validation rejects it. Missing causes are not observations of a third
+cause. A missingness model must be specified before they enter a likelihood.
+
+At a known cause-c failure, the joint time/cause density is
+g_ic(t)=f_ic(t) S_i,other(t). A surviving withdrawn unit contributes S_i(t):
+its exact failure time is unknown, but it is known to exceed t. Under uniform
+random, noninformative removal of survivors, each row therefore contributes
+g_i,cause(time) times S_i(time) raised to its withdrawal count. A block multiplies
+these contributions with its parameter-independent progressive-ordering factor;
+independent blocks multiply. Stage 3 derives and implements the exact ordered-data
+likelihood and log-likelihood in `src/likelihood.py`. Its block constant is
+C_i=product_j Y_ij, where Y_ij is the pre-failure risk-set size. Full constants
+are included by default; `include_constant=False` removes only their logarithm.
+See DERIVATIONS.md, (L1)-(L8), for the complete derivation, event convention,
+time-only versus parameter-dependent terms, numerical contracts, and example.
+Stage 4 derives all scores and implements profile and independent direct MLEs
+in `src/mle.py`; see DERIVATIONS.md, (M1)-(M8). The model's parameter domain
+remains strictly positive. An estimate reported as zero for a zero observed
+cause count is a closure limit with status `boundary_supremum`, not a change to
+the latent distribution assumptions or a positive-domain MLE. If every block
+has only one observed failure, the likelihood is unbounded and no finite
+parameter vector is reported. The finite maximum is unique when some block
+has at least two strictly ordered failures, with interior attainment requiring
+positive counts for both causes in every block. Numerical failure remains
+distinct from these mathematical classifications.
+
+There is no single pooled-population survival curve without specifying a target
+population and block weights. A weighted mean of b parameters does not generally
+produce the survival mixture over facilities. Facility contrasts and any pooled
+target remain to be specified later.
+
+## Differences from the references
+
+- **Reference 1 — Wang et al. (2023):** *Inference for block progressive censored
+  competing risks data from an inverted exponentiated exponential model.*
+  Local file: `../References/Reference_1.pdf`; DOI 10.1002/qre.3382.
+  Its Section 2.1 and Eq. (4) supply the block design and observation organization;
+  Eqs. (5)-(7) describe IEED with facility-specific theta_is and shared lambda.
+  Our b_ic and a sharing structure is analogous but uses a different distribution,
+  support, and mathematical formulas. Its Eq. (8) requires care; see research notes.
+  Its weighted parameter summaries and hierarchical model are not adopted.
+- **Reference 2 — Wang (2018):** *Inference of progressively censored competing
+  risks data from Kumaraswamy distributions.* Local file:
+  `../References/Reference_2.pdf`; DOI 10.1016/j.cam.2018.05.013.
+  Eq. (1), printed p.720 (PDF p.2), defines Kw(alpha,beta), with a=alpha,
+  b=beta here. Eq. (3), printed p.721, gives independent cause and survival
+  contributions for a single progressive Type-II block. Section 3.2 includes
+  alpha_1=alpha_2; general results also permit unequal alpha values. Neither the
+  full block design nor global sharing across facilities follows from that paper.
+- **Reference 3 — Mahto et al. (2022):** *Inference for partially observed
+  competing risks model for Kumaraswamy distribution under generalized progressive
+  hybrid censoring.* Local file: `../References/Reference_3.pdf`;
+  DOI 10.1080/02664763.2021.1889999. Eqs. (1)-(2), printed p.2066 (PDF p.3),
+  use common alpha and cause parameters lambda_j. Sections 2.1 and 4 address
+  missing causes, hybrid stopping, and restrictions. We do not adopt its hybrid
+  stopping rule, missingness probability, or restrictions in the baseline.
+
+These are supporting structures, not proof that our adapted BPCS model or its
+MLEs have any existence, uniqueness, or asymptotic properties without derivation.

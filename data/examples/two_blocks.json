@@ -1,0 +1,22 @@
+{
+  "description": "Hand-constructed teaching data; not simulated, fitted, or published observations.",
+  "blocks": [
+    {
+      "scheme": {"block": "A", "n": 6, "m": 3, "withdrawals": [1, 0, 2]},
+      "observations": [
+        {"block": "A", "time": 0.15, "cause": 1, "withdrawals": 1},
+        {"block": "A", "time": 0.40, "cause": 2, "withdrawals": 0},
+        {"block": "A", "time": 0.70, "cause": 1, "withdrawals": 2}
+      ]
+    },
+    {
+      "scheme": {"block": "B", "n": 7, "m": 4, "withdrawals": [0, 1, 0, 2]},
+      "observations": [
+        {"block": "B", "time": 0.10, "cause": 2, "withdrawals": 0},
+        {"block": "B", "time": 0.25, "cause": 1, "withdrawals": 1},
+        {"block": "B", "time": 0.55, "cause": 2, "withdrawals": 0},
+        {"block": "B", "time": 0.80, "cause": 2, "withdrawals": 2}
+      ]
+    }
+  ]
+}

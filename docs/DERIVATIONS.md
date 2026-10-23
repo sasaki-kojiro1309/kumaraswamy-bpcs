@@ -1,0 +1,750 @@
+# Distribution, likelihood, and MLE derivations (Stages 1, 3, and 4)
+
+These are our derivations and validation identities, not copied BPCS estimators.
+Reference labels below retain the project naming convention. All formulas here
+use a,b>0 and 0<t<1. Both parameters are shapes.
+
+## One latent lifetime
+
+**Reference 2 — Wang (2018)**, Eq. (1), printed p.720 (PDF p.2), gives
+the Kumaraswamy CDF. Our a,b equal its alpha,beta. Consequently,
+
+\[
+F(t)=1-(1-t^a)^b,\qquad S(t)=P(T>t)=1-F(t)=(1-t^a)^b. \tag{D1}
+\]
+
+The CDF answers "what fraction has failed by t?" Survival answers "what fraction
+lasts beyond t?" A withdrawal at t supplies precisely the latter information.
+Differentiating the CDF by the chain rule gives
+
+\[
+f(t)=F'(t)=-b(1-t^a)^{b-1}(-at^{a-1})
+=ab t^{a-1}(1-t^a)^{b-1}. \tag{D2}
+\]
+
+For a small dt, f(t)dt approximates the chance of failure in (t,t+dt).
+It is a density, so its value can exceed one. Substitute u=t^a, du=a t^(a-1)dt:
+integral_0^1 f(t)dt = integral_0^1 b(1-u)^(b-1)du = 1.
+This also proves T^a ~ Beta(1,b), used as an independent SciPy test oracle.
+
+The hazard conditions on having survived:
+
+\[
+h(t)=\lim_{dt\downarrow0}\frac{P(t<T\le t+dt\mid T>t)}{dt}
+=\frac{f(t)}{S(t)}=\frac{ab t^{a-1}}{1-t^a}
+=-\frac{d}{dt}\log S(t). \tag{D3}
+\]
+
+It is a rate rather than a probability. We evaluate it directly, avoiding f/S
+when both probabilities underflow. The shapes a=b=1 give the uniform distribution.
+
+## Two independent competing causes within a block
+
+Suppress block i for readability. Independence gives
+
+\[
+P(X>t)=P(T_1>t,T_2>t)=S_1(t)S_2(t)
+=(1-t^a)^{b_1+b_2}.\quad X\sim Kw(a,B),\ B=b_1+b_2. \tag{D4}
+\]
+
+This is a minimum, not a mixture. It requires a common a across causes.
+If the two a values differ, the product survival remains valid, but it is not
+generally a Kumaraswamy distribution. The observed failure density is -S_X'(t),
+and the observed hazard is h_1(t)+h_2(t).
+
+To observe cause c at t, cause c must fail at t while the other cause survives:
+
+\[
+g_c(t)=f_c(t)S_{3-c}(t)
+=ab_c t^{a-1}(1-t^a)^{B-1}
+=\frac{b_c}{B}f_X(t). \tag{D5}
+\]
+
+This joint time/cause **subdensity** integrates to the probability of its cause,
+not to one. The two subdensities sum to f_X. Its structure follows independently
+from the event definition and agrees with **Reference 2 — Wang (2018)**,
+Section 2, Eq. (3), printed p.721 (PDF p.3). **Reference 1 — Wang et al. (2023)**,
+Section 2.1, Eqs. (4)-(7), has the analogous block organization for IEED, whose
+specific density formulas are not used here.
+
+Integrating (D5) yields
+
+\[
+P(\delta=c)=\frac{b_c}{B},\qquad
+G_c(t)=P(X\le t,\delta=c)=\frac{b_c}{B}F_X(t). \tag{D6}
+\]
+
+These are cause-specific failure probabilities over the whole lifetime and by
+mission time, respectively. G_c is cumulative incidence, not F_c. Because the
+ratio g_c/f_X is constant, X and delta are independent under this shared-a
+model. This is a derived property, not a general fact about competing risks.
+The cause-specific observed hazard g_c/S_X equals the latent hazard h_c under
+the assumed independent latent model.
+
+The median solves S_X(t)=1/2, giving
+
+\[
+\operatorname{MTF}=[1-2^{-1/B}]^{1/a}. \tag{D7}
+\]
+
+This uses the Kumaraswamy survival; **Reference 1 — Wang et al. (2023)** uses
+an IEED median formula for a different distribution.
+Substitution verifies F_X(MTF)=S_X(MTF)=1/2.
+
+## Numerical conventions and limitations
+
+- `Kumaraswamy` exposes pdf/logpdf, cdf, sf/logsf, hazard, and median.
+  `CompetingRisks.minimum` exposes the corresponding observed-lifetime functions;
+  `cause_pdf`, `cause_logpdf`, `cause_cdf`, and `cause_probability` distinguish the
+  joint failures from the latent lifetimes.
+- Parameters must be positive finite scalars, with finite b1+b2. Times accept
+  NumPy array shapes or scalars; NaNs raise ValueError. Parameter arrays are not
+  supported. One object represents one block.
+- For t<=0, CDF=0 and SF=1; for t>=1, CDF=1 and SF=0. Density is assigned zero
+  at and outside the endpoints. A boundary density value is arbitrary for a
+  continuous distribution; this convention does not claim its limiting value
+  is zero (it can diverge). There are no point masses at 0 or 1.
+- Hazard rejects times outside the open interval; endpoint limits may be infinite.
+  Later observed failure data must lie strictly inside the support.
+- Compute z=a log(t) and log(1-exp(z)) using `log1p(-exp(z))` when z<=-log(2)
+  and `log(-expm1(z))` otherwise. Compute F=-expm1(log S).
+  These avoid cancellation near both ends. Logarithms retain information when
+  ordinary probabilities underflow. No epsilon replaces a time or parameter.
+- Float64 still has finite range: extreme densities/hazards can overflow, tiny
+  probabilities can underflow, and extreme medians can round to endpoints.
+  Tests cover representative tails, not arbitrary precision or every positive
+  parameter value. Boundary MLE behavior is a future estimation concern.
+
+## Validation scope
+
+`tests/test_model.py` checks integration including integrable singularities,
+the transformed Beta CDF and density, derivatives F'=f and -(log S)'=h,
+survival complement and monotonicity, latent-product versus observed-minimum
+identities, subdensity integrals and sums, cause cumulative incidence, median
+inversion, uniform special case, support conventions, invalid inputs, scalar
+and array behavior, and cancellation/underflow examples.
+
+These checks validate the distribution layer. No likelihood estimates, published
+numerical tables, censoring simulator, or MLE uncertainty results have been
+reproduced yet. Those require the later milestones and matching assumptions.
+
+## Stage 3: notation and observation convention
+
+Fix the completed schemes R_i and sizes n_i,m_i before testing. For each block
+i=1,...,k the data are the ordered times and causes
+0<x_i1<...<x_i,m_i<1, delta_ij in {1,2}, with known withdrawals r_ij.
+The two independent latent lifetimes follow Kw(a,b_i1), Kw(a,b_i2).
+One a>0 is shared across every block and cause; all b_ic>0 are block-specific.
+Units are independent within and across blocks. Let
+
+\[
+B_i=b_{i1}+b_{i2},\quad
+q_{ij}(a)=1-x_{ij}^{a},\quad
+d_{ic}=\sum_{j=1}^{m_i}\mathbf1\{\delta_{ij}=c\},\quad
+M=\sum_{i=1}^k m_i.
+\]
+
+The schedule is treated as fixed, not assigned a probability model. Removal is
+uniform random among survivors, independent of latent lifetimes and causes.
+The recorded data omit individual unit identities and keep each failure's cause
+alongside its ordered time. Thus the sampling density is with respect to
+Lebesgue measure on each block's ordered time region and counting measure on
+its cause sequence. The likelihood as a function of parameters is that density
+evaluated at the observed data; it is not the probability of exact continuous
+times and need not be bounded by one.
+
+The original experiment in **Reference 1 — Wang et al. (2023)**, Section 2.1,
+Eq. (4), printed p.2741 / PDF p.6, has this block organization but uses IEED.
+Its Section 2.2, Eqs. (8)-(9), printed p.2746 / PDF p.11, motivates multiplication
+within and across facilities. The following derivation uses our Kumaraswamy
+event probabilities, not IEED density or survival expressions.
+
+## Stage 3: failure and withdrawal contributions from first principles
+
+If the unit fails from cause 1 near x, its first latent lifetime must end near x
+and its second latent lifetime must exceed x. Independence therefore gives
+
+\[
+g_{i1}(x)=f_{i1}(x)S_{i2}(x)
+=a b_{i1}x^{a-1}(1-x^a)^{B_i-1}.
+\]
+
+Interchanging causes gives
+
+\[
+g_{i2}(x)=f_{i2}(x)S_{i1}(x)
+=a b_{i2}x^{a-1}(1-x^a)^{B_i-1}. \tag{L1}
+\]
+
+Here g_ic(x)dx approximates the joint probability of failure in (x,x+dx) from
+cause c. It is not f_ic(x), because that latent density alone does not require
+the other cause to survive. It is also not a density conditional on a chosen
+cause: g_ic integrates to b_ic/B_i. These statements follow from (D4)-(D6).
+
+A unit withdrawn alive at x supplies the event X>x, with probability
+S_i(x)=S_i1(x)S_i2(x)=(1-x^a)^B_i. It has not failed at x and its eventual cause
+is not observed. Independence across units gives S_i(x)^r for r survivors.
+Combining one failure and its withdrawals gives the parameter-dependent row factor
+
+\[
+g_{i,\delta_{ij}}(x_{ij})S_i(x_{ij})^{r_{ij}}
+=a b_{i,\delta_{ij}}x_{ij}^{a-1}
+q_{ij}(a)^{(r_{ij}+1)B_i-1}. \tag{L2}
+\]
+
+The r+1 appears because both the failed unit and the r withdrawn units have
+survival factors; the failure density removes one power of 1-x^a. This is an
+algebraic statement about distinct units, not r+1 observed failures.
+
+## Stage 3: derive the censoring constant using conditional risk sets
+
+The row factors above do not by themselves establish the joint density of
+ordered failure times. Successive failure times are not independent. To derive
+the exact constant without counting the same survival event twice, use the
+conditional experiment. Write x_i0=0 and
+
+\[
+Y_{ij}=n_i-(j-1)-\sum_{\ell<j}r_{i\ell},\qquad
+Y_{i,j+1}=Y_{ij}-1-r_{ij}.
+\]
+
+Given the history through x_i,j-1, the Y_ij remaining units each have lifetime
+conditional on exceeding x_i,j-1. For the next observed failure at x_ij from
+cause delta_ij:
+
+- Any one of the Y_ij exchangeable units can fail, giving factor Y_ij.
+- That unit contributes g_i,delta(x_ij)/S_i(x_i,j-1).
+- The other Y_ij-1 units must survive to x_ij, giving
+  [S_i(x_ij)/S_i(x_i,j-1)]^(Y_ij-1).
+
+The conditional next-failure density is therefore
+
+\[
+Y_{ij}g_{i,\delta_{ij}}(x_{ij})
+\frac{S_i(x_{ij})^{Y_{ij}-1}}{S_i(x_{i,j-1})^{Y_{ij}}}. \tag{L3}
+\]
+
+After failure, each eligible set of r_ij survivors has equal selection probability
+1/binom(Y_ij-1,r_ij). Because withdrawal identities are not part of these records,
+summing over those sets cancels this selection probability. There is no extra
+binomial or withdrawal-factorial factor to insert into (L3).
+
+Multiply (L3) over j. At each nonterminal time x_ij, the net survival exponent is
+(Y_ij-1)-Y_i,j+1=r_ij. At the final failure, all remaining survivors are removed,
+so Y_i,m_i-1=r_i,m_i; no denominator from a further failure exists. The initial
+denominator is S_i(0)^n_i=1. Thus
+
+\[
+L_i(a,b_{i1},b_{i2};D_i,R_i)
+=C_i\prod_{j=1}^{m_i}
+g_{i,\delta_{ij}}(x_{ij})S_i(x_{ij})^{r_{ij}},\qquad
+C_i=\prod_{j=1}^{m_i}Y_{ij}. \tag{L4}
+\]
+
+This is the exact density for our ordered, unlabeled records, conditional on the
+scheme. For labeled individual histories an additional selection/labeling
+convention can change parameter-free factors; that is a different recorded
+sample space. No such identities are stored by our Stage 2 data structures.
+
+As checks: complete data give C_i=n_i!; ordinary Type-II censoring gives
+C_i=n_i!/(n_i-m_i)!; one observed failure gives C_i=n_i. For our general
+progressive schedule it is the product of risk sets, not generally n_i! or m_i!.
+
+The constants match **Reference 2 — Wang (2018)**, Eq. (3), printed p.721 /
+PDF p.3: its c=n product_{j=1}^{m-1}[n-sum_{ell<=j}(r_ell+1)] is precisely
+product_j Y_j. Its Eq. (1), printed p.720 / PDF p.2, supplies the underlying
+Kumaraswamy density and survival. Restricting its two alpha values to our shared
+a yields (L2)-(L4) for one block. We then retain separate b values across blocks.
+
+## Stage 3: block likelihood and combined experiment
+
+Collecting the factors in (L2) by cause gives
+
+\[
+L_i=C_i a^{m_i}b_{i1}^{d_{i1}}b_{i2}^{d_{i2}}
+\prod_{j=1}^{m_i}x_{ij}^{a-1}
+q_{ij}(a)^{(r_{ij}+1)B_i-1}. \tag{L5}
+\]
+
+There is no factor m_i!/(d_i1!d_i2!) here: each observed cause is already paired
+with its ordered failure time. The powers b_ic^d_ic collect those particular
+marks without summing over different cause sequences. Summing (L4) over every
+cause sequence instead recovers the time-only progressively censored density
+C_i product_j f_Xi(x_ij) S_i(x_ij)^r_ij.
+
+Independence of blocks conditional on the fixed parameters gives
+
+\[
+L(a,\{b_{ic}\};D,R)=\prod_{i=1}^k L_i
+=C a^M\prod_{i=1}^k b_{i1}^{d_{i1}}b_{i2}^{d_{i2}}
+\prod_{i=1}^k\prod_{j=1}^{m_i}
+x_{ij}^{a-1}q_{ij}(a)^{(r_{ij}+1)B_i-1},
+\quad C=\prod_i C_i. \tag{L6}
+\]
+
+Sharing a does not introduce dependence between blocks at fixed parameters.
+If a future Bayesian model integrates out a shared random parameter, the
+marginal dependence question is different; (L6) remains the conditional
+likelihood used with its prior.
+
+## Stage 3: full log-likelihood and constants
+
+Taking logarithms of (L6) gives
+
+\[
+\ell=\log C+M\log a+
+\sum_i\sum_{c=1}^2 d_{ic}\log b_{ic}
++(a-1)\sum_{i,j}\log x_{ij}
++\sum_{i,j}[(r_{ij}+1)B_i-1]\log(1-x_{ij}^a). \tag{L7}
+\]
+
+All logarithms are natural. The full expression retains all factors for our data
+convention. Its parameter-free censoring term is log C=sum_ij log Y_ij. This
+depends only on the fixed scheme, not on times, causes, or lifetime parameters.
+
+For future algebra define
+
+\[
+T_i=\sum_j\log x_{ij},\quad
+H_i(a)=\sum_j\log(1-x_{ij}^a),\quad
+W_i(a)=-\sum_j(r_{ij}+1)\log(1-x_{ij}^a)>0.
+\]
+
+Then an equivalent expression is
+
+\[
+\ell=\log C+M\log a+\sum_{i,c}d_{ic}\log b_{ic}
++(a-1)\sum_i T_i-\sum_i B_i W_i(a)-\sum_i H_i(a). \tag{L8}
+\]
+
+Only T_i is independent of a among these three summaries. In particular,
+-sum_i H_i(a) cannot be dropped as a constant: it depends on the unknown a.
+If (a-1)sum_i T_i is expanded as a sum_i T_i - sum_i T_i, the last term is a
+time-only, parameter-free constant. Our implementation keeps it even when
+`include_constant=False`: that option removes **only log C**, not time factors.
+
+For fixed data and the same model, omitting log C leaves likelihood ratios in
+parameters and eventual maximizers unchanged. A posterior normalized over those
+same parameters is likewise unchanged because C cancels. However, the full
+sampling density, absolute log-likelihood, and any marginal likelihood for that
+recorded experiment require the appropriate constant. Comparing different data
+conventions or experiments requires matching the underlying sample spaces;
+different constants cannot simply be treated as universally interchangeable.
+
+## Stage 3: reference comparison and safeguards
+
+- **Reference 1 — Wang et al. (2023)** supplies the BPCS structure, independent
+  block product, and facility-specific cause parameters. Its Eq. (8) displays
+  f_2(x)[1-S_1(x)] in one term, an apparent notation error already visually
+  verified and recorded in RESEARCH_NOTES.md. Event reasoning requires f_2 S_1,
+  and the withdrawal survival must be evaluated at x_ij. We do not reproduce
+  those notational errors or transfer its IEED-specific formulas.
+- **Reference 2 — Wang (2018)**, Eqs. (1) and (3), supplies matching distribution
+  and single-block event structure. Its Eq. (5) places the time-only term
+  -sum log x in its additive constant. Equation (L7) retains it within
+  (a-1)sum log x. These are equivalent conventions after alpha_1=alpha_2=a.
+- No missing causes are introduced. Our Stage 2 `BlockData` rejects them. There
+  is no hybrid terminal time, missingness probability, prior, or order restriction.
+  No claims about existence, uniqueness, concavity, or asymptotic distributions
+  of block-model MLEs are inferred from the reference papers.
+
+## Stage 3: implementation contract and numerical behavior
+
+`../src/likelihood.py` exposes:
+
+| Function | Input and result |
+| --- | --- |
+| `block_loglikelihood(block,a,b1,b2,include_constant=True)` | Validated `BlockData`; one block's full log-likelihood |
+| `block_likelihood(...)` | Exponential of the same block log-likelihood |
+| `loglikelihood(data,a,b_by_block,include_constant=True)` | Validated `BPCSExperiment`; one shared a and a mapping from exact block IDs to (b1,b2); sum of block log-likelihoods |
+| `likelihood(...)` | Exponential of that combined log-likelihood |
+| `log_censoring_constant(data)` | Log C for one block or a whole experiment, using Stage 2 risk sets |
+
+`include_constant` is keyword-only. The parameter mapping must have exactly the
+data block IDs; mapping insertion order is irrelevant. Scalars must be real,
+positive, and finite; each b1+b2 must be finite. Booleans, strings, complex
+parameters, and parameter arrays are rejected. NumPy real scalar values work
+with future optimizer/sampler adapters. Block-specific shapes a are deliberately
+not accepted by the joint API.
+
+The implementation sums Stage 1 `cause_logpdf` and r times minimum `logsf`.
+It therefore reuses the established log1p/expm1 computation of log(1-t^a) and
+does not multiply tiny probabilities. `math.fsum` accumulates log terms and
+sum log Y computes log C without forming a potentially overflowing product.
+No Stage 1 or Stage 2 implementation or test was modified for this milestone.
+
+Invalid input raises ValueError. If mathematically finite logs cannot be
+represented in float64, the evaluator raises FloatingPointError instead of
+silently producing NaN. Finite-range limitations still apply to extreme shapes.
+Ordinary likelihoods can underflow to 0 or overflow to infinity even when their
+logarithms are useful; they are not clipped or replaced with epsilon. Use the
+log APIs for inference. A future optimizer or sampler must distinguish invalid
+parameter proposals from numerical failures; no proposal-handling policy,
+prior evaluation, parameter transform, or estimation wrapper is added here.
+
+## Stage 3: work through the two-block teaching data
+
+Use `../experiments/stage3_example.py` with the unchanged Stage 2 teaching data.
+The chosen parameters are a=2, (b_A1,b_A2)=(1,2), (b_B1,b_B2)=(.8,1.2).
+They are illustrative values, not estimates.
+
+Block A has times (.15,.40,.70), causes (1,2,1), R=(1,0,2), and B_A=3.
+The q values are (.9775,.84,.51). Each row's exponent is (r+1)B-1, hence
+(5,2,8). The cause counts are (2,1), so (L5) gives
+
+\[
+L_A/C_A=2^3(1)^2(2)^1(.15\cdot.40\cdot.70)
+(.9775)^5(.84)^2(.51)^8.
+\]
+
+The first row, for instance, is one cause-1 failure with factor
+2(1)(.15)(.9775)^2, multiplied by the withdrawn survivor's survival
+(.9775)^3. Their product is .3(.9775)^5. The terminal row contains one cause-1
+failure and two withdrawn survivors, producing power 2+2*3=8. The risk sets
+(6,4,3) give C_A=72.
+
+Block B has times (.10,.25,.55,.80), causes (2,1,2,2), R=(0,1,0,2), B_B=2,
+and q=(.99,.9375,.6975,.36). The exponents are (1,3,1,5) and counts (1,3):
+
+\[
+L_B/C_B=2^4(.8)^1(1.2)^3(.10\cdot.25\cdot.55\cdot.80)
+(.99)^1(.9375)^3(.6975)^1(.36)^5.
+\]
+
+The risk sets (7,6,4,3) give C_B=504, so C=72*504=36288.
+Executing the example gives the following values, rounded for presentation:
+
+| Quantity | A | B | Combined |
+| --- | ---: | ---: | ---: |
+| Log likelihood omitting C only | -6.246745074472 | -7.085625067089 | -13.332370141561 |
+| Log censoring constant | 4.276666119016 | 6.222576268071 | 10.499242387087 |
+| Full log-likelihood | -1.970078955456 | -.863048799018 | -2.833127754473 |
+| Full likelihood | .139445845770 | .421873910863 | .058828564309 |
+
+For example, T_A=-3.170085660699, W_A(2)=2.239901021181,
+H_A(2)=-.870454927531; substitution in (L8) reproduces A's result.
+The script prints every failure log-density and every withdrawal log-survival
+contribution, so the row calculations can be inspected individually.
+
+## Stage 3: validation and Stage 4 boundary
+
+`../tests/test_likelihood.py` compares against a hand-calculated uniform-minimum
+case, the expanded (L7), products of latent densities and survivals, and the
+conditional risk-set construction (L3). It tests block factorization, exact
+constants, mapping order, summation over all cause sequences, integration of
+full sampling densities over ordered times and causes, first-failure cause
+probabilities, single-cause blocks, cause relabeling, invalid parameters and
+mapping shapes, and probability underflow/density overflow.
+
+These are likelihood correctness checks, not fitted results or reproduction of
+the papers' MLE tables. Stage 4 must derive the scores for the shared a and all
+b_ic, investigate conditional analytic estimates/profile likelihood, treat
+zero-cause-count boundaries, choose parameter transformations and starting
+values, check convergence, and compare profile with direct optimization.
+At the end of Stage 3, no score solver, MLE, profile optimizer, or uncertainty
+method had been implemented. The following section implements Stage 4 only.
+
+## Stage 4: scores for our actual shared-a block model
+
+Start from our full log-likelihood (L8); no IEED derivative is substituted.
+For block i define u_ij=-log x_ij>0, w_ij=r_ij+1, and
+
+\[
+P_{ij}(a)=\frac{d}{da}\log(1-x_{ij}^a)
+=\frac{-x_{ij}^a\log x_{ij}}{1-x_{ij}^a}
+=\frac{u_{ij}}{e^{a u_{ij}}-1}>0.
+\]
+
+Thus W_i'(a)=-sum_j w_ij P_ij(a)<0 and H_i'(a)=sum_j P_ij(a)>0.
+Differentiation of (L8) gives all the interior score equations:
+
+\[
+U_{b_{ic}}=\frac{\partial\ell}{\partial b_{ic}}
+=\frac{d_{ic}}{b_{ic}}-W_i(a)=0,
+\qquad i=1,\ldots,k,\ c=1,2, \tag{M1}
+\]
+
+\[
+U_a=\frac{\partial\ell}{\partial a}
+=\frac{M}{a}+T-\sum_i B_i W_i'(a)-\sum_i H_i'(a)
+=\frac{M}{a}+T+\sum_{i,j}(B_iw_{ij}-1)P_{ij}(a)=0,
+\quad T=\sum_i T_i. \tag{M2}
+\]
+
+There is one equation for the shared a, not a separate a equation for each
+facility. All blocks contribute to that equation. The parameter-free censoring
+constant has zero derivative, but is retained when reporting log-likelihoods.
+
+The b score balances the observed failures d_ic against the weighted survival
+information W_i. The a score balances the time-shape contribution M/a+T against
+the changing survival factors; it depends on every failure and withdrawal.
+
+## Stage 4: conditional estimates and the meaning of a zero count
+
+For fixed a, each cause parameter occurs through
+d_ic log b_ic - b_ic W_i(a). If d_ic>0, its second derivative is
+-d_ic/b_ic^2<0, it tends to -infinity at zero and infinity, and its unique
+conditional maximum is
+
+\[
+\widehat b_{ic}(a)=\frac{d_{ic}}{W_i(a)}. \tag{M3}
+\]
+
+If d_ic=0, the contribution instead equals -b_ic W_i(a), strictly decreasing
+for b_ic>0. Its supremum occurs as b_ic decreases to zero. It has **no maximum
+in the original positive parameter space**. We report the limiting value zero
+with status `boundary_supremum`, not a tiny positive interior estimate.
+The one-sided raw derivative at this closure boundary is -W_i(a)<0.
+This survival penalty shows that a zero observed count does not mean the
+likelihood is independent of that parameter.
+
+Under the convention 0 log 0=0 for this limit, (M3) still gives the closure
+estimates. Because d_i1+d_i2=m_i>0,
+
+\[
+\widehat B_i(a)=\frac{m_i}{W_i(a)},\qquad
+\widehat p_{ic}=\frac{\widehat b_{ic}}{\widehat B_i}
+=\frac{d_{ic}}{m_i}. \tag{M4}
+\]
+
+One can see the separation by writing b_i1=B_i p_i and b_i2=B_i(1-p_i).
+The cause terms become m_i log B_i+d_i1 log p_i+d_i2 log(1-p_i), while
+the time/survival terms depend on B_i and a. Observed cause proportions determine
+p_i, including p_i=0 or 1 as a boundary limit.
+The profile estimate of a depends on times and withdrawals, not on allocation
+of the m_i observed failures between causes. This property relies on the
+shared-a model and known, noninformatively observed causes.
+
+## Stage 4: profile log-likelihood and profile score
+
+Substitute (M3) into (L8), observing that
+sum_c d_ic log(d_ic/W_i)=sum_c d_ic log d_ic-m_i log W_i and
+widehat B_i W_i=m_i. The full profile log-likelihood (or boundary supremum) is
+
+\[
+\ell_p(a)=\log C+M\log a+(a-1)T
++\sum_{i,c}d_{ic}\log d_{ic}
+-\sum_i m_i\log W_i(a)-M-\sum_i H_i(a). \tag{M5}
+\]
+
+Every coefficient m_i in front of log W_i is required by the substitution.
+The profile derivative is
+
+\[
+U_p(a)=\ell_p'(a)
+=\frac{M}{a}+T-\sum_i m_i\frac{W_i'(a)}{W_i(a)}-\sum_i H_i'(a)
+=U_a(a,\widehat b(a)). \tag{M6}
+\]
+
+The last equality also follows by the chain rule: interior conditional b scores
+are zero, and absent-cause closure coordinates are fixed at zero for every a.
+There is only one nonlinear parameter left to optimize.
+
+**Reference 1 — Wang et al. (2023)**, Section 3.1, Theorem 1 and the profile
+construction preceding Theorem 2 (printed pp.2748-2749 / PDF pp.13-14), motivates
+block-specific conditional estimation with a common remaining parameter.
+Its likelihood and derivatives concern IEED. Equations (M1)-(M6) above are
+derived from our Kumaraswamy block likelihood instead.
+
+**Reference 2 — Wang (2018)**, Section 3.2, Theorems 3-4 (printed p.722 /
+PDF p.4) and Appendices C-D (printed pp.734-735 / PDF pp.16-17), concerns
+the common-alpha single-block Kumaraswamy case. Formula (M3) reduces to its
+conditional beta estimate for k=1 with d_ic>0. Our shared-a score sums the
+separate block contributions; no general four-parameter or IEED formula was
+copied without specialization and derivation. Zero-count and degenerate-block
+cases are analyzed explicitly below rather than assuming interior existence.
+
+## Stage 4: existence, uniqueness, and the exceptional unbounded case
+
+We establish these properties for the exact, strictly ordered data contract in
+Stage 2. This is a mathematical result for this provisional model, not a claim
+that a numerical optimizer always succeeds.
+
+First, the profile is strictly concave in **a**, although this does not imply
+concavity in eta=log a. To see this, write
+
+\[
+W_i(a)=\sum_jw_{ij}\left[-\log(1-e^{-a u_{ij}})\right]
+=\sum_j\sum_{h=1}^\infty\frac{w_{ij}}{h}e^{-a h u_{ij}}.
+\]
+
+This is a positive mixture of exponentials in a. The second derivative of
+log W_i is the variance of the rates h u_ij under the corresponding normalized
+positive weights, hence (log W_i)''>=0. Differentiating (M5) twice gives
+
+\[
+\ell_p''(a)=
+\sum_{i,j}\left[-\frac{1}{a^2}
++\frac{u_{ij}^2e^{-a u_{ij}}}{(1-e^{-a u_{ij}})^2}\right]
+-\sum_i m_i(\log W_i(a))''<0. \tag{M7}
+\]
+
+Each bracket is strictly negative: with z=a u_ij>0,
+z^2 e^{-z}/(1-e^{-z})^2=[z/(2 sinh(z/2))]^2<1. The block sum therefore
+extends strict concavity directly to our actual model, without relying on an
+IEED uniqueness theorem.
+
+As a decreases to zero, W_i(a)=n_i[-log a]+O(1), since sum_j w_ij=n_i,
+and H_i(a)=m_i log a+sum_j log u_ij+O(a). In (M5) the M log a terms cancel,
+leaving ell_p(a)=-M log(-log a)+O(1), which tends to -infinity.
+
+As a grows, the largest observed time x_i,m_i dominates W_i:
+W_i(a) is asymptotic to w_i,m_i exp(-a u_i,m_i). Consequently,
+
+\[
+\ell_p(a)=M\log a-aD+O(1),\qquad
+D=\sum_i\sum_j\log\!\left(\frac{x_{i,m_i}}{x_{ij}}\right)\ge0. \tag{M8}
+\]
+
+If at least one block has m_i>=2, strict within-block ordering gives D>0.
+The profile tends to -infinity at both ends and is continuous and strictly
+concave, so it has a unique finite maximizer with U_p=0. If every d_ic>0,
+the conditional estimates are positive and the full model has a unique interior
+MLE. If any d_ic=0, the same finite profile maximum gives the unique maximum
+on the relevant closure face, but only a supremum in the original open domain.
+
+If every block has m_i=1, then D=0 and ell_p(a) grows as M log a plus a constant.
+The likelihood is unbounded above; there is no finite maximizing vector or
+finite boundary supremum. Both fitting methods report `unbounded_likelihood`,
+with a=None, no finite b vector, and log-likelihood=+infinity. They do not return
+the arbitrary endpoint of a numerical search. A block with m_i=1 is otherwise
+allowed when another block supplies at least two distinct failures.
+
+The closure b_ic=0 is a limit, not a valid input to the original continuous
+Kw(a,b_ic) class. Its latent law concentrates at the upper endpoint as b_ic
+decreases to zero. Never pass a boundary result directly to the strictly
+positive Stage 1/3 interfaces without explicitly using the limiting model.
+
+## Stage 4: numerical implementation and diagnostics
+
+`../src/mle.py` exposes `score`, `conditional_estimates`, `profile_score`,
+`profile_loglikelihood`, `fit_mle` (profile), and `fit_direct` (joint).
+The existing Stage 1-3 source and test files are unchanged.
+
+The profile implementation evaluates (M5) with stable log W_i and the convention
+0 log 0=0. It solves a U_p(a)=0 in eta=log a using Brent's bracketed method.
+Starting at initial_a (default 1), it doubles or halves a until it finds the
+opposite score sign. The defaults allow 60 expansions and 200 root iterations;
+the log-coordinate absolute/relative root tolerances are 1e-12.
+Monotonicity of U_p in a and (M7)-(M8) justify the unique root. The sign of
+a U_p is the same as U_p because a>0.
+
+For stability, log q comes from the existing Kumaraswamy log-survival function
+with b=1. Let v=-log q. Compute log W with log-sum-exp of log w+log v.
+For a*u>36, log v=-a*u to float64 accuracy (the omitted relative correction is
+less than 1.2e-16). Weighted ratios compute -W'/W without dividing two
+underflowed numbers. For z=a*u near zero,
+1-z/(exp(z)-1)=z/2-z^2/12+z^4/720+O(z^6), avoiding cancellation in the score.
+Conditional b values are exponentiated only after log d-log W has been formed.
+
+For an interior result, the reported objective is evaluated by the unchanged
+Stage 3 `loglikelihood`. The profile expression is checked against it. For an
+absent cause, exact evaluation on the closure face uses a linear identity:
+replace b_ic=0 temporarily by t=1/(1+W_i), evaluate Stage 3, then add t*W_i.
+Because d_ic=0, ell(b_ic=0)=ell(b_ic=t)+t*W_i exactly. This uses a positive
+reference for evaluation, not an epsilon estimate or an approximate boundary.
+
+The independent direct optimizer does not use the profile fit or conditional
+estimates to initialize or update parameters. It jointly optimizes eta=log a
+and gamma_ic=log b_ic for positive-count causes using L-BFGS-B and the Stage 3
+objective (with the same exact closure correction where needed). Its gradient is
+
+\[
+\frac{\partial\ell}{\partial\eta}=aU_a,\qquad
+\frac{\partial\ell}{\partial\gamma_{ic}}=d_{ic}-b_{ic}W_i(a).
+\]
+
+Absent causes are fixed at zero by (M1), not optimized on a log scale.
+Default starting a values are (.5,1,2,5), each with positive b=1. Custom starts
+use an (a,block-ID-to-(b1,b2)) pair and must lie in the original positive domain;
+values for absent causes are then discarded in favor of the exact zero limit.
+No profile estimate is used as a warm start, so the joint method provides an
+independent optimization check rather than merely re-evaluating the profile fit.
+
+The direct method has log-coordinate guards [-700,700] to prevent float64
+exponentiation overflow. These are numerical safeguards, not scientific
+parameter restrictions. Reaching a guard cannot be reported as a converged MLE.
+Numerically invalid trial points are rejected; their count is recorded.
+
+The returned `MLEResult` contains a, `b_by_block`, full log-likelihood,
+`converged`, `status`, method, message, and diagnostics. Success requires the
+solver's success flag, an absolute active log-parameter score norm no larger
+than score_tol*M (default score_tol=1e-7), and agreement between the conditional
+profile bound and joint likelihood at the candidate. Direct fits must also be
+away from their numerical guards. Boundary one-sided scores -W_i are recorded
+separately, since those coordinates do not have interior zero scores.
+
+| Status | Interpretation |
+| --- | --- |
+| `interior_mle` with converged=True | Numerically verified finite positive MLE |
+| `boundary_supremum` with converged=True | Finite closure optimum; no MLE in the strictly positive domain |
+| `unbounded_likelihood` | No finite maximum; all blocks have one observed failure |
+| `optimization_failed` | Iteration/bracketing budget, gradient, guard, or objective check failed; any candidate is not a certified MLE |
+| `numerical_failure` | Float64 arithmetic cannot represent a required calculation or conditional estimate |
+
+Bracketing exhaustion is not proof of a statistical boundary. In particular,
+extremely close or very small failure times can require unrepresentably large
+conditional b values. The implementation reports failure rather than clamping
+the estimate. The L-BFGS internal curvature approximation is used only for
+optimization; no Hessian, standard error, information matrix, or interval is
+returned as an uncertainty estimate.
+
+## Stage 4: fitted two-block teaching example
+
+Run `.venv/bin/python -m experiments.stage4_example` from the repository root.
+The data remain the Stage 2 hand-constructed rows; parameters are now estimated,
+unlike the chosen-parameter evaluations in Stage 3.
+
+| Parameter/result | Profile | Independent direct |
+| --- | ---: | ---: |
+| a | 1.173959840838 | 1.173959842586 |
+| b_A1 | .517708109960 | .517708110913 |
+| b_A2 | .258854054980 | .258854056901 |
+| b_B1 | .178753429726 | .178753430518 |
+| b_B2 | .536260289178 | .536260288806 |
+| Full log-likelihood | 1.070678947337 | 1.070678947337 |
+| Maximum absolute active log-parameter score | 4.44e-16 | 6.07e-9 |
+
+Both methods report `interior_mle` and converged=True. Profile root finding
+takes 8 iterations after one bracket expansion from a=1 to a=2. The direct
+method uses four independent starts. The full log-likelihoods differ by about
+8.9e-16 in this environment. At the profile fit, all five raw scores are zero
+to displayed floating-point accuracy (largest cause score about 8.9e-16).
+
+At the fitted a, the conditional cause ratios are exactly d_A1/m_A=2/3 and
+d_B1/m_B=1/4. This explains the fitted eventual cause-1 probabilities without
+confusing them with cumulative incidence by a specified time. The fitted
+log-likelihood exceeds the Stage 3 chosen-parameter value -2.833127754473.
+Positive log-likelihood is allowed because these are continuous-time densities.
+These are teaching-data fits, not published numerical reproductions or evidence
+of simulation performance.
+
+## Stage 4: tests and limits of parameter-recovery checks
+
+`../tests/test_mle.py` compares the raw scores to finite differences of the
+unchanged Stage 3 likelihood, conditional estimates to independent inner
+numerical maximization, and the profile score to finite differences and the
+envelope identity. It checks the profile/direct fits, remote starting values,
+arbitrary block counts, cause proportions, finite boundary limits and one-sided
+scores, the unbounded single-failure case, exhausted solver budgets, numerical
+range failures, and invalid inputs.
+
+Known-parameter recovery uses deterministic distribution-quantile fixtures,
+not random simulations. For each block, p_j=(j-.5)/n and
+x_j=[1-(1-p_j)^(1/B_i)]^(1/a_true), with completed schemes R=0. Blocks of sizes
+600 and 500 use B_A=3 and B_B=2, with deterministic cause proportions 1/3 and
+2/5. Three true a values (.6,2,5) give fitted a values approximately
+(.600904768,2.003015892,5.007539731); fitted b_A=(1.002465925,2.004931851)
+and b_B=(.801763145,1.202644718). The finite grid approximates its population,
+so exact recovery is not expected. This deterministic test is not a Monte Carlo
+study, does not generate the BPCS removal process, and establishes no empirical
+bias, consistency, coverage, or uncertainty result.
+
+Stage 5 remains unstarted. Observed Fisher information, standard errors,
+confidence intervals, profile intervals, and published numerical uncertainty
+validation will require a separate milestone. Bayesian methods and simulations
+also remain deferred.
+
+Validation on 2026-10-23: the Stage 4 suite passed 39 cases, and the combined
+suite reported **170 passed in 1.11 seconds**. The executed teaching example
+produced the estimates above. Compilation and Git whitespace checks also passed.
