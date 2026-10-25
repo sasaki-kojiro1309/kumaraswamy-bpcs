@@ -227,3 +227,103 @@ These are fits to hand-constructed teaching data, not published results.
 intervals, profile intervals, Bayesian estimation, and random simulations were
 not implemented. Published numerical baseline reproduction remains pending
 matching source assumptions and data; no paper table is claimed reproduced.
+
+## 2026-10-26: within-block order-restricted MLE
+
+Scope explicitly requested by the user: derive, implement, test, and document
+only b_i1<=b_i2 independently in every block. The direction is provisional;
+no cross-block order or censoring/model assumption changed. No Bayesian method,
+uncertainty method, simulation study, or real-data analysis was added.
+
+Reviewed MODEL_SPEC, DERIVATIONS, these notes, model/censoring/likelihood/mle
+source, and all three local references' relevant model and estimation sections.
+Baseline `.venv/bin/python -m pytest -q`: **170 passed in 1.24 seconds**.
+No Stage 1-4 source/test rewrites or dependency changes were necessary.
+The pre-existing unrelated untracked `molecular-property-research/` was untouched.
+
+Literature: Reference 1, Section 2.1 / Eq. (4), supplies block organization but
+uses IEED. Reference 2, Section 3.2, Theorems 3-4 (PDF p.4 / printed p.722),
+supplies the common-alpha single-block Kumaraswamy baseline. Reference 3,
+Section 4.1, Theorems 4.1-4.2 (PDF pp.11-12 / printed pp.2074-2075), supplies
+the single-experiment order/pooling framework and unchanged alpha result.
+Those two pages were also rendered and visually checked. Theorem 4.1's first
+branch appears to label its left side lambda_1 while its right side and
+j=1,2 condition use lambda_j; the following page gives the latter consistently.
+Our formulas are independently derived from (L8), not copied from that typo.
+The paper's partially observed causes and generalized progressive hybrid
+stopping are not adopted. Zero-count treatment below extends our own boundary
+analysis beyond the positive-count hypotheses stated in those theorems.
+
+Derivation (R1)-(R6) separates B_i=b_i1+b_i2 and p_i=b_i1/B_i. For each fixed a,
+B_i=m_i/W_i(a) uniquely, and p_i^R=min(d_i1/m_i,1/2), with p=0 only as a
+closure limit. When the order is violated both b parameters pool at B_i/2.
+The constrained profile is the unrestricted profile minus a nonnegative
+count-only constant, so a and B_i are unchanged. Finite attained/supremum
+log-likelihood ordering follows, with strict loss precisely when some block's
+cause-1 count exceeds cause-2 count. No novelty or superiority claim is made.
+
+Interpretation: cause-1 hazard is no larger and its latent lifetime is
+stochastically larger, within every block; eventual cause-1 probability is at
+most 1/2. Domain knowledge must justify these labeled-cause statements. It is
+not a cross-facility order or an empirical assertion inferred from these data.
+
+Boundary distinction: if d_i2=0, the restricted optimum has two positive equal
+parameters, even though the unrestricted estimator had a zero-cause-2 limit.
+If d_i1=0, only a zero-b_i1 boundary supremum exists. Finite attainment for the
+restricted fit needs d_i1>0 in every block, together with at least one block
+having two strictly ordered failures. If all blocks have one failure the
+likelihood stays unbounded. Equality-count blocks have an active equality and
+zero KKT multiplier. These are mathematically different cases, not solver
+statuses inferred from a parameter's proximity to a numerical bound.
+
+Implementation: completed src/order_restricted.py with fit_order_restricted_mle
+and a narrowly validated compatibility fit entry point. Reuses fit_mle, its
+result type, stable cached summaries and gradient. The unchanged Stage 3
+likelihood evaluates positive fits. Actual zero-b1 cases use the exact linear
+boundary identity; no epsilon estimate is substituted. Diagnostic checks cover
+order residuals, total/a scores, p stationarity with upper/lower KKT multipliers,
+likelihood penalty and profile/joint agreement. Active equalities, strictly
+pooled blocks, and zero parameters are recorded separately. Failures propagate
+without certifying a fit. `interior_mle` retains its positive-parameter meaning
+and can include an active positive order equality.
+
+Added tests/test_order_restricted.py: **52 passing cases** including separate
+joint SLSQP fits with raw nonnegative b parameters, linear order constraints,
+finite-difference gradients, an independent row-expanded objective, and two
+fixed feasible starts. No analytical conditional update or profile fit supplies
+the numerical oracle's estimates or initialization. Checks include multiple
+block counts, both zero-count directions, equality counts, inactive constraints,
+likelihood ordering, totals/common-a invariance, unbounded likelihood, invalid
+inputs, exhausted budgets, injected evaluation failure/objective mismatch,
+and no mutation of the unrestricted fit. No random samples or large Monte
+Carlo experiment were generated.
+
+Added experiments/order_restricted_example.py using unchanged two_blocks.json.
+Both fits converge with status interior_mle. Shared a=1.173959840838;
+unrestricted A=(.517708109960,.258854054980), restricted
+A=(.388281082470,.388281082470). B is unchanged at
+(.178753429726,.536260289178). A's equality is active, B's is inactive,
+with no zero boundaries. Full log L changes from 1.070678947337 to
+.900779910542; the penalty is .169899036795. These are hand-constructed
+teaching data, not a published reproduction or performance study.
+
+Validation: `.venv/bin/python -m pytest -q` reported **222 passed in 1.19
+seconds**. All 170 existing cases remain passing. The reproducible example,
+`python -m compileall -q src tests experiments`, and `git diff --check` passed.
+Independent numerical tests agree in parameters within declared tolerances
+and in maximized log-likelihood within 1e-9.
+
+Future priorities: (1) justify cause labels/order scientifically; (2) broaden
+focused deterministic stress checks for float64 range, nearly coincident times,
+and large k, including possible restricted-only fitting when the unrestricted
+fit is unrepresentable; (3) derive other justified restriction types only under
+separately approved scope. No unresolved mathematical contradiction was found
+for the current data contract. Numerical finite range and limited oracle
+fixtures remain limitations. Stage 5 uncertainty and later research remain
+unstarted; this milestone stops at the restricted MLE baseline.
+
+Final teaching-data independent SLSQP check: a=1.173959807259,
+A=(.388281063179,.388281063179), B=(.178753408926,.536260247045).
+Maximum absolute difference from analytical fitted parameters was 4.22e-8;
+absolute full log-likelihood difference was 1.32e-14 (rounded upward).
+Final full-suite rerun: **222 passed in 1.10 seconds**.

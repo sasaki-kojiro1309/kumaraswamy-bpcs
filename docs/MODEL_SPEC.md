@@ -1,8 +1,9 @@
-# Model specification: Stages 1-4
+# Model specification: Stages 1-4 and order-restricted MLE
 
 Status: provisional design approved by the user on 2026-10-23. Distribution
 primitives, completed BPCS data validation, likelihood evaluation, and profile/
-direct MLE estimation are implemented. Uncertainty, experimental simulation,
+direct MLE estimation are implemented. The provisional within-block
+order-restricted MLE is implemented and validated on 2026-10-26. Uncertainty, experimental simulation,
 Bayesian estimation, and real-data analysis remain deferred.
 The repository root is the project root; existing `Readme.md` is updated in place and `References/` retains its original
 capitalization. The filesystem treats README.md and Readme.md as the same path.
@@ -24,7 +25,7 @@ project statement was found. All three reference PDFs are available locally.
 | Withdrawals | Fixed configurable R_i=(r_i1,...,r_i,m_i), nonnegative integers; n_i=m_i+sum_j r_ij for a completed block | Progressive Type-II experiment within each block; Reference 1 — Wang et al. (2023), Section 2.1 |
 | Sharing | One a>0 across blocks and causes; separate b_i1,b_i2>0 for every block | Our Kumaraswamy adaptation; not a stated requirement in the project statement |
 | Causes | Exactly two independent latent causes; all recorded causes initially known, coded 1 or 2 | Reference 2 — Wang (2018), Section 2, independence and complete causes; Reference 1 — Wang et al. (2023), Eq. (4) |
-| Restrictions | Baseline unrestricted beyond positivity; optional b_i1 <= b_i2 later if justified | Project requires eventual order-restricted analysis; it does not specify an order |
+| Restrictions | Unrestricted baseline plus implemented provisional b_i1 <= b_i2 independently per block; scientific justification remains pending | Project requires eventual order-restricted analysis; it does not specify an order |
 | Targets | Per-block survival, hazard, median time to failure (MTF), and cause-specific failure probabilities | User-selected targets; do not substitute IEED formulas |
 
 Here MTF means **median**, not mean, time to failure.
@@ -137,7 +138,43 @@ target remain to be specified later.
   DOI 10.1080/02664763.2021.1889999. Eqs. (1)-(2), printed p.2066 (PDF p.3),
   use common alpha and cause parameters lambda_j. Sections 2.1 and 4 address
   missing causes, hybrid stopping, and restrictions. We do not adopt its hybrid
-  stopping rule, missingness probability, or restrictions in the baseline.
+  stopping rule or missingness probability. Its Section 4.1, Theorems 4.1-4.2
+  (PDF pp.11-12), provides the order/pooling framework now adapted and derived
+  for our completed multi-block model; the unrestricted baseline stays available.
 
 These are supporting structures, not proof that our adapted BPCS model or its
 MLEs have any existence, uniqueness, or asymptotic properties without derivation.
+
+## Provisional within-block order-restricted MLE (2026-10-26)
+
+The user specifies b_i1<=b_i2 independently for every block. Positivity, common
+a, all censoring schemes, known causes, and the exact full likelihood are
+unchanged. No cross-block ordering is added. The order means cause-1 hazard is
+no larger, its eventual failure probability is at most 1/2, and its latent
+lifetime is stochastically larger. These implications require a scientific
+justification for the cause labels and direction; this remains provisional.
+
+With B_i=b_i1+b_i2 and p_i=b_i1/B_i, the likelihood separates into time/total
+and cause-proportion terms. At fixed a, B_i=m_i/W_i(a) and
+p_i^R=min(d_i1/m_i,1/2). Violating blocks pool their cause parameters at B_i/2;
+nonviolating pairs stay unchanged. The restricted profile differs from the
+unrestricted profile by a nonnegative constant depending only on counts.
+Therefore the shared a and all block totals B_i remain unchanged. The full
+restricted log-likelihood cannot exceed the unrestricted value. See
+DERIVATIONS.md (R1)-(R6) for proofs, literature provenance, and qualifications.
+
+`src/order_restricted.py::fit_order_restricted_mle` returns MLEResult, reuses the
+existing profile solver, and checks the unchanged likelihood. Diagnostics
+separate active equalities, strictly pooled blocks, and zero parameters.
+`interior_mle` means positive-parameter attainment even when equality is active.
+If d_i2=0, the restricted pair is positive and equal; unlike the unrestricted
+fit, this does not create a zero boundary. If any d_i1=0, b_i1=0 is reported
+only as a closure limit (`boundary_supremum`). These classifications assume
+some block has at least two strictly ordered failures; otherwise the likelihood
+is unbounded regardless of the order, with no finite estimate returned.
+Numerical/optimization failure remains separate from these mathematical cases.
+
+The two-block teaching example and independent SLSQP checks are available in
+`experiments/order_restricted_example.py` and `tests/test_order_restricted.py`.
+No Bayesian method, uncertainty estimate, simulation study, or real-data
+analysis is implemented by this milestone.

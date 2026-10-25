@@ -748,3 +748,247 @@ also remain deferred.
 Validation on 2026-10-23: the Stage 4 suite passed 39 cases, and the combined
 suite reported **170 passed in 1.11 seconds**. The executed teaching example
 produced the estimates above. Compilation and Git whitespace checks also passed.
+
+## Order-restricted MLE: scope, interpretation, and literature
+
+This milestone adds only the user-requested provisional within-block restriction
+b_i1 <= b_i2, independently for every i. All a,b_ic remain strictly positive;
+non-strict equality is permitted. No cross-block order, missing causes, hybrid
+stopping, or changed censoring likelihood is introduced. No Jacobian belongs
+in this likelihood reparameterization: we are maximizing a sampling density
+at the same parameters, not transforming a probability density over parameters.
+
+The restriction has a specific interpretation under the shared-a model:
+h_i1(t)<=h_i2(t), P(delta=1)<=1/2, and
+S_i1(t)>=S_i2(t) for every interior t, so latent cause-1 lifetime is
+stochastically larger. Indeed, h_ic=ab_ic t^(a-1)/(1-t^a), and the base
+1-t^a lies in (0,1). This is a comparison of causes WITHIN a block, not of
+facilities, observed failure times, or realized failure counts. It is provisional
+and must eventually be justified by scientific knowledge about the labeled
+causes. Choosing the direction after seeing counts would change its meaning.
+
+Literature provenance:
+
+- Reference 1, Section 2.1 and Eq. (4), motivates block organization; its
+  distribution is IEED, so its parameter formulas are not used here.
+- Reference 2, Section 3.2, Theorems 3-4 (PDF p.4 / printed p.722), treats
+  common-alpha single-block Kumaraswamy estimation without this order.
+- Reference 3, Section 4.1, Theorems 4.1-4.2 (PDF pp.11-12 / printed
+  pp.2074-2075), already establishes conditional pooling at lambda_1=lambda_2
+  when cause-1 counts dominate, and an unchanged common-alpha estimate under
+  lambda_1<=lambda_2 in its single-experiment generalized progressive hybrid
+  setting. Its theorem statement assumes positive counts for both causes and
+  also permits partially observed causes. Here all causes are known and each
+  completed block has its own pair and fixed progressive Type-II schedule.
+
+The calculations below derive these results for our exact multi-block model,
+including its zero-count limits and unbounded cases. They are not claims of
+novelty or estimator superiority. We do not import Reference 3's hybrid stopping,
+missingness model, priors, or uncertainty formulas.
+
+## Reparameterization and constrained conditional maximization
+
+Starting from (L8), put B_i=b_i1+b_i2 and p_i=b_i1/B_i. The map is one-to-one
+between positive pairs and B_i>0, 0<p_i<1, with inverse
+b_i1=B_i p_i, b_i2=B_i(1-p_i). The restriction is 0<p_i<=1/2. Thus maximize
+
+\[
+\ell(a,\mathbf B,\mathbf p)=\log C+M\log a+(a-1)T-\sum_i H_i(a)
++\sum_i\{m_i\log B_i-B_iW_i(a)+g_i(p_i)\},\quad
+ g_i(p)=d_{i1}\log p+d_{i2}\log(1-p), \tag{R1}
+\]
+
+subject to a>0, B_i>0, 0<p_i<=1/2, with
+W_i(a)=-sum_j(r_ij+1)log(1-x_ij^a)>0 and d_i1+d_i2=m_i>=1.
+For fixed a, the B and p problems separate, including across blocks.
+
+For B_i, derivative m_i/B_i-W_i vanishes at
+
+\[
+\widehat B_i(a)=\frac{m_i}{W_i(a)}. \tag{R2}
+\]
+
+The second derivative -m_i/B_i^2 is strictly negative, and the objective tends
+to -infinity at either endpoint of B_i>0, proving a unique conditional maximum.
+
+For positive counts, g_i'(p)=d_i1/p-d_i2/(1-p) and
+ g_i''(p)=-d_i1/p^2-d_i2/(1-p)^2<0. Its unconstrained root is d_i1/m_i.
+If d_i1<d_i2 it lies below 1/2 and is unchanged. If d_i1=d_i2 the root is
+exactly 1/2, feasible and active with zero order multiplier. If d_i1>d_i2,
+g_i'(1/2)=2(d_i1-d_i2)>0; strict concavity implies g_i is increasing throughout
+the feasible interval, and its unique maximum is the INCLUDED endpoint 1/2.
+Consequently, with the zero-count convention qualified below,
+
+\[
+\widehat p_i^R=\min\{d_{i1}/m_i,1/2\},\qquad
+(\widehat b_{i1}^R(a),\widehat b_{i2}^R(a))=
+\begin{cases}
+(d_{i1}/W_i(a),d_{i2}/W_i(a)),&d_{i1}\le d_{i2},\\
+(m_i/[2W_i(a)],m_i/[2W_i(a)]),&d_{i1}>d_{i2}.
+\end{cases} \tag{R3}
+\]
+
+The equality-count case agrees in both branches. Pooling preserves the total;
+clipping only b_i1, swapping the pair, or sorting the cause labels would not
+maximize this labeled-data likelihood.
+
+For a KKT check, extend p's lower endpoint only when its count is zero. For
+maximization with p<=1/2, p>=0, stationarity is g_i'(p)-mu_i+nu_i=0, with
+nonnegative upper/lower multipliers and complementary slackness. At the upper
+endpoint mu_i=2(d_i1-d_i2)>=0 and nu_i=0. At an interior p both are zero.
+For d_i1=0,p=0 the finite one-sided derivative is -m_i, so nu_i=m_i,mu_i=0.
+This distinguishes an active positive equality from a zero-parameter boundary;
+an active equality does not require both original cause scores to vanish.
+
+## Restricted profile and equality of the shared-a estimates
+
+Substitute (R2)-(R3) into (R1), interpreting 0 log 0 by its limit:
+
+\[
+\ell_p^R(a)=\log C+M\log a+(a-1)T-\sum_iH_i(a)
++\sum_i\{m_i\log m_i-m_i\log W_i(a)-m_i+g_i(\widehat p_i^R)\}.
+\tag{R4}
+\]
+
+The unrestricted profile uses p_i^U=d_i1/m_i instead. Therefore
+
+\[
+\ell_p^R(a)=\ell_p^U(a)-\Delta,\qquad
+\Delta=\sum_i[g_i(p_i^U)-g_i(\widehat p_i^R)]\ge0. \tag{R5}
+\]
+
+Each term is nonnegative because p_i^U maximizes g_i over the larger space.
+For violating blocks it equals
+ d_i1 log(2d_i1/m_i)+d_i2 log(2d_i2/m_i), with 0 log 0=0;
+for nonviolating blocks it is zero. It is strictly positive for every violating
+block (including d_i2=0), and depends only on the observed counts, not a.
+Hence both profiles have identical derivatives, curvature, tail behavior, and
+argmax. Whenever finite,
+
+\[
+\widehat a_R=\widehat a_U,\quad
+\widehat B_{i,R}=\widehat B_{i,U},\quad
+\sup\ell_R=\sup\ell_U-\Delta\le\sup\ell_U. \tag{R6}
+\]
+
+Equality of finite suprema holds exactly when every d_i1<=d_i2. For unbounded
+profiles both suprema are +infinity; do not subtract infinity from infinity.
+Their difference is still the finite constant Delta at any fixed a.
+This invariance relies on the within-block proportion restriction only. A
+cross-block constraint or constraint involving a need not preserve the profile.
+Per-block minimum survival, hazard, and median depend on a and B_i, so their
+plug-in values also remain unchanged; cause probabilities generally change.
+No uncertainty or testing distribution is inferred from this identity.
+
+## Zero counts, attainment, and unbounded likelihood
+
+Since m_i>0, both counts cannot be zero.
+
+| Observed counts | Restricted p and pair at fixed a | Interpretation |
+| --- | --- | --- |
+| d_i1=0, d_i2=m_i | p approaches 0; (0,m_i/W_i) in the closure | g=m_i log(1-p) strictly decreases; no maximum for p>0; finite boundary supremum |
+| d_i1=m_i, d_i2=0 | p=1/2; both b=m_i/(2W_i)>0 | g=m_i log p increases; attained positive equality, despite unrestricted boundary |
+| Both positive, d_i1<d_i2 | p=d_i1/m_i<1/2 | Attained positive pair with inactive order |
+| Both positive, d_i1>=d_i2 | p=1/2 | Attained positive pair with active order |
+
+The zero in the first row is not a valid latent Kw(a,0) parameter. It denotes
+a limit in the original model, not an epsilon substitute or changed probability
+class. To approach it feasibly at fixed optimal B, take b_i1=B*epsilon and
+b_i2=B*(1-epsilon), epsilon decreasing to zero. Every such vector is positive
+and ordered for epsilon<=1/2; its likelihood tends to the reported supremum.
+
+By (R5), the strict concavity and tail argument (M7)-(M8) applies unchanged:
+if any block has at least two strictly ordered failures, there is a unique
+finite maximizing a and positive B_i. The restricted maximum is attained in
+its original domain precisely when EVERY block has d_i1>0. Blocks with
+no cause-2 failures are now allowed for attainment. If any block has d_i1=0,
+only a finite closure supremum exists, with b_i1=0 in those blocks.
+If every block has m_i=1, the restricted profile is unbounded as a tends to
+infinity, because the finite penalty cannot remove M log a growth. Even a
+single all-cause-1 block has no finite maximum in that exceptional design.
+One single-failure block alongside an identifying multi-failure block is allowed.
+
+## Implementation, diagnostics, and independent validation
+
+`src/order_restricted.py::fit_order_restricted_mle` returns the existing
+MLEResult and accepts the same profile controls as fit_mle plus positive finite
+constraint_tol (default 1e-10). It reuses the unchanged fit_mle root and stable
+_Problem summaries; nonconvergence/unbounded/range failures are propagated.
+Inactive pairs are retained exactly. Binding pairs are computed in log scale
+as exp(log m_i-log W_i-log 2), with no generic constrained optimizer in production.
+No existing distribution, censoring, likelihood, or unrestricted MLE source
+module was modified.
+
+For positive pairs the final objective is the original Stage 3 loglikelihood,
+including log C. When b_i1=0, temporarily replace it by the positive b_i2 and
+add b_i2*W_i back: the absent-cause log-likelihood term is exactly -b_i1*W_i.
+This corrects a reference evaluation exactly; it does not approximate a zero by
+a small fitted parameter. Positive b_i2 in all-cause-1 equality blocks is retained.
+
+Success checks include finite representable pairs/totals, the normalized order
+residual (b_i1-b_i2)/B_i<=constraint_tol, the shared log-a and log-total scores,
+and agreement between full joint evaluation and ell_p^U(a)-Delta. The score
+threshold is score_tol*M and the absolute objective tolerance is
+max(1e-8,score_tol*M), matching the existing profile check. Cause probabilities
+are set by (R3), and upper/lower p multipliers are reported. Diagnostics include
+active_constraints (all equality blocks), pooled_blocks (strict count violations),
+boundary_parameters (actual zero coordinates), fitted probabilities, order
+residuals, scores, objective penalty/check, and nested unrestricted diagnostics.
+No raw unconstrained b-score-zero requirement is imposed on an active equality.
+
+`interior_mle` means an attained positive-parameter fit, even if on the ORDER
+boundary. `boundary_supremum` means an actual zero b limit. Both use
+converged=True only after numerical checks. This retains the existing result
+contract; failed candidates must not be interpreted as MLEs. Numerical failures
+return no parameter vector. No derivative-based uncertainty is reported.
+The compatibility `fit(data, restriction='b_i1 <= b_i2', **options)` accepts only
+this restriction and rejects others explicitly.
+
+`tests/test_order_restricted.py` checks inactive, violating, equality-count,
+zero-count, mixed blocks, arbitrary k and block order, common-a/total invariance,
+likelihood ordering, independent constrained optimization, unbounded designs,
+solver budgets, input validation, arithmetic failure, objective inconsistency,
+and preservation of unrestricted results. Its independent oracle jointly fits
+(log a,b11,b12,...) using SLSQP, nonnegative raw b bounds and linear b2-b1>=0
+constraints with finite-difference gradients. It evaluates an independently
+expanded row likelihood using xlogy for zero-count limits. It has no profile
+updates, analytical conditional estimates, fitted starts, or preset active set.
+Two fixed feasible starting vectors and a finite numerical log-a guard are used;
+these fixtures' solutions lie well inside that guard. Agreement is numerical
+validation of these examples, not a general solver proof or simulation study.
+
+## Reproduce the restricted teaching example
+
+Run `.venv/bin/python -m experiments.order_restricted_example`. Block A has
+counts (2,1), so p_A changes from 2/3 to 1/2 and its total .776562164940 is
+split equally. B has counts (1,3), so p_B stays 1/4.
+
+| Quantity | Unrestricted | Restricted |
+| --- | ---: | ---: |
+| a | 1.173959840838 | 1.173959840838 |
+| b_A1 | .517708109960 | .388281082470 |
+| b_A2 | .258854054980 | .388281082470 |
+| b_B1 | .178753429726 | .178753429726 |
+| b_B2 | .536260289178 | .536260289178 |
+| Full log-likelihood | 1.070678947337 | .900779910542 |
+| Status | interior_mle | interior_mle |
+| Converged | True | True |
+
+A's equality is active, B's is inactive, and no zero boundaries occur.
+Delta=2 log(4/3)+log(2/3)=.169899036795. Tests compare these estimates with
+the separate joint constrained optimizer. These remain hand-constructed data;
+no published tables, real-data fit, bias/MSE claim, or superiority result follows.
+
+## Remaining research limits for the order restriction
+
+Priority 1 is scientific justification of the cause labels and direction.
+Priority 2 is further deterministic numerical stress testing for extreme shapes,
+near-coincident times, large k, and float64 range limits. Production depends on
+the unrestricted fit succeeding; exceptionally a restricted fit may be
+representable even when the unrestricted conditional parameters are not. That
+fallback is not implemented. The independent oracle's finite guards and selected
+fixtures are not exhaustive verification over all possible data.
+Priority 3, only after a separately authorized scope, is to reconsider other
+scientifically motivated restrictions; their profiles must be derived afresh.
+No Bayesian inference, intervals, experimental simulation study, or real-data
+analysis is added in this milestone.

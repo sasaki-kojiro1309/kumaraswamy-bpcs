@@ -2,12 +2,13 @@
 
 Research project in progress. **Completed scope: Stage 1 distribution layer,
 Stage 2 BPCS data structures/validation, Stage 3 likelihood construction, and
-Stage 4 profile/direct maximum likelihood estimation.** Uncertainty methods,
+Stage 4 profile/direct maximum likelihood estimation, plus provisional
+within-block order-restricted MLE.** Uncertainty methods,
 simulation, and real-data pipelines are not implemented.
-Bayesian and order-restricted estimation remain teammate integration placeholders.
+Bayesian estimation remains a teammate integration placeholder.
 
-Validation on 2026-10-23: **170 tests passed** (20 Stage 1, 55 Stage 2, 56 Stage 3,
-39 Stage 4) using Python 3.12; exact package versions are recorded in
+Validation on 2026-10-26: **222 tests passed** (170 existing Stage 1-4 tests
+and 52 order-restricted tests) using Python 3.12; exact package versions are recorded in
 `requirements-lock.txt`.
 
 The original project statement is preserved verbatim in
@@ -51,6 +52,7 @@ python3 -m venv .venv
 .venv/bin/python -m experiments.stage2_example
 .venv/bin/python -m experiments.stage3_example
 .venv/bin/python -m experiments.stage4_example
+.venv/bin/python -m experiments.order_restricted_example
 ```
 
 `requirements.txt` lists the intended stack. `requirements-lock.txt` records the
@@ -160,6 +162,38 @@ Parameter-recovery tests use deterministic distribution-quantile fixtures,
 including the complete-data special case of BPCS. No random lifetime/censoring
 generator, standard errors, intervals, or Bayesian estimator was added.
 
+## Provisional order-restricted MLE
+
+`src/order_restricted.py` implements only b_i1<=b_i2 independently per block,
+using the same likelihood as the unrestricted fit. Given a, put
+B_i=m_i/W_i(a), p_i=min(d_i1/m_i,1/2), then b_i1=B_i*p_i and
+b_i2=B_i*(1-p_i). The common a and all B_i stay unchanged; violating pairs
+are pooled equally. The derivation, zero-count limits, and source comparisons
+are in DERIVATIONS.md (R1)-(R6). The order requires future scientific justification.
+
+```python
+from src.order_restricted import fit_order_restricted_mle
+
+restricted = fit_order_restricted_mle(data)  # existing validated BPCSExperiment
+print(restricted.status, restricted.converged)
+print(restricted.b_by_block)
+print(restricted.diagnostics["active_constraints"])
+```
+
+On the teaching data, a=1.173959840838, A=(.388281082470,.388281082470),
+and B=(.178753429726,.536260289178). Only A's equality is active. Full log L
+is .900779910542, compared with 1.070678947337 unrestricted. Both fits converge
+with positive parameters. Equality is an attained order constraint, not a
+zero-parameter boundary. No cause-1 failures in a block instead gives a finite
+zero-b1 boundary supremum when a is identified; no cause-2 failures gives an
+attained positive equality. All single-failure blocks still give unbounded
+likelihood. Check status and convergence before using any result.
+
+The 52 added tests include independent joint constrained SLSQP verification,
+invalid inputs, numerical failures, and boundary cases. Run the reproducible
+example with `.venv/bin/python -m experiments.order_restricted_example`.
+No later research stage is implemented.
+
 ## Roadmap
 
 1. **Stage 1 (complete):** validate distribution primitives and explain
@@ -168,6 +202,8 @@ generator, standard errors, intervals, or Bayesian estimator was added.
 3. **Stage 3 (complete):** derive and validate block/joint likelihoods and constants.
 4. **Stage 4 (complete):** scores, conditional estimates, profile and direct MLE,
    convergence diagnostics, boundary/unbounded cases, and deterministic validation.
+   **Order-restricted MLE extension complete:** provisional within-block b_i1<=b_i2,
+   derivation, exact pooling, boundary diagnostics, and independent numerical checks.
 5. **Stage 5 (not started):** uncertainty and compatible published numerical validation.
 6. **Stages 6-7:** simulate the actual experimental process and evaluate estimators
    on identical datasets with reproducible configurations, tables, and plots.
@@ -175,8 +211,9 @@ generator, standard errors, intervals, or Bayesian estimator was added.
    investigate labeled extensions, and produce reproducible results.
 
 Current files: `src/model.py`, `src/censoring.py`, `src/likelihood.py`, `src/mle.py`,
-their test modules, `docs/`, the two-block JSON data and Stage 2/3/4 example scripts, and teammate
-placeholders `src/bayesian.py`, `src/order_restricted.py`. Reserved directories
+their test modules, `src/order_restricted.py`, `docs/`, the two-block JSON data,
+Stage 2/3/4 and order-restricted example scripts, and the teammate placeholder
+`src/bayesian.py`. Reserved directories
 `data/real/` and `results/` contain no research results. Later modules will be
 created when their mathematics and contracts are
 established; empty implementation stubs would not constitute completed stages.
