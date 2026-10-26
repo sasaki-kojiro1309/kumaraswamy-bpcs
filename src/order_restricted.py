@@ -43,13 +43,14 @@ def fit_order_restricted_mle(data, *, initial_a=1.0, maxiter=200,
     try:
         pairs, probabilities, active, forced, multipliers = {}, {}, {}, {}, {}
         boundary, losses, total_scores, residuals, p_scores = [], [], {}, {}, {}
+        total_preservation = {}
         for label, d, logW, _, _, _ in problem.stats(base.a):
             m = float(d.sum())
             p = min(float(d[0]/m), .5)
             equality = bool(d[0] >= d[1])
-            # Preserve inactive estimates exactly; binding blocks pool BOTH
-            # counts rather than clipping a single cause parameter.
-            if equality:
+            # Retain every already-feasible pair exactly, including equal
+            # counts. Only strict violations need the pooling calculation.
+            if d[0] > d[1]:
                 with np.errstate(over="raise", invalid="raise", under="ignore"):
                     half = float(np.exp(log(m)-logW-log(2)))
                 pair = (half, half)
@@ -72,6 +73,8 @@ def fit_order_restricted_mle(data, *, initial_a=1.0, maxiter=200,
             if p == 0:
                 boundary.append((label, 1))
             residuals[label] = (pair[0]-pair[1])/B
+            unrestricted_B = sum(base.b_by_block[label])
+            total_preservation[label] = (B-unrestricted_B)/unrestricted_B
             total_scores[label] = m-float(np.exp(log(B)+logW))
             # The binomial log-likelihood penalty, with 0 log 0 = 0.
             losses.append(float(fsum((float(xlogy(d[0], d[0]/m)),
@@ -98,6 +101,7 @@ def fit_order_restricted_mle(data, *, initial_a=1.0, maxiter=200,
         threshold = score_tol*problem.M
         objective_tol = max(1e-8, threshold)
         valid = (all(v <= constraint_tol for v in residuals.values())
+                 and all(abs(v) <= constraint_tol for v in total_preservation.values())
                  and norm <= threshold and abs(value-expected) <= objective_tol
                  and penalty >= -objective_tol
                  and value <= base.loglikelihood+objective_tol)
@@ -108,6 +112,7 @@ def fit_order_restricted_mle(data, *, initial_a=1.0, maxiter=200,
                             "p_kkt_multipliers": multipliers,
                             "p_stationarity_residuals": p_scores,
                             "normalized_order_residuals": residuals,
+                            "relative_total_preservation_residuals": total_preservation,
                             "log_total_scores": total_scores,
                             "log_a_score": ga,
                             "log_parameter_score_norm": norm,

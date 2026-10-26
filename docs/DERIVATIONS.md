@@ -570,7 +570,12 @@ W_i(a)=\sum_jw_{ij}\left[-\log(1-e^{-a u_{ij}})\right]
 
 This is a positive mixture of exponentials in a. The second derivative of
 log W_i is the variance of the rates h u_ij under the corresponding normalized
-positive weights, hence (log W_i)''>=0. Differentiating (M5) twice gives
+positive weights, hence (log W_i)''>=0. Termwise differentiation is justified:
+on any compact interval a in [epsilon,L] with epsilon>0, the finite number of
+positive u_ij gives a positive minimum u. The series and its first two
+derivatives are uniformly dominated by convergent sums of powers of h times
+exp(-epsilon*h*u). The normalized weights therefore have finite first and
+second rate moments, so the variance identity applies. Differentiating (M5) twice gives
 
 \[
 \ell_p''(a)=
@@ -769,11 +774,11 @@ causes. Choosing the direction after seeing counts would change its meaning.
 
 Literature provenance:
 
-- Reference 1, Section 2.1 and Eq. (4), motivates block organization; its
+- **Reference 1 — Wang et al. (2023)**, Section 2.1 and Eq. (4), motivates block organization; its
   distribution is IEED, so its parameter formulas are not used here.
-- Reference 2, Section 3.2, Theorems 3-4 (PDF p.4 / printed p.722), treats
+- **Reference 2 — Wang (2018)**, Section 3.2, Theorems 3-4 (PDF p.4 / printed p.722), treats
   common-alpha single-block Kumaraswamy estimation without this order.
-- Reference 3, Section 4.1, Theorems 4.1-4.2 (PDF pp.11-12 / printed
+- **Reference 3 — Mahto et al. (2022)**, Section 4.1, Theorems 4.1-4.2 (PDF pp.11-12 / printed
   pp.2074-2075), already establishes conditional pooling at lambda_1=lambda_2
   when cause-1 counts dominate, and an unchanged common-alpha estimate under
   lambda_1<=lambda_2 in its single-experiment generalized progressive hybrid
@@ -783,8 +788,9 @@ Literature provenance:
 
 The calculations below derive these results for our exact multi-block model,
 including its zero-count limits and unbounded cases. They are not claims of
-novelty or estimator superiority. We do not import Reference 3's hybrid stopping,
-missingness model, priors, or uncertainty formulas.
+novelty or estimator superiority. We do not import the hybrid stopping rule,
+missingness model, priors, or uncertainty formulas of
+**Reference 3 — Mahto et al. (2022)**.
 
 ## Reparameterization and constrained conditional maximization
 
@@ -839,6 +845,16 @@ endpoint mu_i=2(d_i1-d_i2)>=0 and nu_i=0. At an interior p both are zero.
 For d_i1=0,p=0 the finite one-sided derivative is -m_i, so nu_i=m_i,mu_i=0.
 This distinguishes an active positive equality from a zero-parameter boundary;
 an active equality does not require both original cause scores to vanish.
+
+Equivalently, use the original positive parameters with constraint
+b_i1-b_i2<=0. At a strictly pooled block and fixed optimal B_i, the raw scores
+are U_b1=(d_i1-d_i2)/B_i and U_b2=-U_b1. The multiplier
+lambda_i=(d_i1-d_i2)/B_i>=0 gives U_b1-lambda_i=0,
+U_b2+lambda_i=0 and lambda_i(b_i1-b_i2)=0. At equal counts lambda_i=0.
+For fixed a the separate B and p objectives are strictly concave on their
+respective feasible intervals (or have the stated one-sided boundary limits).
+Thus these KKT conditions identify their unique global optima, not merely
+stationary candidates. Global uniqueness in a then follows from (R5) and (M7).
 
 ## Restricted profile and equality of the shared-a estimates
 
@@ -914,7 +930,8 @@ One single-failure block alongside an identifying multi-failure block is allowed
 MLEResult and accepts the same profile controls as fit_mle plus positive finite
 constraint_tol (default 1e-10). It reuses the unchanged fit_mle root and stable
 _Problem summaries; nonconvergence/unbounded/range failures are propagated.
-Inactive pairs are retained exactly. Binding pairs are computed in log scale
+Already feasible pairs, including equal-count pairs, are retained exactly.
+Only strictly violating pairs are recomputed in log scale
 as exp(log m_i-log W_i-log 2), with no generic constrained optimizer in production.
 No existing distribution, censoring, likelihood, or unrestricted MLE source
 module was modified.
@@ -933,7 +950,8 @@ max(1e-8,score_tol*M), matching the existing profile check. Cause probabilities
 are set by (R3), and upper/lower p multipliers are reported. Diagnostics include
 active_constraints (all equality blocks), pooled_blocks (strict count violations),
 boundary_parameters (actual zero coordinates), fitted probabilities, order
-residuals, scores, objective penalty/check, and nested unrestricted diagnostics.
+residuals, relative block-total preservation residuals, scores, objective
+penalty/check, and nested unrestricted diagnostics.
 No raw unconstrained b-score-zero requirement is imposed on an active equality.
 
 `interior_mle` means an attained positive-parameter fit, even if on the ORDER
@@ -957,6 +975,35 @@ Two fixed feasible starting vectors and a finite numerical log-a guard are used;
 these fixtures' solutions lie well inside that guard. Agreement is numerical
 validation of these examples, not a general solver proof or simulation study.
 
+The audit additionally supplies an independently runnable verifier,
+`experiments/within_block_validation.py::fit_slsqp`. It jointly optimizes
+(eta=log(a/a_scale),beta_i=log B_i,p_i), with independent bounds
+0<=p_i<=1/2 and floating-point guards for log a/log B. Here
+a_scale=1/mean(-log x), using all observed times only as a coordinate scale;
+the data and likelihood are unchanged. Three fixed relative starting shapes,
+totals, and feasible proportions are used. There is no analytical conditional
+update, profile warm start, or prescribed active set. The independent expanded
+objective retains risk-set constants and zero-count limits. Its analytic
+gradient is separately verified against finite differences.
+
+Verification requires SLSQP success, finite objective, feasible proportions,
+no numerical-guard contact, and projected score norm <=1e-6*M. For maximization,
+a lower-bound p=0 requires g'(p)<=0 and an upper-bound p=1/2 requires g'(p)>=0;
+the projected residual keeps violations of these conditions rather than
+incorrectly requiring a zero raw derivative at an endpoint. A zero-count p
+within 1e-10 of zero may be cleaned up to the exact closure endpoint after
+optimization; objective and KKT checks are repeated there. No positive floor
+is used as a fitted boundary parameter. Each start's convergence, feasibility,
+guard status, and residual norm are recorded.
+
+The original raw-b test oracle's fixed log-a guard [-15,15] cannot verify all
+extreme valid datasets. For instance, times (1-1e-8,1-5e-9,1-1e-9) give
+a_hat approximately 2.00352774e8, exceeding exp(15). This is a limitation of
+that finite test search, not of the analytical estimator. The scaled joint
+verifier agrees with the analytical estimate in this case, at very small times,
+and across the representable endpoints of the support. It is a second focused
+validation method; the original oracle and its 52 tests are preserved.
+
 ## Reproduce the restricted teaching example
 
 Run `.venv/bin/python -m experiments.order_restricted_example`. Block A has
@@ -979,11 +1026,37 @@ Delta=2 log(4/3)+log(2/3)=.169899036795. Tests compare these estimates with
 the separate joint constrained optimizer. These remain hand-constructed data;
 no published tables, real-data fit, bias/MSE claim, or superiority result follows.
 
+The expanded example prints all seven input rows, unrestricted/restricted and
+independent SLSQP fits, cause probabilities, pooling decisions, and minimum
+survival at t=.5. S_A(.5)=.634625780839 and S_B(.5)=.657914837980 under both
+unrestricted and restricted fits. The independently fitted SLSQP values are
+a=1.173959821550, A=(.388281083610,.388281083610),
+B=(.178753439640,.536260336209); full log L=.900779910542.
+All three SLSQP starts pass their numerical checks. The maximum absolute
+parameter difference is about 4.71e-8 and absolute log-likelihood difference
+is 1.93e-14 (rounded upward). These differences are within the declared
+verification tolerances; no material disagreement remains in these fixtures.
+
+Create the machine-readable report, including input rows and per-start details:
+
+```sh
+.venv/bin/python -m experiments.within_block_validation --output results/within_block_validation.json
+```
+
+`tests/test_within_block_validation.py` adds focused checks of exact retention
+for already-equal pairs, raw KKT scores at positive equalities, survival/total
+invariance, the count-only profile penalty over a grid (including both zero-count
+directions), finite-difference gradients, nine extreme-time/mark cases, numerical
+range failure, solver failure, and the reproducible report. The stress cases
+use times as small as nextafter(0,1), as large as nextafter(1,0), very small
+positive times, and nearly coincident times with unrepresentable fitted b values.
+
 ## Remaining research limits for the order restriction
 
 Priority 1 is scientific justification of the cause labels and direction.
-Priority 2 is further deterministic numerical stress testing for extreme shapes,
-near-coincident times, large k, and float64 range limits. Production depends on
+Focused extreme-time, boundary, and near-coincident-time checks have now been
+added. They do not exhaust all shapes, block counts, or float64 range limits.
+Production depends on
 the unrestricted fit succeeding; exceptionally a restricted fit may be
 representable even when the unrestricted conditional parameters are not. That
 fallback is not implemented. The independent oracle's finite guards and selected

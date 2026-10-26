@@ -1,0 +1,258 @@
+{
+  "data_description": "Hand-constructed teaching data; not a simulation study",
+  "restriction": "b_i1 <= b_i2 within each block only",
+  "input": [
+    {
+      "block": "A",
+      "failure_index": 1,
+      "time": 0.15,
+      "cause": 1,
+      "withdrawals": 1,
+      "at_risk": 6,
+      "after_failure": 5,
+      "remaining": 4
+    },
+    {
+      "block": "A",
+      "failure_index": 2,
+      "time": 0.4,
+      "cause": 2,
+      "withdrawals": 0,
+      "at_risk": 4,
+      "after_failure": 3,
+      "remaining": 3
+    },
+    {
+      "block": "A",
+      "failure_index": 3,
+      "time": 0.7,
+      "cause": 1,
+      "withdrawals": 2,
+      "at_risk": 3,
+      "after_failure": 2,
+      "remaining": 0
+    },
+    {
+      "block": "B",
+      "failure_index": 1,
+      "time": 0.1,
+      "cause": 2,
+      "withdrawals": 0,
+      "at_risk": 7,
+      "after_failure": 6,
+      "remaining": 6
+    },
+    {
+      "block": "B",
+      "failure_index": 2,
+      "time": 0.25,
+      "cause": 1,
+      "withdrawals": 1,
+      "at_risk": 6,
+      "after_failure": 5,
+      "remaining": 4
+    },
+    {
+      "block": "B",
+      "failure_index": 3,
+      "time": 0.55,
+      "cause": 2,
+      "withdrawals": 0,
+      "at_risk": 4,
+      "after_failure": 3,
+      "remaining": 3
+    },
+    {
+      "block": "B",
+      "failure_index": 4,
+      "time": 0.8,
+      "cause": 2,
+      "withdrawals": 2,
+      "at_risk": 3,
+      "after_failure": 2,
+      "remaining": 0
+    }
+  ],
+  "unrestricted": {
+    "a": 1.1739598408380276,
+    "b_by_block": {
+      "A": [
+        0.5177081099598994,
+        0.2588540549799497
+      ],
+      "B": [
+        0.17875342972610397,
+        0.536260289178312
+      ]
+    },
+    "loglikelihood": 1.070678947337087,
+    "converged": true,
+    "status": "interior_mle",
+    "method": "profile",
+    "message": "Profile root solved.",
+    "diagnostics": {
+      "iterations": 8,
+      "root_function_calls": 9,
+      "bracket_expansions": 1,
+      "log_a_bracket": [
+        0.0,
+        0.6931471805599453
+      ],
+      "log_parameter_score_norm": 4.440892098500626e-16,
+      "score_threshold": 7e-07,
+      "boundary_parameters": [],
+      "boundary_one_sided_scores": {},
+      "profile_loglikelihood_check": 1.0706789473370861,
+      "profile_minus_joint_loglikelihood": -8.881784197001252e-16
+    }
+  },
+  "restricted": {
+    "a": 1.1739598408380276,
+    "b_by_block": {
+      "A": [
+        0.3882810824699246,
+        0.3882810824699246
+      ],
+      "B": [
+        0.17875342972610397,
+        0.536260289178312
+      ]
+    },
+    "loglikelihood": 0.90077991054169,
+    "converged": true,
+    "status": "interior_mle",
+    "method": "order_restricted_profile",
+    "message": "Restricted profile verified.",
+    "diagnostics": {
+      "restriction": "b_i1 <= b_i2",
+      "constraint_tolerance": 1e-10,
+      "unrestricted_status": "interior_mle",
+      "unrestricted_diagnostics": {
+        "iterations": 8,
+        "root_function_calls": 9,
+        "bracket_expansions": 1,
+        "log_a_bracket": [
+          0.0,
+          0.6931471805599453
+        ],
+        "log_parameter_score_norm": 4.440892098500626e-16,
+        "score_threshold": 7e-07,
+        "boundary_parameters": [],
+        "boundary_one_sided_scores": {},
+        "profile_loglikelihood_check": 1.0706789473370861,
+        "profile_minus_joint_loglikelihood": -8.881784197001252e-16
+      },
+      "active_constraints": {
+        "A": true,
+        "B": false
+      },
+      "pooled_blocks": {
+        "A": true,
+        "B": false
+      },
+      "cause_1_probabilities": {
+        "A": 0.5,
+        "B": 0.25
+      },
+      "boundary_parameters": [],
+      "p_kkt_multipliers": {
+        "A": {
+          "upper_p": 2.0,
+          "lower_p": 0.0
+        },
+        "B": {
+          "upper_p": 0.0,
+          "lower_p": 0.0
+        }
+      },
+      "p_stationarity_residuals": {
+        "A": 0.0,
+        "B": 0.0
+      },
+      "normalized_order_residuals": {
+        "A": 0.0,
+        "B": -0.5000000000000001
+      },
+      "relative_total_preservation_residuals": {
+        "A": 1.429664069084736e-16,
+        "B": 0.0
+      },
+      "log_total_scores": {
+        "A": -4.440892098500626e-16,
+        "B": -8.881784197001252e-16
+      },
+      "log_a_score": 0.0,
+      "log_parameter_score_norm": 8.881784197001252e-16,
+      "score_threshold": 7e-07,
+      "unrestricted_loglikelihood": 1.070678947337087,
+      "loglikelihood_penalty": 0.1698990367953972,
+      "restricted_profile_loglikelihood_check": 0.9007799105416898,
+      "profile_minus_joint_loglikelihood": -2.220446049250313e-16
+    }
+  },
+  "independent_slsqp": {
+    "a": 1.1739598215497764,
+    "b_by_block": {
+      "A": [
+        0.3882810836099366,
+        0.3882810836099366
+      ],
+      "B": [
+        0.17875343963983845,
+        0.5362603362094148
+      ]
+    },
+    "loglikelihood": 0.9007799105416708,
+    "converged": true,
+    "status": "interior_mle",
+    "method": "SLSQP_validation",
+    "message": "Optimization terminated successfully",
+    "diagnostics": {
+      "starts": [
+        {
+          "solver_success": true,
+          "verified": true,
+          "message": "Optimization terminated successfully",
+          "iterations": 14,
+          "function_calls": 20,
+          "loglikelihood": 0.9007799105416708,
+          "projected_score_norm": 4.0966220149485366e-07,
+          "feasible": true,
+          "hit_numerical_guard": false
+        },
+        {
+          "solver_success": true,
+          "verified": true,
+          "message": "Optimization terminated successfully",
+          "iterations": 11,
+          "function_calls": 16,
+          "loglikelihood": 0.9007799105415415,
+          "projected_score_norm": 2.0315252169389453e-06,
+          "feasible": true,
+          "hit_numerical_guard": false
+        },
+        {
+          "solver_success": true,
+          "verified": true,
+          "message": "Optimization terminated successfully",
+          "iterations": 14,
+          "function_calls": 20,
+          "loglikelihood": 0.9007799105412406,
+          "projected_score_norm": 2.2401597514765115e-06,
+          "feasible": true,
+          "hit_numerical_guard": false
+        }
+      ],
+      "projected_score_norm": 4.0966220149485366e-07,
+      "score_threshold": 7e-06,
+      "boundary_parameters": [],
+      "a_scale": 0.911464781604563,
+      "coordinates": "log(a/a_scale),log(B_i),p_i"
+    }
+  },
+  "comparison": {
+    "absolute_log_a_difference": 1.643007765569751e-08,
+    "max_parameter_error_relative_to_block_total": 6.577650406777244e-08,
+    "absolute_loglikelihood_difference": 1.9206858326015208e-14
+  }
+}

@@ -327,3 +327,63 @@ A=(.388281063179,.388281063179), B=(.178753408926,.536260247045).
 Maximum absolute difference from analytical fitted parameters was 4.22e-8;
 absolute full log-likelihood difference was 1.32e-14 (rounded upward).
 Final full-suite rerun: **222 passed in 1.10 seconds**.
+
+## 2026-10-26: completion audit and independent numerical stress verification
+
+Read the attached completion request, inspected the existing modules, derivations,
+model specification, tests, and examples. The working tree already contained a
+correct within-block estimator and 52 restricted tests, with 222 total passing
+cases. Preserved the unrestricted implementation and all existing tests. A
+SHA-256 comparison confirmed `src/model.py`, `src/censoring.py`,
+`src/likelihood.py`, `src/mle.py`, and the five existing test files are unchanged
+from the beginning of this audit. Existing user changes were not reset.
+
+Rechecked the exact likelihood, d_ic/W_i conditional estimates, unrestricted
+profile, and the restricted B,p separation. The strict-concavity proof remains
+valid; added the uniform-convergence justification for differentiating its
+exponential series. Added raw-parameter KKT equations at positive order
+equalities, complementing the existing p-coordinate multipliers. No erroneous
+statistical formula was found in the baseline.
+
+Made one small production correction: equal-count pairs that already satisfy
+the constraint were unnecessarily re-exponentiated, which can change one
+floating-point rounding step. They now remain bit-for-bit unchanged; only
+strict violations pool. Production also explicitly checks relative block-total
+preservation and exposes those residuals in diagnostics.
+
+Added `experiments/within_block_validation.py`. Its SLSQP optimization jointly
+fits scaled log a, log totals, and bounded proportions, with an expanded full
+likelihood and three fixed feasible starts. It does not call either analytical
+estimator to obtain its estimates or initialization. Its independent gradient
+is checked by finite differences; each result requires solver success,
+feasibility, projected stationarity, and no guard contact. The old raw-b
+finite-difference oracle and its tests remain unchanged.
+
+Found a verification-range limitation in the old oracle: its log-a guard of
+15 excludes a valid near-one-time example whose estimated a is about 2.0035e8.
+The new data-scaled coordinate allows independent verification of that case.
+It also agrees for very small times and for a dataset spanning the representable
+support endpoints, including both zero-count directions. Near-coincident times
+with unrepresentable estimates still return an explicit numerical failure.
+No automatic fallback or arbitrary-precision estimator was introduced.
+
+Added 32 cases in `tests/test_within_block_validation.py`. Full validation:
+`.venv/bin/python -m pytest -q` reported **254 passed in 1.18 seconds**.
+Compilation and whitespace checks passed. The expanded teaching example prints
+the original seven rows, three fits, pooling decisions, cause probabilities,
+and survival invariance. The report command writes the executed comparison to
+`results/within_block_validation.json`, including all starts and input rows.
+
+Teaching-data SLSQP: a=1.173959821550, A=(.388281083610,.388281083610),
+B=(.178753439640,.536260336209), log L=.900779910542. All three starts pass
+checks. Maximum absolute parameter difference from the analytical restricted
+fit is about 4.7032e-8 and log-likelihood difference is about 1.9207e-14.
+No material disagreement remains within the stated tolerances. Common a,
+totals, and minimum survival are preserved by the analytical restriction; only
+cause probabilities change in violating blocks.
+
+See `docs/WITHIN_BLOCK_VALIDATION.md` for the file inventory, mathematical
+audit, exact commands, result table, and remaining limits. The within-block
+stage is complete for the provisional model and documented numerical domain.
+Across-block PAVA, combined restrictions, Bayesian estimation, uncertainty,
+and simulation studies remain outside this task and were not implemented.

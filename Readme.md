@@ -7,8 +7,9 @@ within-block order-restricted MLE.** Uncertainty methods,
 simulation, and real-data pipelines are not implemented.
 Bayesian estimation remains a teammate integration placeholder.
 
-Validation on 2026-10-26: **222 tests passed** (170 existing Stage 1-4 tests
-and 52 order-restricted tests) using Python 3.12; exact package versions are recorded in
+Validation on 2026-10-26: **254 tests passed** (170 Stage 1-4 tests,
+52 existing order-restricted tests, and 32 additional audit/stability tests)
+using Python 3.12; exact package versions are recorded in
 `requirements-lock.txt`.
 
 The original project statement is preserved verbatim in
@@ -53,6 +54,7 @@ python3 -m venv .venv
 .venv/bin/python -m experiments.stage3_example
 .venv/bin/python -m experiments.stage4_example
 .venv/bin/python -m experiments.order_restricted_example
+.venv/bin/python -m experiments.within_block_validation --output results/within_block_validation.json
 ```
 
 `requirements.txt` lists the intended stack. `requirements-lock.txt` records the
@@ -189,9 +191,18 @@ zero-b1 boundary supremum when a is identified; no cause-2 failures gives an
 attained positive equality. All single-failure blocks still give unbounded
 likelihood. Check status and convergence before using any result.
 
-The 52 added tests include independent joint constrained SLSQP verification,
-invalid inputs, numerical failures, and boundary cases. Run the reproducible
-example with `.venv/bin/python -m experiments.order_restricted_example`.
+The original 52 restricted tests include independent joint constrained SLSQP
+verification, invalid inputs, numerical failures, and boundary cases. The audit
+adds 32 checks covering exact equality retention, KKT stationarity, survival
+invariance, extreme valid times, and a standalone independently scaled SLSQP fit.
+The latter uses three fixed starts, no profile-based initial values or pooling
+updates, and verifies convergence, feasibility, and projected scores. Its
+machine-readable result is `results/within_block_validation.json`.
+Run the expanded teaching example with
+`.venv/bin/python -m experiments.order_restricted_example`; it prints inputs,
+unrestricted/restricted/numerical fits, pooling decisions, cause probabilities,
+and unchanged minimum survival. See [the audit report](docs/WITHIN_BLOCK_VALIDATION.md)
+for modified files, mathematical checks, numerical comparisons, and limitations.
 No later research stage is implemented.
 
 ## Roadmap

@@ -176,5 +176,12 @@ Numerical/optimization failure remains separate from these mathematical cases.
 
 The two-block teaching example and independent SLSQP checks are available in
 `experiments/order_restricted_example.py` and `tests/test_order_restricted.py`.
+The completed audit adds `experiments/within_block_validation.py` for a
+standalone, jointly constrained SLSQP verification and JSON report, plus
+`tests/test_within_block_validation.py` for invariance and extreme-time tests.
+The production fit retains all already-feasible pairs exactly, including equal
+counts, and checks relative preservation of each block total. Within-block
+order equalities do not add any ordering between facilities. See
+WITHIN_BLOCK_VALIDATION.md for the inspected files, numerical results, and scope.
 No Bayesian method, uncertainty estimate, simulation study, or real-data
 analysis is implemented by this milestone.
