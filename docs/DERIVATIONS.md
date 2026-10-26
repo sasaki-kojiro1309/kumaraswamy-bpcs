@@ -1,8 +1,8 @@
-# Distribution, likelihood, and MLE derivations (Stages 1, 3, and 4)
+# Distribution, likelihood, MLE, and classical uncertainty derivations
 
 These are our derivations and validation identities, not copied BPCS estimators.
 Reference labels below retain the project naming convention. All formulas here
-use a,b>0 and 0<t<1. Both parameters are shapes.
+use a,b>0 and 0<t<1 unless an explicit closure limit is stated. Both parameters are shapes.
 
 ## One latent lifetime
 
@@ -113,7 +113,7 @@ Substitution verifies F_X(MTF)=S_X(MTF)=1/2.
 - Float64 still has finite range: extreme densities/hazards can overflow, tiny
   probabilities can underflow, and extreme medians can round to endpoints.
   Tests cover representative tails, not arbitrary precision or every positive
-  parameter value. Boundary MLE behavior is a future estimation concern.
+  parameter value. Boundary MLE behavior is treated in (M3)–(M8) below.
 
 ## Validation scope
 
@@ -124,9 +124,9 @@ identities, subdensity integrals and sums, cause cumulative incidence, median
 inversion, uniform special case, support conventions, invalid inputs, scalar
 and array behavior, and cancellation/underflow examples.
 
-These checks validate the distribution layer. No likelihood estimates, published
-numerical tables, censoring simulator, or MLE uncertainty results have been
-reproduced yet. Those require the later milestones and matching assumptions.
+These checks validate the distribution layer. The later sections document the
+implemented likelihood, MLE and uncertainty layers. Published numerical-table
+reproduction and a censoring simulator remain pending.
 
 ## Stage 3: notation and observation convention
 
@@ -745,10 +745,11 @@ so exact recovery is not expected. This deterministic test is not a Monte Carlo
 study, does not generate the BPCS removal process, and establishes no empirical
 bias, consistency, coverage, or uncertainty result.
 
-Stage 5 remains unstarted. Observed Fisher information, standard errors,
-confidence intervals, profile intervals, and published numerical uncertainty
-validation will require a separate milestone. Bayesian methods and simulations
-also remain deferred.
+At the end of Stage 4, uncertainty was deferred. The classical uncertainty
+extension (I1)–(I7) below now implements observed information, SEs, Wald intervals,
+exact probability sets and delta reliability intervals. Profile intervals and
+published numerical-table validation remain pending, as do Bayesian methods
+and simulations.
 
 Validation on 2026-10-23: the Stage 4 suite passed 39 cases, and the combined
 suite reported **170 passed in 1.11 seconds**. The executed teaching example
@@ -958,7 +959,8 @@ No raw unconstrained b-score-zero requirement is imposed on an active equality.
 boundary. `boundary_supremum` means an actual zero b limit. Both use
 converged=True only after numerical checks. This retains the existing result
 contract; failed candidates must not be interpreted as MLEs. Numerical failures
-return no parameter vector. No derivative-based uncertainty is reported.
+return no parameter vector. This estimator itself reports no uncertainty;
+`src/uncertainty.py` supplies the supported procedures in (I1)–(I7).
 The compatibility `fit(data, restriction='b_i1 <= b_i2', **options)` accepts only
 this restriction and rejects others explicitly.
 
@@ -1352,3 +1354,28 @@ The teaching analysis prints the following illustrative values (95% intervals):
 These are computations on hand-constructed observations, not experimental
 coverage results or published numerical values. Restricted individual-b and
 incidence SEs/intervals are not supplied even when their point values exist.
+
+
+## Final audit: numerical evaluation corrections
+
+The statistical formulas (D1)–(I6) were independently rechecked without changing
+the estimators. The following arithmetic identities justify the final fixes:
+
+- Let v=a*(-log t)>0. If forming v is subnormal, compute
+  log(1-exp(-v))=log(a)+log(-log t)+O(v), retaining the representable logarithm.
+  The omitted correction is far below float64 log precision in this branch.
+- In the opposite tail, if exp(-v) is subnormal, evaluate
+  c*log(1-exp(-v))=-sign(c)*exp(log(abs(c))-v)*(1+O(exp(-v)))
+  for nonzero c. This avoids losing a representable scaled result before
+  multiplication. c=0 contributes exactly zero. The shared helper is used by
+  log survival (c=b) and log density (c=b-1). No observation or parameter is
+  clipped or replaced.
+- Covariance symmetry is enforced as V/2+V^T/2 rather than (V+V^T)/2 to avoid
+  intermediate overflow; diagonal entries are retained exactly to preserve
+  representable subnormals. Information validity checks remain unchanged.
+- A normal-Wald endpoint outside float64 range is explicitly unavailable,
+  matching transformed-interval reporting. A numerically zero positive point
+  estimate cannot support a log interval.
+
+See FINAL_AUDIT.md for reproductions, actual test counts and independent checks.
+Historical test records above describe their individual milestones.

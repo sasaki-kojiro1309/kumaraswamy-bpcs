@@ -68,6 +68,7 @@ def _parameters(data, a, b_by_block):
     totals, probs = [], []
     for label in labels:
         if (not isinstance(b_by_block[label], (tuple, list, np.ndarray))
+                or np.ndim(b_by_block[label]) != 1
                 or any(not isinstance(v, Real) or isinstance(v, (bool, np.bool_))
                        for v in b_by_block[label])):
             raise ValueError("each block needs two real nonboolean b values")
@@ -141,11 +142,13 @@ def observed_information(data, a, b_by_block, *, coordinates="total", time_only=
     return InformationResult(names, J, {"kind": "observed", "symmetric": True})
 
 
+@np.errstate(under="ignore")
 def covariance_from_information(information, *, max_condition=1e12):
     """Equilibrated Cholesky solve. Never regularizes or uses a pseudoinverse.
 
     Conditioning threshold applies after diagonal equilibration, to avoid
     rejecting a matrix merely because parameters use different units.
+    Representable subnormal covariances are allowed; zero diagonals are rejected.
     """
     limit = _positive(max_condition, "max_condition")
     J = np.asarray(information.matrix if isinstance(information, InformationResult)
@@ -172,7 +175,11 @@ def covariance_from_information(information, *, max_condition=1e12):
     V = cho_solve(factor, np.eye(len(s)))/s[:, None]/s[None, :]
     if not np.all(np.isfinite(V)) or np.any(np.diag(V) <= 0):
         raise InformationError("covariance outside numerical range")
-    return (V+V.T)/2
+    # Averaging before scaling can overflow even when V itself is finite.
+    # Preserve the diagonal exactly, including representable subnormals.
+    symmetric = .5*V+.5*V.T
+    np.fill_diagonal(symmetric, np.diag(V))
+    return symmetric
 
 
 def binomial_interval(d, m, *, confidence=.95, restricted=False):
@@ -198,9 +205,16 @@ def _wald(value, se, confidence, scale):
                         "Estimate or standard error exceeds numerical range.")
     z = norm.isf((1-confidence)/2)
     if scale == "wald":
-        bounds = (value-z*se, value+z*se)
+        with np.errstate(over="ignore", invalid="ignore"):
+            bounds = (value-z*se, value+z*se)
+        if not np.all(np.isfinite(bounds)):
+            return Interval(None, None, "normal Wald", confidence, "unavailable",
+                            "Interval exceeds floating-point range.")
     else:
         if scale == "log":
+            if value <= 0:
+                return Interval(None, None, "log Wald", confidence, "unavailable",
+                                "Estimate numerically saturates a support endpoint.")
             center, error, inverse = np.log(value), se/value, np.exp
         else:
             if not 0 < value < 1:

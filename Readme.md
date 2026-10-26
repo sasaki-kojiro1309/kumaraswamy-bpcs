@@ -7,8 +7,8 @@ within-block order-restricted MLE, and classical observed-information/interval
 inference.** Simulation and real-data pipelines are not implemented.
 Bayesian estimation remains a teammate integration placeholder.
 
-Validation on 2026-10-26: **309 tests passed** (254 existing tests preserved, plus
-55 classical uncertainty tests)
+Validation on 2026-10-26: **325 tests passed**, with zero failures or skips (309 baseline tests plus
+16 final-audit regression and derivative checks)
 using Python 3.12; exact package versions are recorded in
 `requirements-lock.txt`.
 
@@ -288,12 +288,16 @@ inversion failure. No ridge, pseudoinverse, or epsilon boundary substitution is
 used. See [DERIVATIONS.md I1–I7](docs/DERIVATIONS.md#classical-uncertainty-i1i7-2026-10-26)
 for all formulas, reference notation issues, coverage arguments and limitations.
 
-Validation: 55 focused tests compare both analytical Hessians with independent
+At the classical-uncertainty milestone, 55 focused tests compared both analytical
+Hessians with independent
 likelihood differences for 1–3 blocks, verify covariance transformations and
 nonlinear Hessian corrections, enumerate binomial coverage, check boundaries,
-confirm reliability gradients numerically and verify delta calculations. The
-254 preexisting tests and all preexisting model/estimator source files remain
-unchanged. No existing algorithm error was identified. Published-table
+confirm reliability gradients numerically and verify delta calculations. At that
+milestone, the
+254 preexisting tests and model/estimator source files were unchanged. The final
+audit subsequently added focused distribution-tail and uncertainty robustness
+fixes; the MLE algorithms remain unchanged. No error in the MLE derivations was
+identified. Published-table
 reproduction, Monte Carlo coverage, Bayesian inference and new experimental
 stages remain pending.
 
@@ -312,3 +316,14 @@ stages remain pending.
 
 The references have different distributions or censoring designs. Neither IEED
 formulas nor hybrid-stopping likelihoods are substituted into this model.
+
+## Final classical-code audit
+
+See [FINAL_AUDIT.md](docs/FINAL_AUDIT.md) for confirmed defects, corrections,
+independent verification and numerical limits. All 325 tests pass with warnings
+as errors; all six numerical example/verification modules execute successfully.
+The audit corrected two extreme-tail arithmetic defects, covariance averaging
+overflow, unavailable Wald endpoint reporting and a malformed-pair error case.
+No error in the statistical derivations or MLE algorithms was found. A minimal
+[GitHub Actions workflow](.github/workflows/tests.yml) runs the suite on Python
+3.12; its hosted execution requires pushing the changes and was not run locally.

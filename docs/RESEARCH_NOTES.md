@@ -1,5 +1,13 @@
 # Research log
 
+Current status (2026-10-26): distribution, BPCS data/likelihood, unrestricted and
+within-block restricted MLE, and supported classical uncertainty are implemented.
+The final audit reports 325 passing tests (zero failures/skips); see
+FINAL_AUDIT.md. Bayesian methods, random simulations, real-data analysis and
+published numerical-table reproduction remain pending. Entries below are
+historical milestone records; their test totals and future-tense status apply
+to those milestones only.
+
 ## 2026-10-23: first milestone
 
 Read the original project statement (now preserved verbatim in `PROJECT_STATEMENT.md`). Found all three reference PDFs
@@ -44,7 +52,7 @@ ends and an interior mode, not a decreasing density; the mapping from (0,1) to
 calculus, not those descriptive statements. No real-data transformation has
 been selected or applied.
 
-## Scientific status
+## Scientific status at Stage 1 (historical)
 
 1. Established literature: Kumaraswamy CDF/PDF, independent competing-risk
    contributions, progressive Type-II organization within facilities.
@@ -223,7 +231,7 @@ fits; the largest active log-parameter scores are approximately 4.4e-16 and
 6.1e-9. Cause-1 fitted probabilities equal observed proportions 2/3 and 1/4.
 These are fits to hand-constructed teaching data, not published results.
 
-**Stage 5 remains unstarted.** Observed information, standard errors, confidence
+**At the end of Stage 4, Stage 5 was unstarted.** Observed information, standard errors, confidence
 intervals, profile intervals, Bayesian estimation, and random simulations were
 not implemented. Published numerical baseline reproduction remains pending
 matching source assumptions and data; no paper table is claimed reproduced.
@@ -387,3 +395,24 @@ audit, exact commands, result table, and remaining limits. The within-block
 stage is complete for the provisional model and documented numerical domain.
 Across-block PAVA, combined restrictions, Bayesian estimation, uncertainty,
 and simulation studies remain outside this task and were not implemented.
+
+
+## 2026-10-26: classical uncertainty and final corrections audit
+
+The classical inference milestone added analytical observed information in both
+parameterizations, Jacobian covariance transformation, regular Wald/log/logit
+intervals, exact binomial sets intersected with the within-block order, and
+pointwise delta reliability uncertainty. Its 55 tests brought the suite to 309.
+The procedures and boundary exclusions are documented in DERIVATIONS.md I1–I7.
+
+The final audit reproduced five implementation defects: tiny-shape log-power
+underflow near time 1; loss of a representable scaled tail probability; overflow
+when averaging covariance with its transpose; infinite raw-Wald endpoints marked
+available; and a zero-dimensional pair raising TypeError instead of ValueError.
+Focused corrections affect only model arithmetic and uncertainty handling.
+No statistical derivation error or MLE-algorithm error was found. No optimizer
+was changed and no new inference procedure was introduced. Sixteen new tests
+cover these cases and additional off-fit Hessian configurations. All 325 tests
+pass with warnings as errors; all six numerical example/validation modules run
+without stderr. A minimal GitHub Actions workflow was added but not remotely run.
+See FINAL_AUDIT.md for exact comparisons, reproduction commands and limits.

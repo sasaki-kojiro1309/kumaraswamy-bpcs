@@ -183,8 +183,9 @@ The production fit retains all already-feasible pairs exactly, including equal
 counts, and checks relative preservation of each block total. Within-block
 order equalities do not add any ordering between facilities. See
 WITHIN_BLOCK_VALIDATION.md for the inspected files, numerical results, and scope.
-No Bayesian method, uncertainty estimate, simulation study, or real-data
-analysis is implemented by this milestone.
+That MLE-only milestone did not implement uncertainty. The classical extension
+below now supplies the supported uncertainty procedures. Bayesian methods,
+simulation studies and real-data analysis remain unimplemented.
 
 ## Classical uncertainty extension (2026-10-26)
 
@@ -225,3 +226,10 @@ The full observed information is not the expected Fisher information.
 Published numerical-table reproduction, simulations and empirical coverage
 studies remain separate pending work. No Bayesian or additional ordering
 methods are included by this extension.
+
+
+The final numerical audit preserves these assumptions and public interfaces.
+Subnormal distribution tails are evaluated on the log scale; covariance
+symmetrization avoids intermediate overflow; nonrepresentable Wald endpoints
+are explicitly unavailable. These arithmetic fixes do not extend statistical
+inference at nonregular boundaries. See FINAL_AUDIT.md for verification.

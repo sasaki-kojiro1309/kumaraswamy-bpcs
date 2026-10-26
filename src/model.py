@@ -29,13 +29,29 @@ def _return(value):
     return value.item() if value.ndim == 0 else value
 
 
-def _log_one_minus_power(t, a):
-    """Stable log(1-t**a) for interior times; avoid cancellation near t=1."""
-    z = a * np.log(t)
+def _log_one_minus_power(t, a, scale=1.0):
+    """Stable scale*log(1-t**a) for interior times, including subnormal tails."""
+    if scale == 0:
+        return np.zeros_like(t)
+    logt = np.log(t)
+    with np.errstate(over="ignore", under="ignore"):
+        z = a * logt
     out = np.empty_like(z)
-    near = z > -np.log(2.0)
+    # If a*(-log t) is subnormal, forming it loses relative precision (or
+    # rounds to zero). log(1-exp(-v)) = log(v) + O(v), where the correction
+    # is far below log-scale precision here. Keep log(v) without multiplying.
+    tiny = -z < np.finfo(float).tiny
+    out[tiny] = np.log(a) + np.log(-logt[tiny])
+    near = (z > -np.log(2.0)) & ~tiny
     out[near] = np.log(-np.expm1(z[near]))
-    out[~near] = np.log1p(-np.exp(z[~near]))
+    tail = ~(near | tiny)
+    out[tail] = np.log1p(-np.exp(z[tail]))
+    lost = tail & (-out < np.finfo(float).tiny)
+    out *= scale
+    # A power may underflow although its product with a large scale is
+    # representable. In this tail log(1-exp(z))=-exp(z)*(1+O(exp(z))).
+    with np.errstate(under="ignore"):
+        out[lost] = -np.sign(scale)*np.exp(np.log(abs(scale))+z[lost])
     return out
 
 
@@ -56,7 +72,7 @@ class Kumaraswamy:
         out = np.full_like(t, -np.inf)
         out[t <= 0] = 0.0
         inside = (t > 0) & (t < 1)
-        out[inside] = self.b * _log_one_minus_power(t[inside], self.a)
+        out[inside] = _log_one_minus_power(t[inside], self.a, self.b)
         return _return(out)
 
     def sf(self, t):
@@ -75,7 +91,7 @@ class Kumaraswamy:
         x = t[inside]
         out[inside] = (np.log(self.a) + np.log(self.b)
                        + (self.a - 1) * np.log(x)
-                       + (self.b - 1) * _log_one_minus_power(x, self.a))
+                       + _log_one_minus_power(x, self.a, self.b - 1))
         return _return(out)
 
     def pdf(self, t):

@@ -287,3 +287,41 @@ def test_interval_numerical_failure_explicit_without_clipping():
     assert _wald(1., 1e4, .95, 'log').status == 'unavailable'
     for value in (0., 1.):
         assert _wald(value, .1, .95, 'logit').status == 'unavailable'
+
+
+@pytest.mark.parametrize('information', [1e-308, 1e308])
+def test_covariance_symmetrization_does_not_overflow(information):
+    with np.errstate(all='raise'):
+        V = covariance_from_information([[information]])
+    assert np.isfinite(V[0, 0]) and V[0, 0] > 0
+    assert V[0, 0] == pytest.approx(1/information, rel=2e-14, abs=0)
+
+
+def test_raw_wald_overflow_is_explicitly_unavailable():
+    from src.uncertainty import _wald
+    with np.errstate(all='raise'):
+        ci = _wald(1., 1e308, .95, 'wald')
+    assert ci.status == 'unavailable' and ci.lower is None and ci.upper is None
+    assert _wald(0., .1, .95, 'log').status == 'unavailable'
+
+
+def test_scalar_parameter_pair_raises_documented_value_error():
+    with pytest.raises(ValueError, match='two real'):
+        observed_information(load_example(), 1., {'A': np.array(1.), 'B': (1., 2.)})
+
+
+@pytest.mark.parametrize('a', [.35, 1.8, 4.5])
+@pytest.mark.parametrize('coordinates', ['total', 'original'])
+def test_withdrawal_design_hessians_at_additional_off_fit_points(a, coordinates):
+    data = load_example()
+    if coordinates == 'total':
+        x = np.array([a, .9, 1.4, .3, .65])
+        def pairs(v):
+            return {s: (v[1+i]*v[3+i], v[1+i]*(1-v[3+i])) for i, s in enumerate(('A', 'B'))}
+    else:
+        x = np.array([a, .27, .63, .91, .49])
+        def pairs(v):
+            return {'A': tuple(v[1:3]), 'B': tuple(v[3:5])}
+    J = observed_information(data, a, pairs(x), coordinates=coordinates).matrix
+    f = lambda v: loglikelihood(data, v[0], pairs(v))
+    np.testing.assert_allclose(J, numerical_hessian(f, x, step=5e-5), rtol=2e-5, atol=5e-6)

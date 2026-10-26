@@ -107,3 +107,27 @@ def test_tail_stability_without_clipping():
     assert np.isfinite(heavy.hazard(.99))  # evaluated without 0/0
     risks = CompetingRisks(2, 400, 600)
     assert np.isfinite(risks.cause_logpdf(.99, 1))
+
+
+@pytest.mark.parametrize('a', [1e-300, 1e-310, 1e-320])
+def test_subnormal_power_keeps_finite_log_density_and_hazard(a):
+    # For tiny a, q=1-t**a ~ a*(-log t). This is a log-scale limit,
+    # not a replacement of the parameter or time by epsilon.
+    t = np.nextafter(1., 0.)
+    model = Kumaraswamy(a, 1.)
+    with np.errstate(all='raise'):
+        expected_logq = np.log(a)+np.log(-np.log(t))
+        assert model.logsf(t) == pytest.approx(expected_logq, abs=2e-13)
+        assert model.logpdf(t) == pytest.approx(np.log(a)-np.log(t), abs=2e-13)
+        expected_hazard = 1/(t*(-np.log(t)))
+        assert model.hazard(t) == pytest.approx(expected_hazard, rel=2e-13)
+
+
+@pytest.mark.parametrize('a', [460., 465., 500.])
+def test_large_shape_rescues_representable_mass_after_power_underflow(a):
+    model = Kumaraswamy(a, 1e308)
+    # t**a underflows, but b*t**a is representable. Higher terms in the
+    # expansion of log(1-t**a) are negligible in the subnormal-power tail.
+    expected = np.exp(np.log(1e308)+a*np.log(.2))
+    assert model.cdf(.2) == pytest.approx(-np.expm1(-expected), rel=2e-13, abs=0)
+    assert model.logsf(.2) == pytest.approx(-expected, rel=2e-13, abs=0)

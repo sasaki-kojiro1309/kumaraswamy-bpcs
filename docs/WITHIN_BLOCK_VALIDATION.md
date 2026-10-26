@@ -1,5 +1,10 @@
 # Within-block order-restricted MLE: completion and audit report
 
+Historical MLE-only audit, 2026-10-26. Its 254-test result and file-preservation
+statements below describe that milestone. Classical uncertainty was implemented
+subsequently; see DERIVATIONS.md (I1)–(I7). The final codebase audit reports
+325 passing tests in FINAL_AUDIT.md.
+
 Date: 2026-10-26. Scope: unrestricted MLE and b_i1<=b_i2 independently in
 each block, with a common positive a, known causes, independent latent risks,
 and fixed completed progressive Type-II schemes within blocks.
