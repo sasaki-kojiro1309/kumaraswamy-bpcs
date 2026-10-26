@@ -1065,3 +1065,290 @@ Priority 3, only after a separately authorized scope, is to reconsider other
 scientifically motivated restrictions; their profiles must be derived afresh.
 No Bayesian inference, intervals, experimental simulation study, or real-data
 analysis is added in this milestone.
+
+## Classical uncertainty: I1–I7 (2026-10-26)
+
+### I1. Factorization and derivatives
+
+These are derivations for **our provisional common-a, block-specific-b model**.
+Reference 1 — Wang et al. (2023), Section 2.1, PDF p.6, supports the fixed
+block-wise progressive Type-II experiment and common-mechanism/facility-specific
+parameter structure; its IEED derivatives are not used. Reference 2 — Wang
+(2018), Section 3.2, Theorems 3–4, equations (8)–(9), supports the single-block
+common-shape Kumaraswamy baseline. Its Section 3.3 and Appendix F motivate
+observed-information ACI, with the qualifications in I3. Reference 3 — Mahto
+et al. (2022) concerns a different censoring design; no hybrid likelihood or
+Bayesian interval is imported here.
+
+Write w_ij=1+r_ij, u_ij=-log x_ij>0, z_ij=a u_ij,
+L_ij=log(1-exp(-z_ij)), W_i=-sum_j w_ij L_ij,
+H_i=sum_j L_ij, T=sum_ij log x_ij, and M=sum_i m_i.
+With B_i=b_i1+b_i2 and p_i=b_i1/B_i, substituting b_i1=B_i p_i and
+b_i2=B_i(1-p_i) in the verified likelihood gives
+
+\[
+\ell=\log C+M\log a+(a-1)T+
+\sum_i\{m_i\log B_i-B_iW_i(a)-H_i(a)
++d_{i1}\log p_i+d_{i2}\log(1-p_i)\}. \tag{I1}
+\]
+
+This is a reparameterization of a likelihood, so **no density Jacobian** is
+introduced. C depends on risk sets only; its derivatives vanish. In plain
+language, failure times estimate a and each total B, while the cause labels
+estimate the share p. The two parts separate exactly in the likelihood.
+
+Direct differentiation, holding observations fixed, yields
+
+\[
+P_{ij}=L'_{ij}=\frac{u_{ij}}{e^{a u_{ij}}-1},\qquad
+L''_{ij}=-Q_{ij},\quad
+Q_{ij}=\frac{u_{ij}^2e^{-a u_{ij}}}{(1-e^{-a u_{ij}})^2}.
+\]
+
+Hence W'_i=-sum wP, W''_i=sum wQ, H'_i=sum P,
+and H''_i=-sum Q. The complete first derivatives are
+
+\[
+U_a=M/a+T-\sum_i B_iW'_i-\sum_i H'_i,\quad
+U_{B_i}=m_i/B_i-W_i,\quad
+U_{p_i}=d_{i1}/p_i-d_{i2}/(1-p_i). \tag{I2}
+\]
+
+### I2. Analytical observed information
+
+In q=(a,B_1,...,B_k,p_1,...,p_k), all nonzero entries of J=-Hessian(ell) are
+
+\[
+\begin{split}
+J_{aa}&=M/a^2+\sum_{ij}(B_iw_{ij}-1)Q_{ij},\\
+J_{a B_i}&=J_{B_i a}=W'_i=-\sum_jw_{ij}P_{ij},\\
+J_{B_iB_i}&=m_i/B_i^2,\\
+J_{p_ip_i}&=d_{i1}/p_i^2+d_{i2}/(1-p_i)^2.
+\end{split}\tag{I3}
+\]
+
+All different-block B/B, different-block p/p, a/p and B/p entries vanish.
+For example, differentiating U_a in B_i gives -W'_i, so negating this
+second derivative gives W'_i (negative), which fixes the cross-entry sign.
+In original coordinates theta=(a,b_11,b_12,...), J_aa is unchanged,
+J_(a,b_ic)=W'_i, J_(b_ic,b_ic)=d_ic/b_ic²; all b/b off-diagonals vanish.
+These are **observed**, data-dependent matrices. Expected Fisher information
+would require averaging over this censoring experiment and is not implemented.
+
+For completeness, away from a stationary point Hessians do not transform like
+covariances. Let A=dq/dtheta. Then
+
+\[
+J_\theta=A^TJ_qA-\sum_i U_{p_i}\nabla_\theta^2p_i.\tag{I4}
+\]
+
+The B mapping is linear and contributes no second derivative. In block i,
+p_b1=(1-p)/B, p_b2=-p/B,
+p_b1b1=-2(1-p)/B², p_b2b2=2p/B²,
+p_b1b2=(2p-1)/B². The correction vanishes at an unrestricted interior MLE,
+but generally does **not** vanish at an active constrained fit. Tests check
+this identity away from an MLE and reject the naive congruence by example.
+
+Numerical stability: compute L through the existing model's log survival,
+and evaluate aP=z exp(-z)/(1-exp(-z)) and
+ a²Q=z² exp(-z)/(1-exp(-z))² in logarithms. Near zero use
+1-aP=z/2-z²/12+z⁴/720-z⁶/30240 and
+1-a²Q=z²/12-z⁴/240+z⁶/6048. Evaluate
+J_aa=sum[(1-a²Q)+B_i w_ij a²Q]/a² to avoid cancellation.
+Unrepresentable derivatives fail explicitly; exact zero cause parameters
+are never replaced by epsilon. Full information requires interior p; the
+(a,B) submatrix remains evaluable at a zero-cause closure limit.
+
+### I3. Covariance, standard errors, and approximate intervals
+
+For an unrestricted, finite, identifiable interior MLE under regular
+large-sample conditions (fixed k, sufficient failures per block and information
+in the time experiment), V_q=J_q(hat q)^(-1) estimates its covariance.
+This is not a finite-sample guarantee. At the fitted p=d1/m, J_pp=m/[p(1-p)],
+so its inverse is p(1-p)/m and all estimated time/p covariances are zero.
+The inverse time matrix retains the common-a coupling between block totals.
+
+To calculate covariance, first require a finite square symmetric matrix with
+positive diagonal. Set s_j=sqrt(J_jj), R_jl=J_jl/(s_j s_l), require a Cholesky
+factorization and an acceptable condition number of R (default <=10^12).
+Solve R X=Identity using the factor and set V_jl=X_jl/(s_j s_l).
+Report raw and equilibrated conditioning. Raw conditioning depends strongly
+on parameter units. There is no ridge adjustment or pseudoinverse. If the
+checks fail, regular SE/ACI are unavailable with an explicit reason; exact
+probability sets still remain available. The public matrix function may
+return an indefinite matrix away from an MLE; the covariance function rejects it.
+
+For theta=g(q), the delta covariance is V_theta=G V_q G^T, G=dg/dq:
+b_i1 derivatives in (B_i,p_i) are (p_i,B_i), while b_i2 derivatives are
+(1-p_i,-B_i); the a derivative is identity. Thus, for example,
+Var(b_i1)=p_i² Var(B_i)+B_i² Var(p_i) at the unrestricted fit,
+and Cov(b_i1,b_i2)=p_i(1-p_i)Var(B_i)-B_i²Var(p_i).
+Standard errors are square roots of diagonal variances.
+
+For confidence 1-alpha and z=Phi^(-1)(1-alpha/2), the marginal normal interval
+is estimate +/- z SE. Raw normal intervals may leave the support. For a
+positive parameter v we also return
+
+\[
+[\hat v\exp(-z\,SE/\hat v),\ \hat v\exp(z\,SE/\hat v)].\tag{I5}
+\]
+
+This follows from Var(log vhat) approximately Var(vhat)/vhat².
+**Reference 2 — Wang (2018), Section 3.3, PDF p.5 prints the delta variance
+with denominator hat lambda_j rather than its square, and Appendix F labels
+raw negative second derivatives as information entries although Section 3.3
+uses the negative Hessian.** We derive the square and sign above, checked
+against numerical differentiation. These are paper notation/formula
+inconsistencies; no preexisting repository algorithm required correction.
+For an interior probability use logit(vhat) +/- z SE/[vhat(1-vhat)], then
+apply expit. Intervals are marginal and approximate, not simultaneous.
+Floating-point overflow/underflow of transformed endpoints is reported as
+unavailable; no arbitrary clipping replaces the interval.
+
+### I4. Restricted and zero-boundary inference
+
+In this model cause and minimum time are independent: g_i1(t)=p_i f_min,i(t).
+Fixed progressive withdrawals chosen independently of cause and remaining
+latent lifetimes preserve iid Bernoulli(p_i) labels at the m_i failures.
+Consequently d_i1 ~ Binomial(m_i,p_i), also conditionally on the observed
+failure-time experiment. Adaptive cause-dependent withdrawals, missing causes,
+or a random stopping count require a new argument and are outside this API.
+
+For d successes out of m, an equal-tailed Clopper–Pearson interval [L,U] has
+L=0 if d=0, otherwise BetaQuantile(alpha/2;d,m-d+1);
+U=1 if d=m, otherwise BetaQuantile(1-alpha/2;d+1,m-d).
+Under p<=1/2 return the **set intersection** [L,U] intersect [0,1/2].
+If L>1/2, the result is empty, represented with status `empty` and None
+endpoints. Never replace it by a singleton at 1/2. For every true allowed p,
+{p lies in the intersected set} equals {p lies in the original set}; thus
+marginal coverage remains at least 1-alpha under the binomial model.
+This does not imply coverage under a false order, simultaneous coverage over
+blocks, or that the confidence set always contains the constrained estimate.
+It can be conservative and wide. Empty sets indicate tension with the order
+at this confidence level; this implementation adds no separate testing rule.
+For cause 2 complement endpoints, preserving the empty-set status.
+This exact set construction is our implementation choice derived from I1;
+we do not attribute it to a reference paper's restricted-interval procedure.
+
+The estimator ptilde=min(d/m,1/2) has an active equality when d1>=d2,
+is inactive for 0<d1<d2, and lies at the zero boundary if d1=0.
+Equality with positive b is distinct from a zero parameter. We use exact
+sets uniformly for restricted p and do not return ordinary restricted p SEs.
+At all-cause-1 samples the restricted estimate is positive equality; at
+all-cause-2 samples b1=0 is a closure supremum. Neither implies a regular
+full-parameter covariance. Restricted individual-b SEs/ACI are **unsupported**
+throughout, including inactive sample constraints, to avoid a data-dependent
+switch of methods without a uniform justification. Unrestricted zero-count
+fits similarly lack full covariance or individual-b/probability Wald inference.
+
+The time likelihood is unchanged by the restriction and by cause counts at
+zero. Its (a,B) covariance is supported separately under regular **time-model**
+asymptotics even when cause inference is nonregular. This is not inversion of
+the Hessian along an active face. All-m_i=1 experiments have no finite shape
+MLE; failed/nonfinite/nonstationary fits cannot be passed as valid estimates.
+
+### I5. Reliability and all analytical gradients
+
+At an interior evaluation time 0<t<1 define L=log(1-t^a), P=dL/da,
+S=exp(BL), F=1-S, h=aBt^(a-1)/(1-t^a),
+v=(1-2^(-1/B))^(1/a). v is **median** lifetime (the project's MTF label),
+not mean time to failure. Point estimates reuse the existing Stage 1 models;
+zero-cause cases use the exact continuous closure pF or (1-p)F.
+In local (a,B,p) coordinates:
+
+\[
+\begin{array}{ll}
+\nabla S=(SBP,SL,0),&
+\nabla h=h(1/a+\log t-P,1/B,0),\\
+\nabla v=v(-\log v/a,-\rho/(aB),0),&
+\rho=z_m/(e^{z_m}-1),\quad z_m=\log2/B,\\
+\nabla p=(0,0,1),&\nabla(1-p)=(0,0,-1),\\
+\nabla(pF)=-p\nabla S+(0,0,F),&
+\nabla((1-p)F)=-(1-p)\nabla S-(0,0,F).
+\end{array}\tag{I6}
+\]
+
+For the median, log v=log(1-exp(-log2/B))/a; differentiating in B gives
+-log2 exp(-log2/B)/[a B²(1-exp(-log2/B))], explaining the negative sign.
+For the hazard, differentiate its log to obtain the displayed formula.
+Use (1-aP)/a+log t rather than subtracting nearly equal 1/a and P.
+For incidence, the product rule applied to p(1-S) gives the last line.
+Embed each gradient in the full block parameter vector with zeros for other
+blocks and compute Var(ghat) approximately grad(g)^T V grad(g).
+For S,h,v only the time covariance is needed. Use log Wald intervals for h,
+and logit Wald intervals for bounded S,v and (regular unrestricted) incidence.
+Probabilities retain exact binomial intervals; their SEs are supplied only
+for regular unrestricted fits. Reliability intervals at multiple t are
+**pointwise marginal**, not simultaneous bands.
+
+Restriction leaves a,B and hence S,h,v and their time-based uncertainty
+unchanged, including when p is active. Incidence depends on p; its ordinary
+delta uncertainty is provided only for regular unrestricted interior fits.
+Restricted/zero-boundary incidence uncertainty is explicitly unsupported.
+Numerically saturated point estimates at 0 or 1 cannot support logit delta
+intervals; the result explicitly marks such intervals unavailable.
+
+### I6. Numerical verification and interfaces
+
+`src/uncertainty.py` exposes `observed_information`,
+`covariance_from_information`, `parameter_inference`, `binomial_interval`,
+`reliability_estimates`, `reliability_gradients`, and `reliability_inference`.
+Information includes ordered coordinate names; covariance outputs use those
+orders. Parameter reports carry time/full/original covariance separately,
+per-parameter SE/interval dictionaries and numerical/restriction diagnostics.
+A missing SE or empty interval dictionary means unsupported or failed;
+inspect diagnostics. Exact empty sets use Interval.status='empty', rather
+than the unavailable status for numerical interval failure.
+The fit/data score checks prevent silently applying a fit from another model
+or dataset. The routine does not refit or modify supplied estimators.
+
+`tests/test_uncertainty.py` checks independent central second differences of
+the existing Stage 3 likelihood for 1–3 blocks in both parameterizations,
+nonlinear Hessian correction away from the fit, transformed covariance against
+an independent original-matrix solve, SE and interval formulas, Cholesky and
+conditioning failures, exact set coverage by binomial enumeration, zero-count
+and active/inactive constraints, finite-difference reliability gradients and
+independent delta quadratic forms. Deterministic enumeration verifies the
+chosen finite cases, while I4 provides the general coverage argument.
+`python -m experiments.classical_inference_example` prints the two-block
+teaching analysis and explicitly flags unsupported inference.
+
+### I7. Scope and limitations
+
+These are classical uncertainty additions and deterministic validation, not
+a Monte Carlo coverage study or a reproduction of a published result table.
+The two-block data have only seven failures, so asymptotic normality is
+particularly tentative. Compatible published numerical reproduction remains
+a separate unfinished validation goal. No expected-information integration,
+profile-likelihood interval, simultaneous band, restricted individual-b/CIF
+interval, Bayesian method, across-block order, new simulator, or real-data
+analysis is introduced. Existing Stages 1–4 and restricted MLE code/tests are
+preserved; reference inconsistencies are handled in this new derivation.
+
+Recorded verification on 2026-10-26: `.venv/bin/python -m pytest -q`
+reported **309 passed in 1.44 s** (254 preserved tests plus 55 new tests).
+All 13 preexisting source/test files matched their pre-task SHA-256 hashes;
+no existing estimator or test was edited. `git diff --check` passed.
+For the teaching fit, independent central likelihood differences with absolute
+step 10^(-5) gave maximum Hessian-entry errors 1.485e-6 (original coordinates)
+and 1.827e-6 (total/proportion coordinates). The transformed original covariance
+agreed with an independent direct linear solve to maximum absolute error
+5.552e-17. Finite-difference errors depend on step and cancellation; the tests
+also use separate moderate, off-fit points with explicit tolerances.
+
+The teaching analysis prints the following illustrative values (95% intervals):
+
+| Quantity | Estimate | SE | Interval / method |
+|---|---:|---:|---|
+| Common a | 1.173960 | 0.542361 | [0.474684, 2.903369], log Wald |
+| B_A | 0.776562 | 0.554363 | [0.191660, 3.146456], log Wald |
+| B_B | 0.715014 | 0.438624 | [0.214855, 2.379485], log Wald |
+| Restricted p_A | 0.500000 | unsupported | [0.094299, 0.500000], exact intersection |
+| Restricted p_B | 0.250000 | unsupported | [0.006309, 0.500000], exact intersection |
+| S_A(0.5), both fits | 0.634626 | 0.168675 | [0.294498, 0.878453], logit delta |
+| h_A(0.5), both fits | 1.451328 | 0.889990 | [0.436303, 4.827734], log delta |
+| Median_A, both fits | 0.638353 | 0.194611 | [0.252750, 0.902071], logit delta |
+
+These are computations on hand-constructed observations, not experimental
+coverage results or published numerical values. Restricted individual-b and
+incidence SEs/intervals are not supplied even when their point values exist.

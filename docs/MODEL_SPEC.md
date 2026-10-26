@@ -185,3 +185,43 @@ order equalities do not add any ordering between facilities. See
 WITHIN_BLOCK_VALIDATION.md for the inspected files, numerical results, and scope.
 No Bayesian method, uncertainty estimate, simulation study, or real-data
 analysis is implemented by this milestone.
+
+## Classical uncertainty extension (2026-10-26)
+
+The classical inference module now supplements the preceding MLE milestone;
+its earlier scope statements describe that milestone historically. All model,
+data and censoring assumptions above remain unchanged. With B_i=b_i1+b_i2,
+p_i=b_i1/B_i, the likelihood factors into independent parameter components:
+a time part in (a,B_1,...,B_k) and a binomial cause-label part for each p_i.
+This factorization assumes fixed m_i and noninformative withdrawals with fully
+known causes. See DERIVATIONS.md I1–I7 for complete first/second derivatives,
+analytical observed information, transformations and numerical checks.
+
+Supported procedures in `src/uncertainty.py`:
+
+- Unrestricted interior MLE: full observed-information covariance, SEs for
+  a,B,p,b1,b2, marginal normal/log/logit Wald intervals as appropriate.
+- Time component (a,B): observed-information covariance and approximate marginal
+  intervals also under within-block restriction and zero-cause closure limits,
+  subject to regular time-model asymptotics and numerical information checks.
+- Cause probabilities: exact marginal Clopper–Pearson sets; within-block
+  restriction intersects the cause-1 set with [0,1/2]. The set can be empty,
+  and remains explicitly empty. Cause-2 sets are complements.
+- Block survival, hazard and median lifetime (MTF means median here): shared
+  Stage 1 point values and pointwise delta SE/transformed intervals from the
+  time covariance. Restricting p leaves their estimates and uncertainty unchanged.
+- Cause-specific cumulative incidence: fitted values for both models; delta
+  uncertainty only for regular unrestricted interior fits.
+
+Unsupported: ordinary full covariance or b/probability Wald SEs at a zero
+cause boundary; ordinary restricted p SEs; restricted individual-b or incidence
+confidence intervals. Active positive equality is distinguished from zero
+parameters and from inactive constraints. No uniform coverage claim is made
+for normal/delta approximations; exact probability coverage is marginal under
+the binomial model and correct order. Intervals are not simultaneous bands.
+Ill-conditioned/nonpositive information fails without regularization; failed,
+unbounded or mismatched fits are rejected. No epsilon replaces a boundary.
+The full observed information is not the expected Fisher information.
+Published numerical-table reproduction, simulations and empirical coverage
+studies remain separate pending work. No Bayesian or additional ordering
+methods are included by this extension.

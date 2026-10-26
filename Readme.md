@@ -3,12 +3,12 @@
 Research project in progress. **Completed scope: Stage 1 distribution layer,
 Stage 2 BPCS data structures/validation, Stage 3 likelihood construction, and
 Stage 4 profile/direct maximum likelihood estimation, plus provisional
-within-block order-restricted MLE.** Uncertainty methods,
-simulation, and real-data pipelines are not implemented.
+within-block order-restricted MLE, and classical observed-information/interval
+inference.** Simulation and real-data pipelines are not implemented.
 Bayesian estimation remains a teammate integration placeholder.
 
-Validation on 2026-10-26: **254 tests passed** (170 Stage 1-4 tests,
-52 existing order-restricted tests, and 32 additional audit/stability tests)
+Validation on 2026-10-26: **309 tests passed** (254 existing tests preserved, plus
+55 classical uncertainty tests)
 using Python 3.12; exact package versions are recorded in
 `requirements-lock.txt`.
 
@@ -215,19 +215,87 @@ No later research stage is implemented.
    convergence diagnostics, boundary/unbounded cases, and deterministic validation.
    **Order-restricted MLE extension complete:** provisional within-block b_i1<=b_i2,
    derivation, exact pooling, boundary diagnostics, and independent numerical checks.
-5. **Stage 5 (not started):** uncertainty and compatible published numerical validation.
+5. **Stage 5 (classical uncertainty implemented):** analytical observed information,
+   covariance/ACI and reliability uncertainty with boundary qualifications.
+   Compatible published numerical-table reproduction remains pending.
 6. **Stages 6-7:** simulate the actual experimental process and evaluate estimators
    on identical datasets with reproducible configurations, tables, and plots.
 7. **Stages 8-10:** assess real-data compatibility, integrate teammate estimators,
    investigate labeled extensions, and produce reproducible results.
 
 Current files: `src/model.py`, `src/censoring.py`, `src/likelihood.py`, `src/mle.py`,
-their test modules, `src/order_restricted.py`, `docs/`, the two-block JSON data,
+their test modules, `src/order_restricted.py`, `src/uncertainty.py`, `docs/`, the two-block JSON data,
 Stage 2/3/4 and order-restricted example scripts, and the teammate placeholder
 `src/bayesian.py`. Reserved directories
-`data/real/` and `results/` contain no research results. Later modules will be
+`data/real/` and `results/` contain no simulation or real-data research results. Later modules will be
 created when their mathematics and contracts are
 established; empty implementation stubs would not constitute completed stages.
+
+## Classical uncertainty and reliability
+
+Run the deterministic teaching analysis and full tests from the repository root:
+
+```bash
+.venv/bin/python -m experiments.classical_inference_example
+.venv/bin/python -m pytest -q
+```
+
+```python
+from experiments.stage2_example import load_example
+from src.mle import fit_mle
+from src.order_restricted import fit_order_restricted_mle
+from src.uncertainty import parameter_inference, reliability_inference
+
+data = load_example()
+fit = fit_mle(data)
+report = parameter_inference(data, fit, confidence=.95)
+print(report.standard_errors)
+print(report.intervals["a"]["log"])
+print(report.original_names, report.covariance_original)
+reliability = reliability_inference(data, fit, t=.5)
+restricted = parameter_inference(data, fit_order_restricted_mle(data))
+print(restricted.intervals["p[A]"]["exact"])
+```
+
+`observed_information` supplies analytical negative Hessians in `(a,B...,p...)`
+or original `(a,b11,b12,...)` coordinates. Covariance uses equilibrated Cholesky
+solves with symmetry/definiteness/conditioning checks. For unrestricted interior
+fits, reports include SEs and marginal normal/log/logit intervals, full covariance
+and its correct transformation to b coordinates. These are asymptotic
+approximations. The actual information matrix is observed, not expected.
+
+Cause probabilities use exact marginal Clopper–Pearson sets. Under b_i1<=b_i2,
+the cause-1 set is intersected with [0,1/2]; it can be **empty**, represented by
+`status="empty"`, with None endpoints. This retains at-least-nominal marginal
+coverage for true allowed probabilities under fixed counts and noninformative
+withdrawals. It does not assert simultaneous coverage or coverage under a false
+order. Cause-2 intervals complement the endpoints.
+
+Separate time-component inference supports a and B even when restricted cause
+estimates are nonregular. Survival, hazard and median (the project's MTF) use
+Stage 1 point values and time-based delta uncertainty, unchanged by the order.
+Unrestricted interior cumulative incidence also has delta uncertainty. All
+reliability intervals are pointwise marginal approximations, not simultaneous
+bands. The teaching dataset has only seven failures and does not validate
+asymptotic coverage.
+
+Restricted individual-b intervals, restricted probability Wald SEs and
+restricted/zero-boundary cumulative-incidence uncertainty are explicitly
+unsupported. Unrestricted zero-cause fits lack full covariance and b/probability
+Wald SEs. Unavailable SEs are None; inspect report diagnostics for numerical
+failures and unsupported procedures. Exact probability sets survive information
+inversion failure. No ridge, pseudoinverse, or epsilon boundary substitution is
+used. See [DERIVATIONS.md I1–I7](docs/DERIVATIONS.md#classical-uncertainty-i1i7-2026-10-26)
+for all formulas, reference notation issues, coverage arguments and limitations.
+
+Validation: 55 focused tests compare both analytical Hessians with independent
+likelihood differences for 1–3 blocks, verify covariance transformations and
+nonlinear Hessian corrections, enumerate binomial coverage, check boundaries,
+confirm reliability gradients numerically and verify delta calculations. The
+254 preexisting tests and all preexisting model/estimator source files remain
+unchanged. No existing algorithm error was identified. Published-table
+reproduction, Monte Carlo coverage, Bayesian inference and new experimental
+stages remain pending.
 
 ## References
 
