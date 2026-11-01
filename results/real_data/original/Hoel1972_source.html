@@ -1,0 +1,65 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Hoel1972 </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="shortcut icon" href="../favicon.ico">
+  </head>
+  
+  <body>
+    <h1>
+      <tt> Hoel1972 </tt>
+      <span style="float:right;">
+        <a href="#" id="copy-button" onclick="copyToClipboard()">
+          <i class="bi-clipboard"></i>
+          <span hidden id="clip-code">read.delim('https://raw.githubusercontent.com/IowaBiostat/data-sets/main/Hoel1972/Hoel1972.txt')</span>
+          <span id="popup" class='hide'>code copied</span>
+        </a>
+        <a href="https://github.com/IowaBiostat/data-sets/raw/main/Hoel1972/Hoel1972.txt"><i class="bi-cloud-download"></i></a>
+      </span>
+    </h1>
+
+    <h2> Time until death for mice exposed to radiation </h2>
+
+    <h3> Dimension </h3>
+
+    <ul>
+      <li> 181 instances (rows) </li>
+      <li> 3 features (columns) </li>
+    </ul>
+
+    <h3 id="description">Description</h3>
+
+<p>Two groups of male mice were given 300 rads of radiation and and tracked until death for instances of cancer.  One group was maintained in a germ-free environment; a control group was maintained a standard lab environment.  The cause of death is recorded for all mice.  In particular, it is worth noting that not all mice died of cancer.</p>
+
+<h3 id="variables">Variables</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Group</code>: Experimental group (Control, Germ-free)</li>
+  <li><code class="language-plaintext highlighter-rouge">Cause</code>: Cause of death (Thymic lymphoma, Reticulum cell sarcoma, Other)</li>
+  <li><code class="language-plaintext highlighter-rouge">Time</code>: Time of death (days)</li>
+</ul>
+
+<h3 id="reference">Reference</h3>
+
+<p>I obtained the data from</p>
+
+<blockquote>
+  <p>Kalbfleisch JD and Prentice RL (2002). <em>The Statistical Analysis of Failure Time Data (2nd edition)</em>, Wiley.</p>
+</blockquote>
+
+<p>The original source is</p>
+
+<blockquote>
+  <p>Hoel DG (1972). A representation of mortality data by competing risks.  <em>Biometrics</em>, <strong>28</strong>:475-488.</p>
+</blockquote>
+
+
+    
+  </body>
+  <script src="../copy.js"></script>  
+</html>
+

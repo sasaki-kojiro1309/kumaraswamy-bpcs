@@ -1,0 +1,1 @@
+{"payload":{"analysis_id":"d91d4e8d182aa5f2341aa2b3","formulas":["AB=abs(mean(estimate-truth))","MSE=mean((estimate-truth)^2)"],"point_groups_checked":702,"source":"Persisted replication CSVs, independent recomputation","status":"passed"},"sha256":"b035781577dc9bcb0742d5f8a756523edfb2395443fa12e42556052e36db24d9"}

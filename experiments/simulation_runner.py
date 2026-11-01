@@ -9,6 +9,7 @@ from pathlib import Path
 import platform
 import sys
 import traceback
+import time
 
 import numpy as np
 import scipy
@@ -21,10 +22,12 @@ from .simulation_generator import (GENERATOR_VERSION, dataset_path, load_dataset
 from .simulation_storage import (CompatibilityError, StorageError, TaskLocked,
     commit_json, read_json, task_lock, recover_locks, save_draws)
 from .simulation_adapters import fit_method
+from .simulation_budget import ExecutionBudget, BudgetExpired
 
 GENERATION_SOURCES = ('experiments/simulation_config.py', 'experiments/simulation_storage.py',
     'experiments/simulation_generator.py', 'src/censoring.py', 'src/model.py')
 FIT_SOURCES = ('experiments/simulation_config.py', 'experiments/simulation_storage.py',
+    'experiments/simulation_budget.py',
     'experiments/simulation_adapters.py', 'experiments/simulation_runner.py',
     'src/censoring.py', 'src/model.py', 'src/likelihood.py', 'src/mle.py',
     'src/order_restricted.py', 'src/uncertainty.py', 'src/bayesian.py', 'src/bayesian_sampling.py')
@@ -145,7 +148,8 @@ def verify_result(path, fit_id, metadata, dataset_sha, method):
     return result, sha
 
 
-def fit_stage(root, cfg, scenarios, methods, *, attempt=1):
+def fit_stage(root, cfg, scenarios, methods, *, attempt=1, budget=None, max_new_fits=None):
+    budget = ExecutionBudget() if budget is None else budget
     ensure_study(root, cfg)
     # Preflight all requested files before any fitting. A recorded generation
     # failure is retained; an unexplained missing file is an actionable error.
@@ -163,7 +167,7 @@ def fit_stage(root, cfg, scenarios, methods, *, attempt=1):
             else:
                 raise CompatibilityError(f'Missing saved dataset: {path}. Run generate first; fit-only never generates.')
     fit_id = campaign(root, cfg, attempt)
-    counts = dict(completed=0, reused=0, locked=0)
+    counts = dict(completed=0, reused=0, locked=0, budget_exhausted=False)
     for scenario, rep, path in work:
         # Load the exact same immutable observed-data object for all methods.
         data, metadata, sha = load_dataset(path, scenario=scenario, repetition=rep, master_seed=cfg['master_seed'])
@@ -173,6 +177,11 @@ def fit_stage(root, cfg, scenarios, methods, *, attempt=1):
                 verify_result(output, fit_id, metadata, sha, method)
                 counts['reused'] += 1
                 continue
+            if budget.remaining() <= 0:
+                counts['budget_exhausted'] = True
+                return fit_id, counts
+            if max_new_fits is not None and counts['completed'] >= max_new_fits:
+                return fit_id, counts
             lock = Path(root)/'metadata'/'locks'/'fitting'/fit_id/f"{metadata['dataset_id']}_{method}.lock"
             try:
                 with task_lock(lock):
@@ -187,7 +196,17 @@ def fit_stage(root, cfg, scenarios, methods, *, attempt=1):
                     if check_sha != sha:
                         raise CompatibilityError('dataset changed after validation')
                     seed = seed_for(cfg['mcmc_master_seed'], 'kw-bpcs-mcmc-v1', metadata['dataset_id'], method)
-                    bundle, draws = fit_method(data, scenario, cfg, method, seed)
+                    try:
+                        with budget.supervise():
+                            bundle, draws = fit_method(data, scenario, cfg, method, seed)
+                    except BudgetExpired:
+                        commit_json(Path(root)/'diagnostics'/'budget_interruptions'/fit_id/
+                            (f"{metadata['dataset_id']}_{method}_{time.time_ns()}.json"),
+                            dict(dataset_id=metadata['dataset_id'],dataset_sha256=sha,
+                                 scenario_id=scenario['id'],repetition=rep,method=method,
+                                 status='budget_interrupted',fit_id=fit_id,mcmc_seed=seed))
+                        counts['budget_exhausted'] = True
+                        return fit_id, counts
                     bundle.update(fit_id=fit_id, dataset_id=metadata['dataset_id'], dataset_sha256=sha,
                                   dataset_path=str(path.relative_to(root)), scenario_id=scenario['id'],
                                   repetition=rep, ordering=scenario['ordering'], censoring=scenario['censoring'],
@@ -235,6 +254,9 @@ def build_parser():
     parser.add_argument('--mcmc-master-seed', type=int)
     parser.add_argument('--attempt', type=int, default=1, help='new explicit fit campaign attempt; never overwrites old results')
     parser.add_argument('--fit-id', help='existing campaign for analyze mode only')
+    parser.add_argument('--budget-seconds', type=float, help='elapsed fit budget; supervises in-flight fits on POSIX')
+    parser.add_argument('--deadline-unix', type=float, help='absolute deadline shared across separate invocations')
+    parser.add_argument('--max-new-fits', type=int, help='stop after this many newly completed method fits (benchmarking)')
     parser.add_argument('--recover-locks', action='store_true', help='only after ALL previous workers have stopped')
     return parser
 
@@ -242,6 +264,9 @@ def build_parser():
 def main(argv=None):
     parser = build_parser(); args = parser.parse_args(argv)
     try:
+        budget = ExecutionBudget(args.budget_seconds, args.deadline_unix)
+        if args.max_new_fits is not None:
+            integer(args.max_new_fits, 'max_new_fits', 1)
         cfg = load_config(args.config)
         if args.repetitions is not None:
             cfg['repetitions'] = args.repetitions
@@ -278,7 +303,8 @@ def main(argv=None):
                 raise TaskLocked('Generation tasks are still locked; resume after they complete')
         fit_id = None
         if args.mode in ('fit', 'run'):
-            fit_id, report = fit_stage(root, cfg, scenarios, methods, attempt=args.attempt)
+            fit_id, report = fit_stage(root, cfg, scenarios, methods, attempt=args.attempt,
+                                      budget=budget, max_new_fits=args.max_new_fits)
             print('Fit campaign:', fit_id, 'status:', json.dumps(report, sort_keys=True))
         if args.mode in ('analyze', 'run'):
             from .simulation_analysis import analyze_stage

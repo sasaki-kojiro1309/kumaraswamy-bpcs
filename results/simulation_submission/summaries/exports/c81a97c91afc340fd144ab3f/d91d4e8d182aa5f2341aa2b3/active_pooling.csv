@@ -1,0 +1,7 @@
+analysis_id,fit_id,scenario_id,method,R_generated,R_verified_order_fits,active_equality_count,active_equality_frequency,block,strict_pooling_count,strict_pooling_frequency
+d91d4e8d182aa5f2341aa2b3,c81a97c91afc340fd144ab3f,equality_late,mle_within_block,20,20,12,0.6,A,9,0.45
+d91d4e8d182aa5f2341aa2b3,c81a97c91afc340fd144ab3f,equality_late,mle_within_block,20,20,11,0.55,B,9,0.45
+d91d4e8d182aa5f2341aa2b3,c81a97c91afc340fd144ab3f,strict_order_late,mle_within_block,20,20,0,0.0,A,0,0.0
+d91d4e8d182aa5f2341aa2b3,c81a97c91afc340fd144ab3f,strict_order_late,mle_within_block,20,20,0,0.0,B,0,0.0
+d91d4e8d182aa5f2341aa2b3,c81a97c91afc340fd144ab3f,violation_late,mle_within_block,20,20,20,1.0,A,20,1.0
+d91d4e8d182aa5f2341aa2b3,c81a97c91afc340fd144ab3f,violation_late,mle_within_block,20,20,20,1.0,B,20,1.0
