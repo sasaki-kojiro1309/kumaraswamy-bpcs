@@ -1,5 +1,11 @@
 # Research log
 
+Current update (2026-11-01): both specified Bayesian priors now have unrestricted
+and within-block restricted implementations. See BAYESIAN_GUIDE.md for current
+verification and BAYESIAN_DERIVATIONS.md for all verified mathematics. The
+2026-10-26 status immediately below and subsequent entries are historical.
+
+
 Current status (2026-10-26): distribution, BPCS data/likelihood, unrestricted and
 within-block restricted MLE, and supported classical uncertainty are implemented.
 The final audit reports 325 passing tests (zero failures/skips); see
@@ -434,3 +440,44 @@ no universal design-specific CLT is claimed. Placeholder authors and unrelated
 RA/entropy/Bayesian-performance prose were removed from the template, retaining
 the specified article format and original institutional affiliation.
 Compilation/layout results are recorded in MANUSCRIPT_AUDIT.md after QA.
+
+
+## 2026-11-01: Bayesian estimation extension
+
+Read the attached Bayesian request and the actual Group_22-4.pdf found in
+Downloads (14 pages), including Sections 4.1–4.4, equations (16)–(35); rendered
+and checked the key Bayesian pages. A byte-identical source copy is preserved
+in References/Group_22-4.pdf. Existing three reference labels are unchanged.
+The complete classical baseline passed 325 tests before implementation.
+
+Added independent-prior marginal-conditional sampling and hierarchical Gamma
+Gibbs/log-slice sampling, each unrestricted or within-block ordered. Retained
+all likelihood signs and Gamma normalizers depending on unknown hyperparameters.
+The ordered hierarchy conditions the entire joint posterior, not separately
+normalized conditional priors. Exact Beta/Gamma factorization makes the
+independent-prior a and total posteriors invariant; no such invariance is
+assumed under the hierarchical model.
+
+Proved posterior propriety and checked first/second moments independently of
+Monte Carlo averages. Corrected an overbroad statement in the task: within-block
+order CAN rescue a zero-cause-2 case under the independent scale prior. The API
+still conservatively excludes all independent-prior zero-count cases as
+requested and calls restricted cases unsupported rather than asserting universal
+impropriety. Derived separate mission-time hazard moment bounds. The report's
+shortest-interval indexing has an extra point when requested mass times sample
+size is integer; the code uses ceil(mass*N) actual included observations.
+
+Added rank-normalized/folded split Rhat, bulk/tail ESS, finite-variance mean MCSE,
+explicit convergence/numerical failure reporting, qualified shortest sample
+intervals and per-draw reliability averaging. The independent-a mean is checked
+by numerical quadrature; both nonstandard shape slice targets and the truncated
+Gamma kernels have independent checks. Four methods run on the existing fixed
+teaching data, without simulation studies or real-data fitting. The configured
+proper hyperpriors are illustrative and explicitly recorded, not scientifically
+elicited defaults. No classical source module or manuscript was changed.
+
+Final verification: 397 passed in 37.67 s with warnings as errors, zero
+failures/skips. All 325 baseline tests remain; 72 Bayesian cases were added.
+All six classical examples and the four-method Bayesian example execute
+successfully. Numerical teaching results and full diagnostics are recorded
+in results/bayesian_teaching_example.json and summarized in BAYESIAN_GUIDE.md.

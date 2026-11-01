@@ -1,11 +1,12 @@
-# Model specification: Stages 1-4 and order-restricted MLE
+# Model specification: classical and Bayesian Kumaraswamy BPCS
 
 Status: provisional design approved by the user on 2026-10-23. Distribution
 primitives, completed BPCS data validation, likelihood evaluation, and profile/
 direct MLE estimation are implemented. The provisional within-block
 order-restricted MLE is implemented and validated on 2026-10-26. Supported
 classical observed-information and interval inference is also implemented;
-experimental simulation, Bayesian estimation, and real-data analysis remain deferred.
+Bayesian estimation under the two specified priors is implemented on 2026-11-01;
+experimental simulation and real-data analysis remain deferred.
 The repository root is the project root; existing `Readme.md` is updated in place and `References/` retains its original
 capitalization. The filesystem treats README.md and Readme.md as the same path.
 
@@ -46,7 +47,8 @@ T_{iu1}\sim Kw(a,b_{i1}),\qquad T_{iu2}\sim Kw(a,b_{i2}),
 \delta_{iu}=\arg\min_{c\in\{1,2\}}T_{iuc}.
 \]
 
-All latent lifetimes are independent across causes, units, and blocks.
+Conditional on the lifetime parameters, all latent lifetimes are independent
+across causes, units, and blocks.
 Units are identically distributed within a block, but generally not across
 blocks. Shared a is a fixed unknown parameter, not a random effect. It is a
 modeling restriction, not a consequence of independence. Both a and b are shape
@@ -185,8 +187,9 @@ counts, and checks relative preservation of each block total. Within-block
 order equalities do not add any ordering between facilities. See
 WITHIN_BLOCK_VALIDATION.md for the inspected files, numerical results, and scope.
 That MLE-only milestone did not implement uncertainty. The classical extension
-below now supplies the supported uncertainty procedures. Bayesian methods,
-simulation studies and real-data analysis remain unimplemented.
+below now supplies the supported classical uncertainty procedures. The Bayesian
+extension is specified at the end of this document; simulation studies and
+real-data analysis remain unimplemented.
 
 ## Classical uncertainty extension (2026-10-26)
 
@@ -234,3 +237,35 @@ Subnormal distribution tails are evaluated on the log scale; covariance
 symmetrization avoids intermediate overflow; nonrepresentable Wald endpoints
 are explicitly unavailable. These arithmetic fixes do not extend statistical
 inference at nonregular boundaries. See FINAL_AUDIT.md for verification.
+
+
+## Bayesian prior specifications (2026-11-01)
+
+The lifetime model, support, fixed schedules and known-cause assumption do not
+change. A prior on the single common unknown a does not introduce unit-specific
+frailty or a different a for each facility. Blocks remain independent conditional
+on their lifetime parameters; shared priors induce marginal dependence.
+
+Implemented cases are unrestricted and b_i1<=b_i2 for every block, under:
+
+1. Independent scale prior pi(a,b) proportional to 1/a times product(1/b_is).
+   Both observed cause counts must be positive in every block, M>1 and D>0.
+   Restricted zero-count cases are conservatively unsupported, not all declared
+   mathematically improper. The a marginal and Gamma totals are unchanged by
+   this within-block restriction; Beta cause proportions are truncated at 1/2.
+2. Hierarchical b_is|kappa_s,lambda_s~Gamma(kappa_s,lambda_s), with explicit
+   proper Gamma priors for a, each kappa_s and each lambda_s. All Gamma laws use
+   shape-rate. Hyperpriors are configuration inputs. The restricted model
+   conditions the entire joint posterior on within-block order; it does not
+   independently normalize conditional prior truncations. Its a marginal and
+   totals generally change under restriction.
+
+The posterior-mean and variance conditions, verified conditional distributions,
+Jacobian factors and credible-interval qualifications are in
+BAYESIAN_DERIVATIONS.md. `src/bayesian.py::fit` returns structured draws,
+posterior-mean estimates where justified, intervals, moments, diagnostics,
+reliability summaries, warnings and reproducibility controls. Infinite/unverified
+means are None; improper priors, numerical failure and failed diagnostics have
+separate classifications. Classical likelihood/MLE/uncertainty source files
+remain unchanged. No across-block order, missing causes, hybrid censoring,
+new loss, simulation study or real-data inference is introduced.

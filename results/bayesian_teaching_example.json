@@ -1,0 +1,2204 @@
+{
+  "description": "Fixed seven-failure teaching data; not a performance or coverage study.",
+  "configuration": {
+    "chains": 4,
+    "warmup": 1000,
+    "draws": 2000,
+    "seed": 20261101,
+    "slice_width": 1.0,
+    "max_slice_steps": 1000,
+    "max_rhat": 1.01,
+    "min_ess": 400.0,
+    "probability": 0.95
+  },
+  "hierarchical_prior": {
+    "a": {
+      "shape": 2.0,
+      "rate": 2.0
+    },
+    "kappa": [
+      {
+        "shape": 3.0,
+        "rate": 2.0
+      },
+      {
+        "shape": 3.0,
+        "rate": 2.0
+      }
+    ],
+    "lam": [
+      {
+        "shape": 2.0,
+        "rate": 2.0
+      },
+      {
+        "shape": 2.0,
+        "rate": 2.0
+      }
+    ]
+  },
+  "data": [
+    {
+      "block": "A",
+      "failure_index": 1,
+      "time": 0.15,
+      "cause": 1,
+      "withdrawals": 1,
+      "at_risk": 6,
+      "after_failure": 5,
+      "remaining": 4
+    },
+    {
+      "block": "A",
+      "failure_index": 2,
+      "time": 0.4,
+      "cause": 2,
+      "withdrawals": 0,
+      "at_risk": 4,
+      "after_failure": 3,
+      "remaining": 3
+    },
+    {
+      "block": "A",
+      "failure_index": 3,
+      "time": 0.7,
+      "cause": 1,
+      "withdrawals": 2,
+      "at_risk": 3,
+      "after_failure": 2,
+      "remaining": 0
+    },
+    {
+      "block": "B",
+      "failure_index": 1,
+      "time": 0.1,
+      "cause": 2,
+      "withdrawals": 0,
+      "at_risk": 7,
+      "after_failure": 6,
+      "remaining": 6
+    },
+    {
+      "block": "B",
+      "failure_index": 2,
+      "time": 0.25,
+      "cause": 1,
+      "withdrawals": 1,
+      "at_risk": 6,
+      "after_failure": 5,
+      "remaining": 4
+    },
+    {
+      "block": "B",
+      "failure_index": 3,
+      "time": 0.55,
+      "cause": 2,
+      "withdrawals": 0,
+      "at_risk": 4,
+      "after_failure": 3,
+      "remaining": 3
+    },
+    {
+      "block": "B",
+      "failure_index": 4,
+      "time": 0.8,
+      "cause": 2,
+      "withdrawals": 2,
+      "at_risk": 3,
+      "after_failure": 2,
+      "remaining": 0
+    }
+  ],
+  "analyses": {
+    "independent_unrestricted": {
+      "status": "diagnostics_passed",
+      "converged": true,
+      "estimates": {
+        "a": 1.0855988154203648,
+        "b1[A]": 0.5028161405215053,
+        "b2[A]": 0.2553527697794871,
+        "b1[B]": 0.17342535823968214,
+        "b2[B]": 0.5123111676186723
+      },
+      "moments": {
+        "a": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b1[A]": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b2[A]": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b1[B]": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b2[B]": {
+          "first": "finite",
+          "second": "finite"
+        }
+      },
+      "intervals": {
+        "a": {
+          "lower": 0.12405518682898628,
+          "upper": 2.112643443359112,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b1[A]": {
+          "lower": 0.005346055124823579,
+          "upper": 1.3888216575700405,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b2[A]": {
+          "lower": 6.179939026618988e-05,
+          "upper": 0.8135394706513353,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b1[B]": {
+          "lower": 1.4794904674203419e-05,
+          "upper": 0.5529436723449803,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b2[B]": {
+          "lower": 0.029589828671322555,
+          "upper": 1.2250189818539905,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        }
+      },
+      "diagnostics": {
+        "parameters": {
+          "a": {
+            "rhat": 1.0007944136633717,
+            "ess_bulk": 6455.9632245873245,
+            "ess_tail": 4586.239452915332,
+            "ess_mean": 7488.128456333627,
+            "mcse_mean": 0.006169207635981986
+          },
+          "b1[A]": {
+            "rhat": 1.0000645393404448,
+            "ess_bulk": 7335.250490655246,
+            "ess_tail": 7157.443902111113,
+            "ess_mean": 8000.0,
+            "mcse_mean": 0.005081560455699449
+          },
+          "b2[A]": {
+            "rhat": 0.9999890243605613,
+            "ess_bulk": 7565.6543280560445,
+            "ess_tail": 7592.315049625156,
+            "ess_mean": 7891.807351440959,
+            "mcse_mean": 0.0034611385051305896
+          },
+          "b1[B]": {
+            "rhat": 1.0004747153937812,
+            "ess_bulk": 7956.619475612658,
+            "ess_tail": 7850.245298195944,
+            "ess_mean": 7991.42935503038,
+            "mcse_mean": 0.0022279962024427916
+          },
+          "b2[B]": {
+            "rhat": 1.0003827396408371,
+            "ess_bulk": 7696.603854422203,
+            "ess_tail": 7570.698141952015,
+            "ess_mean": 8000.0,
+            "mcse_mean": 0.0041809025238847075
+          }
+        },
+        "propriety": {
+          "proper": true,
+          "status": "proper",
+          "all_cause_counts_positive": true,
+          "M": 7,
+          "D": 5.717346629809499,
+          "y_min": {
+            "A": 0.35667494393873245,
+            "B": 0.2231435513142097
+          },
+          "moments": {
+            "a": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b1[A]": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b2[A]": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b1[B]": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b2[B]": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "note": "Hierarchical b moment conditions are sufficient, not necessary. Independent zero counts are conservatively excluded even under restriction."
+        },
+        "elapsed_seconds": 7.236786999994365,
+        "criteria": {
+          "max_rhat": 1.01,
+          "min_ess": 400.0
+        },
+        "note": "Passing rank Rhat/ESS checks does not prove convergence."
+      },
+      "warnings": [],
+      "configuration": {
+        "prior": "independent",
+        "sampler": {
+          "chains": 4,
+          "warmup": 1000,
+          "draws": 2000,
+          "seed": 20261101,
+          "slice_width": 1.0,
+          "max_slice_steps": 1000,
+          "max_rhat": 1.01,
+          "min_ess": 400.0,
+          "probability": 0.95
+        }
+      },
+      "reliability": {
+        "A": {
+          "cause_1_probability": {
+            "estimate": 0.6630764877473555,
+            "interval": {
+              "lower": 0.22422315900970696,
+              "upper": 0.9991694095159083,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9998419328331396,
+              "ess_bulk": 7682.17188390644,
+              "ess_tail": 7749.808477296499,
+              "ess_mean": 7673.343055818064,
+              "mcse_mean": 0.002711545679053727
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_probability": {
+            "estimate": 0.3369235122526445,
+            "interval": {
+              "lower": 0.0008305904840917311,
+              "upper": 0.775776840990293,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9998419328331396,
+              "ess_bulk": 7682.17188390644,
+              "ess_tail": 7749.808477296499,
+              "ess_mean": 7673.343055818071,
+              "mcse_mean": 0.002711545679053726
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "median": {
+            "estimate": 0.6854372898562092,
+            "interval": {
+              "lower": 0.37954849357173476,
+              "upper": 0.9999999998258337,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.000458100094107,
+              "ess_bulk": 7281.578502636911,
+              "ess_tail": 7032.228194182633,
+              "ess_mean": 7408.711710794436,
+              "mcse_mean": 0.0021608325343210693
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "survival@0.5": {
+            "estimate": 0.6514903280711581,
+            "interval": {
+              "lower": 0.35308537942531365,
+              "upper": 0.9245524489353757,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.000060033632315,
+              "ess_bulk": 7591.360151264735,
+              "ess_tail": 7642.486533101556,
+              "ess_mean": 7599.62878681769,
+              "mcse_mean": 0.0017535161869262047
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "hazard@0.5": {
+            "estimate": 1.3572234732501718,
+            "interval": {
+              "lower": 0.12469358965185824,
+              "upper": 3.051735217508102,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0003191892089123,
+              "ess_bulk": 6924.3812152829805,
+              "ess_tail": 7268.86761321316,
+              "ess_mean": 7306.548825586878,
+              "mcse_mean": 0.0100038857464648
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_1_incidence@0.5": {
+            "estimate": 0.23092516495616763,
+            "interval": {
+              "lower": 0.009055792138840923,
+              "upper": 0.4894230840198029,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0001367555924714,
+              "ess_bulk": 7202.223231332433,
+              "ess_tail": 6959.94698086533,
+              "ess_mean": 7134.585119293754,
+              "mcse_mean": 0.0016034291775611034
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_incidence@0.5": {
+            "estimate": 0.11758450697267427,
+            "interval": {
+              "lower": 3.055563971800608e-05,
+              "upper": 0.32334039161035705,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9998241736650049,
+              "ess_bulk": 7923.21368992574,
+              "ess_tail": 7709.690373140361,
+              "ess_mean": 7946.681427795437,
+              "mcse_mean": 0.0011664002469828141
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          }
+        },
+        "B": {
+          "cause_1_probability": {
+            "estimate": 0.2517387029970007,
+            "interval": {
+              "lower": 0.00016098234623065948,
+              "upper": 0.6336619892523456,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0002865446828255,
+              "ess_bulk": 7459.371523119127,
+              "ess_tail": 7619.746533787543,
+              "ess_mean": 7299.312195796628,
+              "mcse_mean": 0.002268225619530262
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_probability": {
+            "estimate": 0.7482612970029994,
+            "interval": {
+              "lower": 0.3663380107476544,
+              "upper": 0.9998390176537694,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0002865446828255,
+              "ess_bulk": 7459.371523119127,
+              "ess_tail": 7619.746533787543,
+              "ess_mean": 7299.312195796599,
+              "mcse_mean": 0.002268225619530267
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "median": {
+            "estimate": 0.6963453981756953,
+            "interval": {
+              "lower": 0.4121695708432732,
+              "upper": 0.9999999999999972,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.999941503835435,
+              "ess_bulk": 8000.0,
+              "ess_tail": 7640.233762060306,
+              "ess_mean": 8000.0,
+              "mcse_mean": 0.0018836496674862438
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "survival@0.5": {
+            "estimate": 0.6644629383026303,
+            "interval": {
+              "lower": 0.3984664433809764,
+              "upper": 0.9098121921525493,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9998578112592343,
+              "ess_bulk": 8000.0,
+              "ess_tail": 7846.538635227382,
+              "ess_mean": 8000.0,
+              "mcse_mean": 0.0015289780837904434
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "hazard@0.5": {
+            "estimate": 1.2477330227082968,
+            "interval": {
+              "lower": 0.1588778687553812,
+              "upper": 2.5719281631516093,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.000171219383849,
+              "ess_bulk": 7757.777707158014,
+              "ess_tail": 7599.626971207282,
+              "ess_mean": 7984.43309295721,
+              "mcse_mean": 0.007552553423750421
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_1_incidence@0.5": {
+            "estimate": 0.0850152064213895,
+            "interval": {
+              "lower": 1.0235269170233988e-05,
+              "upper": 0.24372730828029418,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.000341348985716,
+              "ess_bulk": 7747.286676557761,
+              "ess_tail": 7866.733138865628,
+              "ess_mean": 7475.606424944884,
+              "mcse_mean": 0.0009171533357875247
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_incidence@0.5": {
+            "estimate": 0.25052185527598025,
+            "interval": {
+              "lower": 0.03673620342283805,
+              "upper": 0.4851833451363987,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9998886111708849,
+              "ess_bulk": 8000.0,
+              "ess_tail": 7927.517527610664,
+              "ess_mean": 8000.0,
+              "mcse_mean": 0.001372710569206155
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          }
+        }
+      }
+    },
+    "independent_within_block": {
+      "status": "diagnostics_passed",
+      "converged": true,
+      "estimates": {
+        "a": 1.0855988154203648,
+        "b1[A]": 0.2529208822930238,
+        "b2[A]": 0.5052480280079686,
+        "b1[B]": 0.1354302250320602,
+        "b2[B]": 0.5503063008262944
+      },
+      "moments": {
+        "a": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b1[A]": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b2[A]": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b1[B]": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b2[B]": {
+          "first": "finite",
+          "second": "finite"
+        }
+      },
+      "intervals": {
+        "a": {
+          "lower": 0.12405518682898628,
+          "upper": 2.112643443359112,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b1[A]": {
+          "lower": 0.0034833379071827417,
+          "upper": 0.6993535817351678,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b2[A]": {
+          "lower": 0.01793558915291027,
+          "upper": 1.2942866986317427,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b1[B]": {
+          "lower": 1.6095274097867807e-05,
+          "upper": 0.4101326691005001,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b2[B]": {
+          "lower": 0.040213990673086716,
+          "upper": 1.2671794537160757,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        }
+      },
+      "diagnostics": {
+        "parameters": {
+          "a": {
+            "rhat": 1.0007944136633717,
+            "ess_bulk": 6455.9632245873245,
+            "ess_tail": 4586.239452915332,
+            "ess_mean": 7488.128456333627,
+            "mcse_mean": 0.006169207635981986
+          },
+          "b1[A]": {
+            "rhat": 1.000281096690672,
+            "ess_bulk": 7080.546918060679,
+            "ess_tail": 7584.56178270236,
+            "ess_mean": 7884.1191388012285,
+            "mcse_mean": 0.0025536766035433164
+          },
+          "b2[A]": {
+            "rhat": 1.0001933325898118,
+            "ess_bulk": 7148.210150977311,
+            "ess_tail": 6799.0441704102395,
+            "ess_mean": 8000.0,
+            "mcse_mean": 0.004584776676995309
+          },
+          "b1[B]": {
+            "rhat": 1.0004810539694957,
+            "ess_bulk": 8000.0,
+            "ess_tail": 8000.0,
+            "ess_mean": 8000.0,
+            "mcse_mean": 0.0016316058973484026
+          },
+          "b2[B]": {
+            "rhat": 1.0003140472527456,
+            "ess_bulk": 7626.138800132518,
+            "ess_tail": 7355.957025081849,
+            "ess_mean": 7984.934316927423,
+            "mcse_mean": 0.004246441235884234
+          }
+        },
+        "propriety": {
+          "proper": true,
+          "status": "proper",
+          "all_cause_counts_positive": true,
+          "M": 7,
+          "D": 5.717346629809499,
+          "y_min": {
+            "A": 0.35667494393873245,
+            "B": 0.2231435513142097
+          },
+          "moments": {
+            "a": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b1[A]": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b2[A]": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b1[B]": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b2[B]": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "note": "Hierarchical b moment conditions are sufficient, not necessary. Independent zero counts are conservatively excluded even under restriction."
+        },
+        "elapsed_seconds": 7.213670791003096,
+        "criteria": {
+          "max_rhat": 1.01,
+          "min_ess": 400.0
+        },
+        "note": "Passing rank Rhat/ESS checks does not prove convergence."
+      },
+      "warnings": [],
+      "configuration": {
+        "prior": "independent",
+        "sampler": {
+          "chains": 4,
+          "warmup": 1000,
+          "draws": 2000,
+          "seed": 20261101,
+          "slice_width": 1.0,
+          "max_slice_steps": 1000,
+          "max_rhat": 1.01,
+          "min_ess": 400.0,
+          "probability": 0.95
+        }
+      },
+      "reliability": {
+        "A": {
+          "cause_1_probability": {
+            "estimate": 0.3331432811495471,
+            "interval": {
+              "lower": 0.10841774188161751,
+              "upper": 0.4999611454314629,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0000387330018992,
+              "ess_bulk": 7728.9922569528335,
+              "ess_tail": 8000.0,
+              "ess_mean": 7094.381565816597,
+              "mcse_mean": 0.001403473227391408
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_probability": {
+            "estimate": 0.666856718850453,
+            "interval": {
+              "lower": 0.500038854568537,
+              "upper": 0.8915822581183825,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0000387330018992,
+              "ess_bulk": 7728.9922569528335,
+              "ess_tail": 8000.0,
+              "ess_mean": 7094.381565816563,
+              "mcse_mean": 0.0014034732273914114
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "median": {
+            "estimate": 0.6854372898562092,
+            "interval": {
+              "lower": 0.37954849357173476,
+              "upper": 0.9999999998258337,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0004554168948168,
+              "ess_bulk": 7281.578502636911,
+              "ess_tail": 7032.228194182633,
+              "ess_mean": 7408.711710794436,
+              "mcse_mean": 0.0021608325343210693
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "survival@0.5": {
+            "estimate": 0.6514903280711581,
+            "interval": {
+              "lower": 0.35308537942531365,
+              "upper": 0.9245524489353757,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.000060033632315,
+              "ess_bulk": 7591.360151264735,
+              "ess_tail": 7642.486533101556,
+              "ess_mean": 7599.62878681769,
+              "mcse_mean": 0.0017535161869262047
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "hazard@0.5": {
+            "estimate": 1.3572234732501718,
+            "interval": {
+              "lower": 0.12469358965185824,
+              "upper": 3.051735217508102,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0003191892089123,
+              "ess_bulk": 6924.3812152829805,
+              "ess_tail": 7268.86761321316,
+              "ess_mean": 7306.548825586878,
+              "mcse_mean": 0.0100038857464648
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_1_incidence@0.5": {
+            "estimate": 0.11602702113742502,
+            "interval": {
+              "lower": 0.006088161556525695,
+              "upper": 0.24641200850581488,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9999332964944566,
+              "ess_bulk": 7610.795674554975,
+              "ess_tail": 7531.9650943421975,
+              "ess_mean": 7458.691175096866,
+              "mcse_mean": 0.0007852517073643769
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_incidence@0.5": {
+            "estimate": 0.23248265079141692,
+            "interval": {
+              "lower": 0.04209829955047392,
+              "upper": 0.4498167610655094,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.000052396934234,
+              "ess_bulk": 7493.108880434044,
+              "ess_tail": 7709.233068868561,
+              "ess_mean": 7556.318074113419,
+              "mcse_mean": 0.0012824228964629627
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          }
+        },
+        "B": {
+          "cause_1_probability": {
+            "estimate": 0.1960575150721461,
+            "interval": {
+              "lower": 2.5104737696490268e-05,
+              "upper": 0.4462273954566764,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.00012219385115,
+              "ess_bulk": 7579.482978632197,
+              "ess_tail": 7623.760936836906,
+              "ess_mean": 7541.394080788352,
+              "mcse_mean": 0.001566228625080689
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_probability": {
+            "estimate": 0.8039424849278539,
+            "interval": {
+              "lower": 0.5537726045433236,
+              "upper": 0.9999748952623035,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.00012219385115,
+              "ess_bulk": 7579.482978632197,
+              "ess_tail": 7623.760936836906,
+              "ess_mean": 7541.394080788377,
+              "mcse_mean": 0.0015662286250806867
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "median": {
+            "estimate": 0.6963453981756953,
+            "interval": {
+              "lower": 0.4121695708432732,
+              "upper": 0.9999999999999972,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.999941503835435,
+              "ess_bulk": 8000.0,
+              "ess_tail": 7640.233762060306,
+              "ess_mean": 8000.0,
+              "mcse_mean": 0.0018836496674862438
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "survival@0.5": {
+            "estimate": 0.6644629383026303,
+            "interval": {
+              "lower": 0.3984664433809765,
+              "upper": 0.9098121921525493,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9998578112592343,
+              "ess_bulk": 8000.0,
+              "ess_tail": 7846.538635227382,
+              "ess_mean": 8000.0,
+              "mcse_mean": 0.0015289780837904434
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "hazard@0.5": {
+            "estimate": 1.2477330227082966,
+            "interval": {
+              "lower": 0.1588778687553812,
+              "upper": 2.5719281631516084,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.000171219383849,
+              "ess_bulk": 7757.777707158014,
+              "ess_tail": 7599.626971207282,
+              "ess_mean": 7984.433092957206,
+              "mcse_mean": 0.007552553423750423
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_1_incidence@0.5": {
+            "estimate": 0.06610416492457136,
+            "interval": {
+              "lower": 7.409302448960795e-06,
+              "upper": 0.18240820365314478,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0001562371302046,
+              "ess_bulk": 7877.593547710212,
+              "ess_tail": 7867.8810361948445,
+              "ess_mean": 7942.77473194401,
+              "mcse_mean": 0.0006403767797434671
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_incidence@0.5": {
+            "estimate": 0.2694328967727984,
+            "interval": {
+              "lower": 0.06092462258723425,
+              "upper": 0.5045967477911146,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9999563376018641,
+              "ess_bulk": 8000.0,
+              "ess_tail": 7794.496899317334,
+              "ess_mean": 7879.212129938816,
+              "mcse_mean": 0.0013429514820619416
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          }
+        }
+      }
+    },
+    "hierarchical_unrestricted": {
+      "status": "diagnostics_passed",
+      "converged": true,
+      "estimates": {
+        "a": 1.3294131724765539,
+        "b1[A]": 0.6536053367885004,
+        "b2[A]": 0.46354419168217614,
+        "b1[B]": 0.331993049384012,
+        "b2[B]": 0.6505519379253745,
+        "kappa1": 1.1251494170152239,
+        "kappa2": 1.1992995599484195,
+        "lambda1": 1.4520301656629304,
+        "lambda2": 1.4260792601333483
+      },
+      "moments": {
+        "a": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b1[A]": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b2[A]": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b1[B]": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b2[B]": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "kappa1": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "kappa2": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "lambda1": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "lambda2": {
+          "first": "finite",
+          "second": "finite"
+        }
+      },
+      "intervals": {
+        "a": {
+          "lower": 0.49791430567290423,
+          "upper": 2.2194447307660963,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b1[A]": {
+          "lower": 0.04228608629595594,
+          "upper": 1.5167002324842624,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b2[A]": {
+          "lower": 0.007814695036637117,
+          "upper": 1.195972555629796,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b1[B]": {
+          "lower": 0.002672641072324258,
+          "upper": 0.8615374768270512,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b2[B]": {
+          "lower": 0.0823648411966189,
+          "upper": 1.3920995092180797,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "kappa1": {
+          "lower": 0.23769841414880488,
+          "upper": 2.1849138136743362,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "kappa2": {
+          "lower": 0.2884388337608137,
+          "upper": 2.314662387141453,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "lambda1": {
+          "lower": 0.16289917763681627,
+          "upper": 3.0263134025950307,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "lambda2": {
+          "lower": 0.20033048680137047,
+          "upper": 2.9499649094405545,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        }
+      },
+      "diagnostics": {
+        "parameters": {
+          "a": {
+            "rhat": 1.0001690767367646,
+            "ess_bulk": 3304.3840030172764,
+            "ess_tail": 4935.373215741974,
+            "ess_mean": 3320.8554315567185,
+            "mcse_mean": 0.007968793868641393
+          },
+          "b1[A]": {
+            "rhat": 1.000557385489159,
+            "ess_bulk": 4329.854398084831,
+            "ess_tail": 5625.989386926044,
+            "ess_mean": 4132.469473285441,
+            "mcse_mean": 0.006980212858762783
+          },
+          "b2[A]": {
+            "rhat": 1.000108305464387,
+            "ess_bulk": 4375.868661957445,
+            "ess_tail": 6389.259820354529,
+            "ess_mean": 4357.47745310472,
+            "mcse_mean": 0.005511254797277519
+          },
+          "b1[B]": {
+            "rhat": 1.0003709264732534,
+            "ess_bulk": 4929.782987778816,
+            "ess_tail": 5442.553235455564,
+            "ess_mean": 4771.3713207808205,
+            "mcse_mean": 0.003860641610085819
+          },
+          "b2[B]": {
+            "rhat": 1.0000992719432926,
+            "ess_bulk": 4312.978368696197,
+            "ess_tail": 6304.538877238084,
+            "ess_mean": 4366.9168702046945,
+            "mcse_mean": 0.005819031307002163
+          },
+          "kappa1": {
+            "rhat": 1.0008132030792778,
+            "ess_bulk": 4069.2239071199015,
+            "ess_tail": 4986.36137567769,
+            "ess_mean": 4130.247354124195,
+            "mcse_mean": 0.008542447457165345
+          },
+          "kappa2": {
+            "rhat": 1.0005601659452523,
+            "ess_bulk": 4264.836260447389,
+            "ess_tail": 5149.132521142199,
+            "ess_mean": 4269.865150551926,
+            "mcse_mean": 0.008696156077944467
+          },
+          "lambda1": {
+            "rhat": 1.0001059209796903,
+            "ess_bulk": 5343.149593727774,
+            "ess_tail": 6823.436043069216,
+            "ess_mean": 5402.452152469567,
+            "mcse_mean": 0.011083240508756012
+          },
+          "lambda2": {
+            "rhat": 1.0007568408270444,
+            "ess_bulk": 5034.500121663006,
+            "ess_tail": 6582.595354648084,
+            "ess_mean": 5284.531807764995,
+            "mcse_mean": 0.010719821400242677
+          }
+        },
+        "propriety": {
+          "proper": true,
+          "status": "proper",
+          "all_cause_counts_positive": true,
+          "M": 7,
+          "D": 5.717346629809499,
+          "y_min": {
+            "A": 0.35667494393873245,
+            "B": 0.2231435513142097
+          },
+          "moments": {
+            "a": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b1[A]": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b2[A]": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b1[B]": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b2[B]": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "kappa1": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "kappa2": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "lambda1": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "lambda2": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "note": "Hierarchical b moment conditions are sufficient, not necessary. Independent zero counts are conservatively excluded even under restriction."
+        },
+        "elapsed_seconds": 14.059729582993896,
+        "criteria": {
+          "max_rhat": 1.01,
+          "min_ess": 400.0
+        },
+        "note": "Passing rank Rhat/ESS checks does not prove convergence."
+      },
+      "warnings": [],
+      "configuration": {
+        "prior": {
+          "a": {
+            "shape": 2.0,
+            "rate": 2.0
+          },
+          "kappa": [
+            {
+              "shape": 3.0,
+              "rate": 2.0
+            },
+            {
+              "shape": 3.0,
+              "rate": 2.0
+            }
+          ],
+          "lam": [
+            {
+              "shape": 2.0,
+              "rate": 2.0
+            },
+            {
+              "shape": 2.0,
+              "rate": 2.0
+            }
+          ]
+        },
+        "sampler": {
+          "chains": 4,
+          "warmup": 1000,
+          "draws": 2000,
+          "seed": 20261101,
+          "slice_width": 1.0,
+          "max_slice_steps": 1000,
+          "max_rhat": 1.01,
+          "min_ess": 400.0,
+          "probability": 0.95
+        }
+      },
+      "reliability": {
+        "A": {
+          "cause_1_probability": {
+            "estimate": 0.5870402393196598,
+            "interval": {
+              "lower": 0.20536974594536567,
+              "upper": 0.952409080479871,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9998260429378811,
+              "ess_bulk": 6286.578577056023,
+              "ess_tail": 7397.509766971164,
+              "ess_mean": 6343.220002051262,
+              "mcse_mean": 0.002579478340637257
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_probability": {
+            "estimate": 0.41295976068034035,
+            "interval": {
+              "lower": 0.04759091952012895,
+              "upper": 0.7946302540546344,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9998260429378811,
+              "ess_bulk": 6286.578577056023,
+              "ess_tail": 7397.509766971164,
+              "ess_mean": 6343.22000205127,
+              "mcse_mean": 0.0025794783406372563
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "median": {
+            "estimate": 0.5951678628913819,
+            "interval": {
+              "lower": 0.32149308092730744,
+              "upper": 0.8923948695031633,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0005615164956903,
+              "ess_bulk": 7524.912311682161,
+              "ess_tail": 7110.1868647068895,
+              "ess_mean": 7474.429140537226,
+              "mcse_mean": 0.0017037765098675802
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "survival@0.5": {
+            "estimate": 0.5888859778439561,
+            "interval": {
+              "lower": 0.30807793063718675,
+              "upper": 0.8487473357287122,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0006670554048047,
+              "ess_bulk": 8000.0,
+              "ess_tail": 7888.473494310473,
+              "ess_mean": 8000.0,
+              "mcse_mean": 0.0015898522889336436
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "hazard@0.5": {
+            "estimate": 1.8882980577089445,
+            "interval": {
+              "lower": 0.3990625663074709,
+              "upper": 3.6496303013936466,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.000439840621675,
+              "ess_bulk": 4920.2238775890055,
+              "ess_tail": 6852.292476985652,
+              "ess_mean": 4914.901714680646,
+              "mcse_mean": 0.012700706291803806
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_1_incidence@0.5": {
+            "estimate": 0.24097464848819294,
+            "interval": {
+              "lower": 0.037512155356191935,
+              "upper": 0.47995634285074307,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0002308323709945,
+              "ess_bulk": 7143.730335079936,
+              "ess_tail": 7597.118472555823,
+              "ess_mean": 7139.522709205814,
+              "mcse_mean": 0.0014362306462499521
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_incidence@0.5": {
+            "estimate": 0.1701393736678508,
+            "interval": {
+              "lower": 0.005214366562652968,
+              "upper": 0.3759060156696684,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0001170647988586,
+              "ess_bulk": 6911.434275811478,
+              "ess_tail": 7648.4216326678725,
+              "ess_mean": 6952.571623978521,
+              "mcse_mean": 0.0012827634898197192
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          }
+        },
+        "B": {
+          "cause_1_probability": {
+            "estimate": 0.33580270470776924,
+            "interval": {
+              "lower": 0.02062855912622439,
+              "upper": 0.685259046004,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9999309796530259,
+              "ess_bulk": 6366.1946016529755,
+              "ess_tail": 7036.713437398071,
+              "ess_mean": 6367.426016767168,
+              "mcse_mean": 0.0023421800795481694
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_probability": {
+            "estimate": 0.6641972952922307,
+            "interval": {
+              "lower": 0.314740953996,
+              "upper": 0.9793714408737756,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9999309796530259,
+              "ess_bulk": 6366.194601652971,
+              "ess_tail": 7036.713437398071,
+              "ess_mean": 6367.426016767162,
+              "mcse_mean": 0.002342180079548171
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "median": {
+            "estimate": 0.6252834881383308,
+            "interval": {
+              "lower": 0.3583949495323041,
+              "upper": 0.8902674083719324,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0000437285610981,
+              "ess_bulk": 8000.0,
+              "ess_tail": 7091.284194952555,
+              "ess_mean": 8000.0,
+              "mcse_mean": 0.0015253650554728497
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "survival@0.5": {
+            "estimate": 0.6208197126712138,
+            "interval": {
+              "lower": 0.36861097320605896,
+              "upper": 0.8556449563890524,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0000114796824773,
+              "ess_bulk": 8000.0,
+              "ess_tail": 8000.0,
+              "ess_mean": 8000.0,
+              "mcse_mean": 0.0014322978743328421
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "hazard@0.5": {
+            "estimate": 1.6690876981997669,
+            "interval": {
+              "lower": 0.44998397932692574,
+              "upper": 3.0954260064820285,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.000282334897148,
+              "ess_bulk": 5528.102313023618,
+              "ess_tail": 7091.587601771095,
+              "ess_mean": 5607.307385985537,
+              "mcse_mean": 0.009551724126633462
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_1_incidence@0.5": {
+            "estimate": 0.12787045946548212,
+            "interval": {
+              "lower": 0.0019415165258675243,
+              "upper": 0.2934677707445814,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.000175807238864,
+              "ess_bulk": 6613.481362171466,
+              "ess_tail": 7422.022112328819,
+              "ess_mean": 6665.021304970773,
+              "mcse_mean": 0.0010663156255092381
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_incidence@0.5": {
+            "estimate": 0.2513098278633041,
+            "interval": {
+              "lower": 0.05924555048526425,
+              "upper": 0.4756551151011408,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9996388584475822,
+              "ess_bulk": 7900.502223869874,
+              "ess_tail": 7839.434397178805,
+              "ess_mean": 7916.564663192903,
+              "mcse_mean": 0.0012608513705017932
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          }
+        }
+      }
+    },
+    "hierarchical_within_block": {
+      "status": "diagnostics_passed",
+      "converged": true,
+      "estimates": {
+        "a": 1.3484203007868691,
+        "b1[A]": 0.40059904937184454,
+        "b2[A]": 0.7410395217250572,
+        "b1[B]": 0.2574411099651212,
+        "b2[B]": 0.7449805099265799,
+        "kappa1": 1.019642775023142,
+        "kappa2": 1.3545718833885099,
+        "lambda1": 1.5405948558156717,
+        "lambda2": 1.3756717262153408
+      },
+      "moments": {
+        "a": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b1[A]": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b2[A]": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b1[B]": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "b2[B]": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "kappa1": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "kappa2": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "lambda1": {
+          "first": "finite",
+          "second": "finite"
+        },
+        "lambda2": {
+          "first": "finite",
+          "second": "finite"
+        }
+      },
+      "intervals": {
+        "a": {
+          "lower": 0.5043038396469103,
+          "upper": 2.2797495196536937,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b1[A]": {
+          "lower": 0.025183878338974407,
+          "upper": 0.9165707267469528,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b2[A]": {
+          "lower": 0.09692182316364417,
+          "upper": 1.6042926941430609,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b1[B]": {
+          "lower": 0.00039003695237965075,
+          "upper": 0.6281321022425683,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "b2[B]": {
+          "lower": 0.13158192115512066,
+          "upper": 1.537040439121896,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "kappa1": {
+          "lower": 0.1842052741288458,
+          "upper": 1.926033008786794,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "kappa2": {
+          "lower": 0.3309422219792849,
+          "upper": 2.650270139849864,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "lambda1": {
+          "lower": 0.23800492271551793,
+          "upper": 3.19136330493425,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        },
+        "lambda2": {
+          "lower": 0.23209972538451276,
+          "upper": 2.828929737695595,
+          "probability": 0.95,
+          "empirical_mass": 0.95,
+          "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+        }
+      },
+      "diagnostics": {
+        "parameters": {
+          "a": {
+            "rhat": 1.0001694258222793,
+            "ess_bulk": 2334.9602657095406,
+            "ess_tail": 3822.661871818454,
+            "ess_mean": 2358.6148498578987,
+            "mcse_mean": 0.009590460495572519
+          },
+          "b1[A]": {
+            "rhat": 1.0006255248125622,
+            "ess_bulk": 2166.3806197909275,
+            "ess_tail": 4148.839516955548,
+            "ess_mean": 2219.1517487251062,
+            "mcse_mean": 0.005657794675868181
+          },
+          "b2[A]": {
+            "rhat": 1.000835343051109,
+            "ess_bulk": 2024.6136058333764,
+            "ess_tail": 3433.2742321802257,
+            "ess_mean": 2175.014054199466,
+            "mcse_mean": 0.009423815656881173
+          },
+          "b1[B]": {
+            "rhat": 1.0000681118168853,
+            "ess_bulk": 3886.9101192474086,
+            "ess_tail": 4806.586312030554,
+            "ess_mean": 3654.515861061067,
+            "mcse_mean": 0.003103443588894228
+          },
+          "b2[B]": {
+            "rhat": 0.9998666389134275,
+            "ess_bulk": 2714.9602772470353,
+            "ess_tail": 5081.277667884019,
+            "ess_mean": 2775.725232703524,
+            "mcse_mean": 0.0075843777416136696
+          },
+          "kappa1": {
+            "rhat": 1.0002421096017144,
+            "ess_bulk": 4033.3780651331826,
+            "ess_tail": 4722.571009832972,
+            "ess_mean": 4167.955120745422,
+            "mcse_mean": 0.007541885062527704
+          },
+          "kappa2": {
+            "rhat": 1.0008217529455397,
+            "ess_bulk": 3702.0829761328255,
+            "ess_tail": 4874.386787616825,
+            "ess_mean": 3673.4915047410263,
+            "mcse_mean": 0.010466295121417222
+          },
+          "lambda1": {
+            "rhat": 1.0000970469481978,
+            "ess_bulk": 5862.310761067444,
+            "ess_tail": 6012.6756079269835,
+            "ess_mean": 5895.763550100467,
+            "mcse_mean": 0.010868252646328833
+          },
+          "lambda2": {
+            "rhat": 1.0001358653396393,
+            "ess_bulk": 4742.391749256638,
+            "ess_tail": 6636.329425300906,
+            "ess_mean": 4775.981947834892,
+            "mcse_mean": 0.010585892525428577
+          }
+        },
+        "propriety": {
+          "proper": true,
+          "status": "proper",
+          "all_cause_counts_positive": true,
+          "M": 7,
+          "D": 5.717346629809499,
+          "y_min": {
+            "A": 0.35667494393873245,
+            "B": 0.2231435513142097
+          },
+          "moments": {
+            "a": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b1[A]": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b2[A]": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b1[B]": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "b2[B]": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "kappa1": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "kappa2": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "lambda1": {
+              "first": "finite",
+              "second": "finite"
+            },
+            "lambda2": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "note": "Hierarchical b moment conditions are sufficient, not necessary. Independent zero counts are conservatively excluded even under restriction."
+        },
+        "elapsed_seconds": 16.60606445799931,
+        "criteria": {
+          "max_rhat": 1.01,
+          "min_ess": 400.0
+        },
+        "note": "Passing rank Rhat/ESS checks does not prove convergence."
+      },
+      "warnings": [],
+      "configuration": {
+        "prior": {
+          "a": {
+            "shape": 2.0,
+            "rate": 2.0
+          },
+          "kappa": [
+            {
+              "shape": 3.0,
+              "rate": 2.0
+            },
+            {
+              "shape": 3.0,
+              "rate": 2.0
+            }
+          ],
+          "lam": [
+            {
+              "shape": 2.0,
+              "rate": 2.0
+            },
+            {
+              "shape": 2.0,
+              "rate": 2.0
+            }
+          ]
+        },
+        "sampler": {
+          "chains": 4,
+          "warmup": 1000,
+          "draws": 2000,
+          "seed": 20261101,
+          "slice_width": 1.0,
+          "max_slice_steps": 1000,
+          "max_rhat": 1.01,
+          "min_ess": 400.0,
+          "probability": 0.95
+        }
+      },
+      "reliability": {
+        "A": {
+          "cause_1_probability": {
+            "estimate": 0.35043469378155273,
+            "interval": {
+              "lower": 0.14776720932488902,
+              "upper": 0.4999656312197842,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.000107006512078,
+              "ess_bulk": 8000.0,
+              "ess_tail": 8000.0,
+              "ess_mean": 8000.0,
+              "mcse_mean": 0.0012011610700301063
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_probability": {
+            "estimate": 0.6495653062184473,
+            "interval": {
+              "lower": 0.5000343687802158,
+              "upper": 0.852232790675111,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0001064495610792,
+              "ess_bulk": 8000.0,
+              "ess_tail": 8000.0,
+              "ess_mean": 8000.0,
+              "mcse_mean": 0.0012011610700301061
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "median": {
+            "estimate": 0.5949262233219242,
+            "interval": {
+              "lower": 0.3350857697029237,
+              "upper": 0.9123641979286536,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0010085149838683,
+              "ess_bulk": 3618.569591435894,
+              "ess_tail": 3882.2506270118593,
+              "ess_mean": 3513.9465023418193,
+              "mcse_mean": 0.002464922013854189
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "survival@0.5": {
+            "estimate": 0.5889829028039657,
+            "interval": {
+              "lower": 0.3219606373827046,
+              "upper": 0.8592198562944701,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0007396356914344,
+              "ess_bulk": 4372.66412661447,
+              "ess_tail": 6481.217448069639,
+              "ess_mean": 4424.54305461559,
+              "mcse_mean": 0.002127030014330135
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "hazard@0.5": {
+            "estimate": 1.909345335722318,
+            "interval": {
+              "lower": 0.4287837868208451,
+              "upper": 3.7095852734088934,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0008560465642025,
+              "ess_bulk": 2304.2932772528684,
+              "ess_tail": 3558.483613231442,
+              "ess_mean": 2403.941123465585,
+              "mcse_mean": 0.018408928625760275
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_1_incidence@0.5": {
+            "estimate": 0.14409961316873446,
+            "interval": {
+              "lower": 0.02122615375942267,
+              "upper": 0.27428530195232687,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0003990854715998,
+              "ess_bulk": 4883.160691579058,
+              "ess_tail": 6868.005688983668,
+              "ess_mean": 5011.953078847312,
+              "mcse_mean": 0.0009623921466510901
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_incidence@0.5": {
+            "estimate": 0.2669174840273,
+            "interval": {
+              "lower": 0.07703409646884786,
+              "upper": 0.46334804226938503,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.000591101865676,
+              "ess_bulk": 5726.857571089616,
+              "ess_tail": 6091.964791370736,
+              "ess_mean": 6012.638475108017,
+              "mcse_mean": 0.0013267398817858166
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          }
+        },
+        "B": {
+          "cause_1_probability": {
+            "estimate": 0.2573405068765426,
+            "interval": {
+              "lower": 0.05562913904922864,
+              "upper": 0.49700114132985035,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9998819829739398,
+              "ess_bulk": 7572.340243285926,
+              "ess_tail": 7575.751301167843,
+              "ess_mean": 7613.154457522585,
+              "mcse_mean": 0.0014558099249165467
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_probability": {
+            "estimate": 0.7426594931234574,
+            "interval": {
+              "lower": 0.5029988586701497,
+              "upper": 0.9443708609507714,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9998824149207245,
+              "ess_bulk": 7572.340243285926,
+              "ess_tail": 7575.751301167843,
+              "ess_mean": 7613.154457522585,
+              "mcse_mean": 0.0014558099249165465
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "median": {
+            "estimate": 0.6228828977898089,
+            "interval": {
+              "lower": 0.36981056105863785,
+              "upper": 0.8984005782366803,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 1.0000476205426856,
+              "ess_bulk": 6108.986354992446,
+              "ess_tail": 7076.9417617371955,
+              "ess_mean": 6032.935318960258,
+              "mcse_mean": 0.001733830059343222
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "survival@0.5": {
+            "estimate": 0.6197929050303056,
+            "interval": {
+              "lower": 0.3713526257383625,
+              "upper": 0.8572386033963802,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9999700316384963,
+              "ess_bulk": 7605.518569209001,
+              "ess_tail": 7808.689811223985,
+              "ess_mean": 7623.453374728169,
+              "mcse_mean": 0.0014565089883340975
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "hazard@0.5": {
+            "estimate": 1.6892787900675585,
+            "interval": {
+              "lower": 0.45102327795992275,
+              "upper": 3.104552602372611,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9998487538278169,
+              "ess_bulk": 3631.170570763024,
+              "ess_tail": 6390.522223515368,
+              "ess_mean": 3696.3312038742347,
+              "mcse_mean": 0.011723987183907662
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_1_incidence@0.5": {
+            "estimate": 0.09796458470372953,
+            "interval": {
+              "lower": 0.0018734045837851389,
+              "upper": 0.2114605756656724,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9998191319558364,
+              "ess_bulk": 6729.999175153727,
+              "ess_tail": 7210.316939017373,
+              "ess_mean": 6773.278527704299,
+              "mcse_mean": 0.0007374770031129844
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          },
+          "cause_2_incidence@0.5": {
+            "estimate": 0.2822425102659649,
+            "interval": {
+              "lower": 0.08770713495442511,
+              "upper": 0.48961661520090627,
+              "probability": 0.95,
+              "empirical_mass": 0.95,
+              "method": "shortest contiguous sample interval (unimodal HPD approximation)"
+            },
+            "diagnostics": {
+              "rhat": 0.9999915552385792,
+              "ess_bulk": 8000.0,
+              "ess_tail": 7522.537148289719,
+              "ess_mean": 8000.0,
+              "mcse_mean": 0.0011930138277143974
+            },
+            "moments": {
+              "first": "finite",
+              "second": "finite"
+            }
+          }
+        }
+      }
+    }
+  }
+}

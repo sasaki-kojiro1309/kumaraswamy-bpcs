@@ -1379,3 +1379,13 @@ the estimators. The following arithmetic identities justify the final fixes:
 
 See FINAL_AUDIT.md for reproductions, actual test counts and independent checks.
 Historical test records above describe their individual milestones.
+
+
+## Bayesian extension (2026-11-01)
+
+BAYESIAN_DERIVATIONS.md verifies both prior specifications, unrestricted and
+within-block restricted posteriors, propriety and first/second moment conditions,
+Jacobian transformations, Gamma conditionals, slice targets and credible-interval
+indexing against the likelihood above. The classical equations and estimators
+are unchanged. BAYESIAN_GUIDE.md describes APIs and actual verification results.
+Earlier no-Bayesian statements refer to their individual classical milestones.

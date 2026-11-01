@@ -5,11 +5,15 @@ Stage 2 BPCS data structures/validation, Stage 3 likelihood construction, and
 Stage 4 profile/direct maximum likelihood estimation, plus provisional
 within-block order-restricted MLE, and classical observed-information/interval
 inference.** Simulation and real-data pipelines are not implemented.
-Bayesian estimation remains a teammate integration placeholder.
+Bayesian estimation is implemented for the independent scale prior and proper
+hierarchical Gamma prior, each unrestricted or within-block restricted. See
+[BAYESIAN_GUIDE.md](docs/BAYESIAN_GUIDE.md).
 
-Validation on 2026-10-26: **325 tests passed**, with zero failures or skips (309 baseline tests plus
-16 final-audit regression and derivative checks)
-using Python 3.12; exact package versions are recorded in
+The classical baseline audit on 2026-10-26 reported **325 passing tests**.
+The Bayesian extension adds independently checked posterior computations; its
+current executed verification is recorded in
+[BAYESIAN_GUIDE.md](docs/BAYESIAN_GUIDE.md). **397 tests pass**, including
+all 325 classical baseline cases and 72 Bayesian cases, using Python 3.12; exact package versions are recorded in
 `requirements-lock.txt`.
 
 The original project statement is preserved verbatim in
@@ -220,13 +224,12 @@ No later research stage is implemented.
    Compatible published numerical-table reproduction remains pending.
 6. **Stages 6-7:** simulate the actual experimental process and evaluate estimators
    on identical datasets with reproducible configurations, tables, and plots.
-7. **Stages 8-10:** assess real-data compatibility, integrate teammate estimators,
+7. **Stages 8-10:** assess real-data compatibility, integrate estimator comparisons,
    investigate labeled extensions, and produce reproducible results.
 
 Current files: `src/model.py`, `src/censoring.py`, `src/likelihood.py`, `src/mle.py`,
 their test modules, `src/order_restricted.py`, `src/uncertainty.py`, `docs/`, the two-block JSON data,
-Stage 2/3/4 and order-restricted example scripts, and the teammate placeholder
-`src/bayesian.py`. Reserved directories
+Stage 2/3/4 and order-restricted example scripts, and `src/bayesian.py` / `src/bayesian_sampling.py`. Reserved directories
 `data/real/` and `results/` contain no simulation or real-data research results. Later modules will be
 created when their mathematics and contracts are
 established; empty implementation stubs would not constitute completed stages.
@@ -298,8 +301,8 @@ milestone, the
 audit subsequently added focused distribution-tail and uncertainty robustness
 fixes; the MLE algorithms remain unchanged. No error in the MLE derivations was
 identified. Published-table
-reproduction, Monte Carlo coverage, Bayesian inference and new experimental
-stages remain pending.
+reproduction, Monte Carlo coverage and new experimental stages remain pending.
+Bayesian inference was added subsequently; see the guide below.
 
 ## References
 
@@ -344,3 +347,35 @@ implementation/test mappings and remaining limitations. Its reproducible
 The manuscript includes no Bayesian estimates, simulation-performance claims,
 or real-data findings. Its author names remain unspecified; the supplied
 institutional affiliation is retained.
+
+## Bayesian extension (2026-11-01)
+
+Four methods share the existing data and likelihood: independent scale-invariant
+or hierarchical Gamma prior, each unrestricted or with b_i1<=b_i2 within every
+block. The independent prior uses a one-dimensional marginal sampler plus
+Gamma totals and Beta proportions; the hierarchy uses Gamma Gibbs and log-scale
+slice updates, with stable truncated Gamma updates under restriction. There is
+no ordering between facilities and no projection of posterior means.
+
+```sh
+.venv/bin/python -W error -m experiments.bayesian_example --output results/bayesian_teaching_example.json
+.venv/bin/python -m pytest -q -W error
+```
+
+The [guide](docs/BAYESIAN_GUIDE.md) explains priors, controls and structured
+results. [Verified derivations](docs/BAYESIAN_DERIVATIONS.md) cover propriety,
+first/second moments, transformations and all conditional distributions, based
+on the supplied [Group_22-4 report](References/Group_22-4.pdf), independently
+checked against our likelihood. The three published reference labels retain
+their original meanings. The supplied report is not treated as a new published
+reference or as authority for methods beyond this scope.
+
+Finite posterior means and finite-variance mean MCSEs require separate checks.
+Improper/unsupported independent priors are refused before sampling; numerical
+failures and failed rank Rhat/ESS diagnostics never certify estimates.
+Intervals are shortest contiguous sample intervals, qualified as HPD
+approximations for suitable unimodal marginals. Reliability is averaged over
+joint draws. The recorded demonstration is a teaching analysis, not a simulation
+performance study, real-data application or prior-sensitivity investigation.
+Classical source code, the manuscript and the original reference PDFs are
+preserved. No new runtime dependency is required.
