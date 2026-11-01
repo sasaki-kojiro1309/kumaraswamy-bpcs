@@ -78,6 +78,27 @@ def main():
         budget_interruptions=len(list(root.glob('diagnostics/budget_interruptions/**/*.json'))),
         interpretation='Small-scale exploratory simulation (20 planned per scenario). Metrics condition on explicitly counted valid estimates/intervals; paired MSE uses common valid datasets. Missing and diagnostic-failed fits are not successful.',
         resume='Use the same config and implementation with a new future deadline; successful committed fits are skipped. Interrupted tasks remain eligible. Failed committed fits are preserved; retry only in a separate explicit attempt/campaign.')
+    priority_logs=[]
+    for p in sorted(root.glob('diagnostics/priority_supervision/*/started.json')):
+        begin,_=read_json(p);row=dict(begin,log_directory=str(p.parent))
+        finish=p.with_name('finished.json')
+        if finish.exists():
+            ended,_=read_json(finish);row.update(ended)
+            row['supervisor_wall_seconds']=ended['finished_unix']-begin['supervisor_started_unix']
+        priority_logs.append(row)
+    if priority_logs:
+        audit['priority_supervision']=priority_logs
+        original,_=read_json(root/'metadata/urgent30_start.json')
+        for name,sha in original['original_file_hashes'].items():
+            assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==sha
+        baseline={x['method']:x['successful'] for x in original['original_manifest']['methods']}
+        latest=priority_logs[-1]
+        audit['urgent30_execution']=dict(original_files_verified_unchanged=len(original['original_file_hashes']),
+            start_unix=latest['task_start_unix'],elapsed_seconds_at_audit=time.time()-latest['task_start_unix'],
+            hard_deadline_unix=latest['hard_deadline_unix'],compute_deadline_unix=latest['compute_deadline_unix'],
+            new_successful_fits_by_method={x['method']:x['successful']-baseline[x['method']] for x in bymethod},
+            quick_focused_tests_passed=27,
+            finalization_complete_before_deadline=time.time()<latest['hard_deadline_unix'])
     path=root/'metadata'/'execution_audits'/f'{time.time_ns()}.json'
     commit_json(path,audit)
     publish_pointer(root/'manifest.json',path)

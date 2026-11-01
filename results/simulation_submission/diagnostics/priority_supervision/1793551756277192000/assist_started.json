@@ -1,0 +1,1 @@
+{"payload":{"deadline_monotonic":67203.03679728508,"no_violation_failure_retried":true,"reason":"Repeated violation failures without new pairs; allocate released third worker to additional complete comparisons.","started_unix":1793552628.878488},"sha256":"2a6989b3a6e2efcdf0bd2fc70b4b11e124ae613dcd64a8c9c07c3dbc55b8bdef"}
