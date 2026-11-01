@@ -1,0 +1,4 @@
+analysis_id,fit_id,scenario_id,R_generated,R_generation_failed,R_not_generated,R_requested
+4452c7e0f7a6a19383e12608,c81a97c91afc340fd144ab3f,equality_late,20,0,0,20
+4452c7e0f7a6a19383e12608,c81a97c91afc340fd144ab3f,strict_order_late,20,0,0,20
+4452c7e0f7a6a19383e12608,c81a97c91afc340fd144ab3f,violation_late,20,0,0,20
