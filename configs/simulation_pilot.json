@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "study_id": "kumaraswamy_bpcs_pilot",
+  "master_seed": 20261101,
+  "mcmc_master_seed": 20261102,
+  "repetitions": 50,
+  "output_dir": "results/simulation/pilot",
+  "methods": ["mle_unrestricted", "mle_within_block", "bayes_independent_unrestricted", "bayes_independent_within_block", "bayes_hierarchical_unrestricted", "bayes_hierarchical_within_block"],
+  "classical": {"confidence": 0.95, "max_condition": 1000000000000.0, "initial_a": 1.0, "maxiter": 200, "max_bracket_steps": 60, "score_tol": 0.0000001, "constraint_tol": 0.0000000001},
+  "mcmc": {"chains": 4, "warmup": 1000, "draws": 2000, "slice_width": 1.0, "max_slice_steps": 1000, "max_rhat": 1.01, "min_ess": 400.0, "probability": 0.95},
+  "hierarchical_prior": {
+    "a": {"shape": 2.0, "rate": 2.0},
+    "kappa": [{"shape": 3.0, "rate": 2.0}, {"shape": 3.0, "rate": 2.0}],
+    "lam": [{"shape": 2.0, "rate": 2.0}, {"shape": 2.0, "rate": 2.0}]
+  },
+  "mission_times": [0.25, 0.5, 0.75],
+  "include_boundary_suprema": false,
+  "save_draws": {"repetitions": [], "diagnostic_failures": false, "numerical_failures": false},
+  "scenarios": [
+    {"id": "strict_order_early", "ordering": "strict", "censoring": "early", "a": 1.5, "blocks": [
+      {"block": "A", "n": 50, "m": 30, "b": [0.5, 1.5], "plan": "early"},
+      {"block": "B", "n": 50, "m": 30, "b": [0.75, 2.25], "plan": "early"}]},
+    {"id": "strict_order_late", "ordering": "strict", "censoring": "late", "a": 1.5, "blocks": [
+      {"block": "A", "n": 50, "m": 30, "b": [0.5, 1.5], "plan": "late"},
+      {"block": "B", "n": 50, "m": 30, "b": [0.75, 2.25], "plan": "late"}]},
+    {"id": "strict_order_distributed", "ordering": "strict", "censoring": "distributed", "a": 1.5, "blocks": [
+      {"block": "A", "n": 50, "m": 30, "b": [0.5, 1.5], "plan": "distributed"},
+      {"block": "B", "n": 50, "m": 30, "b": [0.75, 2.25], "plan": "distributed"}]},
+    {"id": "equality_early", "ordering": "equality", "censoring": "early", "a": 1.5, "blocks": [
+      {"block": "A", "n": 50, "m": 30, "b": [1.0, 1.0], "plan": "early"},
+      {"block": "B", "n": 50, "m": 30, "b": [1.5, 1.5], "plan": "early"}]},
+    {"id": "equality_late", "ordering": "equality", "censoring": "late", "a": 1.5, "blocks": [
+      {"block": "A", "n": 50, "m": 30, "b": [1.0, 1.0], "plan": "late"},
+      {"block": "B", "n": 50, "m": 30, "b": [1.5, 1.5], "plan": "late"}]},
+    {"id": "equality_distributed", "ordering": "equality", "censoring": "distributed", "a": 1.5, "blocks": [
+      {"block": "A", "n": 50, "m": 30, "b": [1.0, 1.0], "plan": "distributed"},
+      {"block": "B", "n": 50, "m": 30, "b": [1.5, 1.5], "plan": "distributed"}]},
+    {"id": "near_equality_early", "ordering": "near_equality", "censoring": "early", "a": 1.5, "blocks": [
+      {"block": "A", "n": 50, "m": 30, "b": [0.95, 1.05], "plan": "early"},
+      {"block": "B", "n": 50, "m": 30, "b": [1.45, 1.55], "plan": "early"}]},
+    {"id": "near_equality_late", "ordering": "near_equality", "censoring": "late", "a": 1.5, "blocks": [
+      {"block": "A", "n": 50, "m": 30, "b": [0.95, 1.05], "plan": "late"},
+      {"block": "B", "n": 50, "m": 30, "b": [1.45, 1.55], "plan": "late"}]},
+    {"id": "near_equality_distributed", "ordering": "near_equality", "censoring": "distributed", "a": 1.5, "blocks": [
+      {"block": "A", "n": 50, "m": 30, "b": [0.95, 1.05], "plan": "distributed"},
+      {"block": "B", "n": 50, "m": 30, "b": [1.45, 1.55], "plan": "distributed"}]},
+    {"id": "violation_early", "ordering": "violation", "censoring": "early", "a": 1.5, "blocks": [
+      {"block": "A", "n": 50, "m": 30, "b": [1.5, 0.5], "plan": "early"},
+      {"block": "B", "n": 50, "m": 30, "b": [2.25, 0.75], "plan": "early"}]},
+    {"id": "violation_late", "ordering": "violation", "censoring": "late", "a": 1.5, "blocks": [
+      {"block": "A", "n": 50, "m": 30, "b": [1.5, 0.5], "plan": "late"},
+      {"block": "B", "n": 50, "m": 30, "b": [2.25, 0.75], "plan": "late"}]},
+    {"id": "violation_distributed", "ordering": "violation", "censoring": "distributed", "a": 1.5, "blocks": [
+      {"block": "A", "n": 50, "m": 30, "b": [1.5, 0.5], "plan": "distributed"},
+      {"block": "B", "n": 50, "m": 30, "b": [2.25, 0.75], "plan": "distributed"}]}
+  ]
+}

@@ -379,3 +379,17 @@ joint draws. The recorded demonstration is a teaching analysis, not a simulation
 performance study, real-data application or prior-sensitivity investigation.
 Classical source code, the manuscript and the original reference PDFs are
 preserved. No new runtime dependency is required.
+
+## Simulation framework (written, not executed)
+
+The framework now has separate generation, fitting and offline analysis modes,
+immutable saved observed datasets, six existing-estimator adapters, reproducible
+seed domains, resumable task records and parameter-wise AB/MSE/CP/AW summaries.
+See [SIMULATION_GUIDE.md](docs/SIMULATION_GUIDE.md) for schemas, failure policies,
+prior sensitivity, interval exclusions and the exact commands for later execution.
+Pilot and main specifications are in `configs/simulation_pilot.json` and
+`configs/simulation_main.json`; the new test files are `tests/test_simulation_*.py`.
+
+**Implementation written. Simulation and tests have NOT been executed.**
+No datasets, MCMC runs or performance results were generated for this delivery.
+Existing estimator source files and the manuscript are unchanged.

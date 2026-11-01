@@ -1,0 +1,5 @@
+{
+  "a": {"shape": 2.0, "rate": 1.0},
+  "kappa": [{"shape": 2.0, "rate": 1.0}, {"shape": 2.0, "rate": 1.0}],
+  "lam": [{"shape": 2.0, "rate": 1.0}, {"shape": 2.0, "rate": 1.0}]
+}
