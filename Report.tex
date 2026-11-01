@@ -1,120 +1,1114 @@
 \documentclass[a4paper,11pt]{article}
 \usepackage[a4paper,bindingoffset=0in,left=0.9in,right=0.9in,top=1in,bottom=1in,footskip=.25in]{geometry}
-\usepackage{generic}
-\usepackage{comment}
-\usepackage{graphicx}
-\usepackage{epstopdf}
-\usepackage{amsmath, amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
 \usepackage{setspace}
-% Standard IEEE citation
 \usepackage{cite}
- \usepackage{cuted}
-%\usepackage[ruled,vlined]{algorithm2e}
- \usepackage{flushend}
- %\usepackage{multicol}
-% Hyperlinks for references, URLs, sections
-\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage[capitalize]{cleveref}
+\setlist{noitemsep,topsep=3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\numberwithin{equation}{section}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}{Proposition}[section]
-\newtheorem{remark}{Remark}[section]
 \newtheorem{lemma}{Lemma}[section]
-% Math and symbols
-\usepackage{amsmath,amssymb,amsfonts}
-\usepackage{enumitem}
-\setlist{noitemsep, topsep=0pt}
-
-% Graphics
-\usepackage{graphicx}
-\setlength{\parindent}{0pt}
-\usepackage[justification=centering]{caption}
-% Algorithms
-\usepackage{algorithm,algorithmic}
-% \usepackage{enumerate}
-\usepackage{rotating}
-% Cross-referencing
-\usepackage[capitalize]{cleveref}
-\crefname{section}{Sec.}{Secs.}
-\Crefname{section}{Section}{Sections}
-\Crefname{table}{Table}{Tables}
-\crefname{table}{Tab.}{Tabs.}
-
-\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
-
-
-\title{Classical and Bayesian estimation of ....................... distribution}
-\author{Student 1 \& Student 2 \\ Mehta Family School of Data Science and AI, IIT Guwahati, India }
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\newcommand{\Kw}{\operatorname{Kw}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\logit}{\operatorname{logit}}
+\newcommand{\expit}{\operatorname{expit}}
+\newcommand{\ind}{\mathbf{1}}
+\newcommand{\R}{\mathbb{R}}
+\title{Classical Estimation for Block Progressively Censored\texorpdfstring{\\}{ }Competing Risks from the Kumaraswamy Distribution}
+% The supplied template did not identify actual authors. Do not invent names.
+\author{}
 \date{}
 \begin{document}
-
 \begin{singlespace}
- \maketitle
+\maketitle
 \end{singlespace}
-% % \bibliographystyle{agsm}
-% \setcounter{page}{1}
-% \setcounter{equation}{0}
-% \setcounter{figure}{0}
-% \setcounter{table}{0}
-% \newcommand{\oddhead}{Kumaraswamy}
-% \renewcommand{\@oddhead}
-% {\hspace*{-3pt}\raisebox{-3pt}[\headheight][0pt]
-% 	{\vbox{\hbox to \textwidth
-% 			{\hfill\oddhead}\vskip8pt}}}
-% \vspace*{0.5in}
-%\begin{onehalfspace}
-
+\vspace{-2.5em}
+\begin{center}\small
+Mehta Family School of Data Science and AI, IIT Guwahati, India
+\end{center}
+% Affiliation above is retained from the supplied template; author names remain unspecified.
 \begin{abstract}
-\noindent 
+We study classical estimation for two independent latent Kumaraswamy failure
+causes observed under fixed, completed progressive Type-II censoring within
+independent blocks. A common positive shape parameter is shared across blocks
+and causes, while the second shape parameter varies by block and cause.
+The full ordered-data likelihood separates into a minimum-lifetime component
+and independent cause-label components after a total/proportion
+reparameterization. We derive conditional maximum likelihood estimates and a
+strictly concave shape profile. A unique finite maximizing shape exists
+exactly when some block contains at least two distinct failures; positive-domain
+attainment additionally depends on the observed cause counts. For a provisional
+within-block order on cause parameters, the constrained estimates pool violating
+pairs, leaving the fitted common shape and block totals unchanged. We derive
+observed information, conditional large-sample Wald and delta procedures, and
+exact marginal binomial confidence sets intersected with the order domain.
+A reproducible two-block illustration and independent numerical differentiation
+and optimization verify the implemented calculations. The illustration is not
+a simulation study, and no claim of finite-sample performance, novelty, Bayesian
+inference, or real-data validation is made.
 
-
-\noindent In this article, we consider the Bayesian estimation of ................. The performance of different estimators is evaluated through extensive numerical simulations in terms of mean-squared error and absolute bias, while ACI and HPD credible intervals are assessed in terms of average width and coverage probability. Finally, ............real data are analyzed for illustration purposes.\\
-%\noindent {\bf Mathematics Subject Classification:}  62F10, 62F15, 62N02\\
-\textbf{Keywords:} ..... distribution; ...... prior; maximum likelihood estimator; Bayesian estimation.\\
+\smallskip\noindent\textbf{Keywords:} Kumaraswamy distribution; competing risks;
+block progressive censoring; maximum likelihood; order restriction; observed
+information; exact binomial confidence set.
 \end{abstract}
 
-%\doublespacing
-\maketitle
-\section{Introduction}
-\label{sec:introduction}
-Reliability testing is one of the important methods to assess the failure pattern of different products. In such situations, items are put on test under some operational condition and then failure times are recorded. ..........................................................................
-\section{Maximum Likelihood Estimation}
-.........................
-\subsection{MLE Under no order restriction}
-.............................
-\subsection{MLE Under order restriction}
-.............................
-\section{Bayesion Estimation}
-.............................
-\subsection{Bayesion Estimation under No Order Restriction}
-.............................
-\subsection{Bayesion Estimation under Order Restriction}
-............................................................
+\section{Introduction}\label{sec:introduction}
+Reliability experiments record failure times, often together with their causes.
+When different mechanisms can terminate a unit's operation, the observed
+lifetime is the minimum of the latent times associated with those mechanisms.
+Progressive Type-II censoring permits predetermined numbers of surviving
+units to be withdrawn after successive failures, with the experiment ending
+at a predetermined failure count. Block progressive censoring conducts such
+experiments separately in several facilities or groups. The resulting
+observations must retain both block identity and the withdrawal schedule.
 
-The organization of the paper is as follows. The DE of a RA distribution under type-II censoring is determined in section \ref{sec2}. The maximum likelihood estimates of the entropy $H$ and the Fisher information matrix under the given censoring are provided in Section \ref{sec3}. In Section \ref{sec4}, objective Bayesian analysis under non-informative priors is examined. Section \ref{sec5} presents a simulation study and demonstrates the efficacy of entropy measure in RA distribution using two real data applications. Finally, the conclusion is given in Section \ref{sec6}. 
+Wang, Wu, Lin and Tripathi~\cite{wang2023} investigate block progressively
+censored competing risks with an inverted exponentiated exponential lifetime
+model and facility-specific cause parameters. Their block organization motivates
+the experimental structure considered here, but neither their distributional
+formulas nor their weighted facility summaries are adopted. Wang~\cite{wang2018}
+studies progressively censored Kumaraswamy competing risks in a single block,
+including a common-shape special case. Mahto, Lodhi, Tripathi and
+Wang~\cite{mahto2022} consider a common-shape Kumaraswamy model with partially
+observed causes under generalized progressive hybrid censoring. Their
+Section~4.1 establishes pooling under an order on the two cause parameters
+and invariance of the common-shape estimate in that setting.
 
+Here every block has a fixed progressive Type-II schedule, every recorded
+cause is known, and one shape is common to all blocks and causes. The second
+shape is specific to each block and cause. The common-shape assumption and
+the optional within-block order are explicit modeling choices, not consequences
+of block censoring or independence. They require application-specific
+justification. The bounded support of the Kumaraswamy distribution is useful
+only when the measurement scale has scientifically meaningful fixed bounds.
 
+The purpose of this paper is to present and verify the completed classical
+methods for this particular model: the exact likelihood; unrestricted and
+within-block restricted estimation with existence qualifications; analytical
+observed information; supported approximate and exact marginal inference; and
+reliability calculations. The proofs below establish the stated results directly
+for the block likelihood. This is a documented specialization and computational
+verification, rather than a claim of an original statistical methodology.
+The broader project also envisages Bayesian estimation, but its implementation
+is a reserved interface and supplies no results in this paper.
 
+\section{Model Description and Assumptions}\label{sec:model}
+\subsection{Probability model and experimental assumptions}
+Let $k\ge1$ denote the number of blocks. In block $i$, unit $u$ has latent
+failure times $T_{iu1},T_{iu2}$, with
+\begin{equation}\label{eq:latent}
+ T_{iu1}\sim\Kw(a,b_{i1}),\qquad T_{iu2}\sim\Kw(a,b_{i2}),\qquad
+ X_{iu}=\min(T_{iu1},T_{iu2}),\quad
+ \delta_{iu}=\arg\min_{c\in\{1,2\}}T_{iuc}.
+\end{equation}
+The unrestricted parameter space has $1+2k$ positive coordinates.
+The assumptions governing the analysis are as follows.
+\begin{enumerate}[label=(A\arabic*)]
+\item All parameters satisfy $a>0$, $b_{ic}>0$. The same fixed unknown $a$
+  applies to every block and cause. There is no random facility effect.
+\item Latent failure times are independent between the two causes, between
+  units, and between blocks. Units have identical latent laws within each
+  block; laws may differ between blocks through $b_{ic}$.
+\item Exactly two causes exist, and the cause of every observed failure is
+  known and correctly recorded. Missing or misclassified causes are excluded.
+\item The initial sizes, failure targets and withdrawal counts are fixed
+  before testing. At each failure, the prescribed number of survivors is
+  selected uniformly and independently of their unobserved latent failure
+  times and causes. The last failure is followed by removal of every remaining
+  survivor. Selection identities are not included in the recorded data.
+\item Times are measured exactly on a fixed dimensionless scale with support
+  $(0,1)$. Recorded times are strictly increasing within each block, but may
+  overlap across blocks. The continuous model implies no ties almost surely;
+  rounded ties require a separate measurement model.
+\item In the restricted analysis only, $b_{i1}\le b_{i2}$ is imposed
+  independently for each block. There is no order between different blocks.
+\end{enumerate}
+The distributional family, latent independence, common shape, accurate cause
+labels and noninformative selection are scientific or sampling assumptions.
+A data validator can enforce positivity, ordering and accounting, but cannot
+establish these scientific assumptions from a table. In particular, independence
+of latent risks is not a generally identifiable consequence of observing only
+the minimum and its cause. The parameter-sharing choice needs its own rationale.
 
-\section{Numerical Illustration}\label{sec5}
-We now examine the performance of MLE and Bayes estimators of DE under the type-II censoring scheme, and  evaluate proposed estimates using average bias (AB) and average mean squared error (AMSE) value. The Bayesian estimation algorithm and simulation study are presented in following subsection.
+If physical bounds $L_0<U_0$ are known in advance, the fixed transformation
+$t=(y-L_0)/(U_0-L_0)$ has density factor $(U_0-L_0)^{-1}$ per recorded
+failure; survivor probabilities are evaluated on the transformed scale.
+The appropriate Jacobian must accompany an exact density in the original units.
+Dividing by the observed maximum does not implement this fixed-support
+experiment and is not justified by this model.
 
-\subsection{Simulation Study}
-In this section, we conduct a simulation study to evaluate the performance of classical and Bayesian estimators ..................................
+\subsection{Distributional identities}
+For $T\sim\Kw(a,b)$, the CDF, density, survival and hazard are
+\begin{align}
+ F(t;a,b)&=1-(1-t^a)^b,&
+ f(t;a,b)&=ab t^{a-1}(1-t^a)^{b-1},\label{eq:kw}\\
+ S(t;a,b)&=(1-t^a)^b,&
+ h(t;a,b)&=\frac{ab t^{a-1}}{1-t^a},\qquad 0<t<1.\label{eq:kwsh}
+\end{align}
+Differentiating $F$ gives $f$. Substitution $y=t^a$ gives
+$\int_0^1 f(t)\,dt=\int_0^1 b(1-y)^{b-1}\,dy=1$ and
+$T^a\sim\operatorname{Beta}(1,b)$. Also $h=f/S=-d\log S/dt$.
+The median lifetime, denoted $v(a,b)$, solves $S(v)=1/2$:
+\begin{equation}\label{eq:median}
+ v(a,b)=\left(1-2^{-1/b}\right)^{1/a}.
+\end{equation}
+It is the median, not the mean time to failure.
 
+The limits are $S(0+)=1$ and $S(1-)=0$, with no endpoint atoms.
+As $t\downarrow0$, $f(t)\sim abt^{a-1}$ and $h(t)\sim abt^{a-1}$.
+As $t\uparrow1$, $f(t)\sim ab[a(1-t)]^{b-1}$ and $h(t)\sim b/(1-t)$.
+Thus endpoint density limits need not vanish. The software assigns density
+zero at and outside the endpoints, an immaterial convention for a continuous
+law, and requires interior times for hazards and observed failures.
 
-\subsection{Real Data Analysis}
+\begin{proposition}\label{prop:minimum}
+Define $B_i=b_{i1}+b_{i2}$ and $p_i=b_{i1}/B_i$. Under
+\eqref{eq:latent} and latent independence, $X_{iu}\sim\Kw(a,B_i)$.
+The joint time/cause subdensity and cumulative incidence for cause $c$ are
+\begin{align}
+ g_{ic}(t)&=f(t;a,b_{ic})S(t;a,b_{i,3-c})
+   =ab_{ic}t^{a-1}(1-t^a)^{B_i-1},\label{eq:subdensity}\\
+ \pi_{ic}&=P(\delta_{iu}=c)=\frac{b_{ic}}{B_i},\label{eq:probability}\\
+ G_{ic}(t)&=P(X_{iu}\le t,\delta_{iu}=c)
+    =\pi_{ic}\{1-S_i(t)\},\label{eq:incidence}
+\end{align}
+where $S_i(t)=S(t;a,B_i)$. The minimum and its cause are independent.
+\end{proposition}
+\begin{proof}
+Independence gives
+$P(X>t)=S(t;a,b_{i1})S(t;a,b_{i2})=(1-t^a)^{B_i}$.
+To observe cause $c$ at $t$, that cause must fail and the other must survive,
+which gives \eqref{eq:subdensity}. Its ratio to $f(t;a,B_i)$ is the constant
+$b_{ic}/B_i$. Integrating proves \eqref{eq:incidence} and independence.
+Summing the subdensities recovers the minimum density; summing the incidences
+recovers $1-S_i(t)$. The minimum hazard is the sum of the two latent hazards.
+\end{proof}
+The subdensity integrates to $\pi_{ic}$, not one. It is distinct from both the
+latent density and the density conditional on the cause. Likewise, $G_{ic}$
+is not the latent cause CDF. Write $h_{ic}(t)=h(t;a,b_{ic})$ for the latent
+cause hazard. Under the optional order, $p_i\le1/2$,
+$h_{i1}(t)\le h_{i2}(t)$ and $S(t;a,b_{i1})\ge S(t;a,b_{i2})$.
+Hence latent cause-1 lifetime is stochastically larger. These implications
+clarify the scientific content of the restriction; they do not justify it.
 
-In this section, we present an analysis of real data for illustrative purposes. 
+\section{Likelihood Under Block Progressive Censoring}\label{sec:likelihood}
+\subsection{Risk sets and conditional contributions}
+For block $i$, fix integers $1\le m_i\le n_i$ and nonnegative integers
+$\mathbf R_i=(r_{i1},\ldots,r_{im_i})$ satisfying
+\begin{equation}\label{eq:scheme}
+ n_i=m_i+\sum_{j=1}^{m_i}r_{ij}.
+\end{equation}
+The data are $(x_{ij},\delta_{ij},r_{ij})$, $j=1,\ldots,m_i$, with
+$0<x_{i1}<\cdots<x_{im_i}<1$ and $\delta_{ij}\in\{1,2\}$.
+Immediately before failure $j$, the risk set is
+\begin{equation}\label{eq:risks}
+ Y_{ij}=n_i-(j-1)-\sum_{\ell<j}r_{i\ell}
+       =\sum_{\ell=j}^{m_i}(1+r_{i\ell}).
+\end{equation}
+Consequently $Y_{i,j+1}=Y_{ij}-1-r_{ij}$ and
+$Y_{im_i}-1=r_{im_i}$; there are no units left under test after the last row.
+The withdrawal counts are fixed, while the identities of withdrawn survivors
+are random. A withdrawal at $x$ supplies the survival event $X>x$, not a
+failure or a known eventual cause.
 
-%\newpage
-\section{Conclusion} \label{sec6}
-In this paper, we develop estimators of \\
+For completeness, set $x_{i0}=0$. Conditional on the history through failure
+$j-1$, every remaining unit has lifetime conditional on exceeding $x_{i,j-1}$.
+There are $Y_{ij}$ exchangeable choices for the next failed unit. The next
+failure time and cause therefore have conditional density
+\begin{equation}\label{eq:conditional-density}
+ Y_{ij}g_{i,\delta_{ij}}(x_{ij})
+ \frac{S_i(x_{ij})^{Y_{ij}-1}}{S_i(x_{i,j-1})^{Y_{ij}}}.
+\end{equation}
+The failure contributes $g/S_i(x_{i,j-1})$, and each other survivor contributes
+$S_i(x_{ij})/S_i(x_{i,j-1})$. Uniform survivor-selection probabilities sum to
+one when the unrecorded identities are marginalized. Thus they introduce no
+additional binomial coefficient into this data convention.
 
+Multiplication over $j$ telescopes the survival exponents: at a nonterminal
+time, $(Y_{ij}-1)-Y_{i,j+1}=r_{ij}$, while the terminal exponent is
+$Y_{im_i}-1=r_{im_i}$. Since $S_i(0)=1$, the block likelihood is exactly
+\begin{equation}\label{eq:block-likelihood}
+ L_i=C_i\prod_{j=1}^{m_i}g_{i,\delta_{ij}}(x_{ij})S_i(x_{ij})^{r_{ij}},
+ \qquad C_i=\prod_{j=1}^{m_i}Y_{ij}.
+\end{equation}
+This is a density with respect to Lebesgue measure on the ordered times and
+counting measure on the ordered cause sequence, conditional on the fixed scheme.
+If only cause totals were recorded, or unit identities had a different role,
+the sampling convention would need reconsideration. Here no cause-count
+multinomial factor is included in \eqref{eq:block-likelihood}.
 
-%\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\section{References}
-\bibliographystyle{IEEEtran}
-\bibliography{reference}
+\subsection{Full likelihood and notation}
+Let
+\begin{equation}\label{eq:counts}
+ M=\sum_i m_i,\quad d_{ic}=\sum_{j=1}^{m_i}\ind\{\delta_{ij}=c\},\quad
+ C=\prod_i C_i,\quad T=\sum_{i,j}\log x_{ij}.
+\end{equation}
+Throughout, $\sum_{i,j}$ means $\sum_{i=1}^k\sum_{j=1}^{m_i}$, and
+$d_{i1}+d_{i2}=m_i$. Combining one failed unit and its $r_{ij}$ withdrawals
+in \eqref{eq:block-likelihood} gives the row factor
+\[
+ a b_{i,\delta_{ij}}x_{ij}^{a-1}
+ (1-x_{ij}^{a})^{(r_{ij}+1)B_i-1}.
+\]
+The survival powers of the failed and withdrawn units account for $r_{ij}+1$;
+only one failure has been observed. Independence between blocks yields
+\begin{equation}\label{eq:likelihood}
+ L=C a^M\prod_{i=1}^k\prod_{c=1}^2 b_{ic}^{d_{ic}}
+   \prod_{i,j}x_{ij}^{a-1}(1-x_{ij}^{a})^{(r_{ij}+1)B_i-1}.
+\end{equation}
+Define $w_{ij}=r_{ij}+1$, $u_{ij}=-\log x_{ij}>0$, and
+\begin{equation}\label{eq:WH}
+ L_{ij}(a)=\log(1-x_{ij}^a),\qquad
+ W_i(a)=-\sum_j w_{ij}L_{ij}(a)>0,\qquad
+ H_i(a)=\sum_j L_{ij}(a).
+\end{equation}
+Here $L_{ij}$ denotes a log survival base, whereas $L$ without indices is the
+likelihood. Taking logs in \eqref{eq:likelihood} gives
+\begin{equation}\label{eq:loglikelihood}
+ \ell=\log C+M\log a+(a-1)T+\sum_{i,c}d_{ic}\log b_{ic}
+            -\sum_i B_iW_i(a)-\sum_i H_i(a).
+\end{equation}
+The term $-\sum_iH_i(a)$ depends on $a$ and cannot be discarded. The software
+includes the full $\log C$ by default; its optional omission removes no other
+time-dependent or time-only terms. Positive log-likelihood values are possible
+because this is a continuous-time density. In limiting calculations only,
+$0\log0=0$ is used when the corresponding cause count is zero.
 
+\section{Unrestricted Maximum Likelihood Estimation}\label{sec:unrestricted}
+\subsection{Scores and conditional estimates}
+Differentiation of \eqref{eq:WH} gives
+\begin{equation}\label{eq:PQ}
+ P_{ij}(a)=L'_{ij}(a)=\frac{u_{ij}}{e^{au_{ij}}-1},\qquad
+ L''_{ij}(a)=-Q_{ij}(a),\quad
+ Q_{ij}(a)=\frac{u_{ij}^2e^{-au_{ij}}}{(1-e^{-au_{ij}})^2}>0.
+\end{equation}
+Thus $W'_i=-\sum_j w_{ij}P_{ij}$, $W''_i=\sum_j w_{ij}Q_{ij}$,
+$H'_i=\sum_jP_{ij}$ and $H''_i=-\sum_jQ_{ij}$.
+The scores in the original coordinates are
+\begin{align}
+ U_{b_{ic}}&=d_{ic}/b_{ic}-W_i(a),\label{eq:b-score}\\
+ U_a&=M/a+T-\sum_iB_iW'_i(a)-\sum_iH'_i(a)
+     =M/a+T+\sum_{i,j}(B_iw_{ij}-1)P_{ij}(a).\label{eq:a-score}
+\end{align}
+For fixed $a$, the $b_{ic}$ contribution is
+$d_{ic}\log b_{ic}-b_{ic}W_i$. If $d_{ic}>0$, it is strictly concave,
+tends to $-\infty$ at either endpoint, and is uniquely maximized by
+\begin{equation}\label{eq:conditional-b}
+ \widehat b_{ic}(a)=d_{ic}/W_i(a),\qquad
+ \widehat B_i(a)=m_i/W_i(a).
+\end{equation}
+If $d_{ic}=0$, the contribution is strictly decreasing for $b_{ic}>0$.
+There is no maximum in that coordinate: its supremum is the limit at
+$b_{ic}\downarrow0$. The survival information still penalizes positive values,
+with one-sided derivative $-W_i(a)$; the likelihood is not independent of an
+unobserved cause parameter. Formula~\eqref{eq:conditional-b} then describes a
+closure value only. The original distribution does not admit $\Kw(a,0)$.
+
+Substitution gives the full profile, interpreted as a supremum where necessary:
+\begin{align}
+ \ell_p(a)={}&\log C+M\log a+(a-1)T+\sum_{i,c}d_{ic}\log d_{ic}
+       -\sum_i m_i\log W_i(a)-M-\sum_iH_i(a),\label{eq:profile}\\
+ U_p(a)={}&M/a+T-\sum_i m_i W'_i(a)/W_i(a)-\sum_iH'_i(a).
+ \label{eq:profile-score}
+\end{align}
+The count allocation contributes only a constant to \eqref{eq:profile}; the
+shape estimate depends on the times and withdrawals, not on their cause labels.
+Equation~\eqref{eq:profile-score} also equals $U_a$ at the conditional estimates,
+including the exact absent-cause limits.
+
+\subsection{Existence and uniqueness with boundary qualifications}
+\begin{lemma}\label{lem:concavity}
+For any valid completed data with interior failure times, $\ell_p$ is strictly
+concave in $a>0$.
+\end{lemma}
+\begin{proof}
+The power-series expansion $-\log(1-z)=\sum_{h\ge1}z^h/h$ gives
+\begin{equation}\label{eq:exponential-series}
+ W_i(a)=\sum_j\sum_{h=1}^{\infty}\frac{w_{ij}}h e^{-ahu_{ij}}.
+\end{equation}
+On a compact interval of positive $a$, this series and its first two derivative
+series converge uniformly: each is bounded by a finite sum of polynomially
+weighted geometric series because every $u_{ij}>0$. Differentiation is therefore
+valid. Normalize the summands to weights summing to one. The second derivative
+of $\log W_i$ is the variance of the rates $hu_{ij}$ under those weights, and
+is nonnegative. Differentiating \eqref{eq:profile} twice yields
+\begin{equation}\label{eq:profile-curvature}
+ \ell_p''(a)=\sum_{i,j}\{-a^{-2}+Q_{ij}(a)\}
+          -\sum_i m_i(\log W_i(a))''<0.
+\end{equation}
+Indeed, with $z=au_{ij}>0$,
+$a^2Q_{ij}=[z/(2\sinh(z/2))]^2<1$, since $2\sinh(z/2)>z$.
+Every term in the first sum is strictly negative.
+\end{proof}
+
+\begin{theorem}\label{thm:existence}
+Suppose the assumptions of \cref{sec:model} hold and the recorded times are
+strictly increasing within blocks. If at least one block has $m_i\ge2$, the
+profile has a unique finite maximizer $\widehat a>0$. The unique maximizing
+vector on the relevant cause-zero closure faces is given by
+\eqref{eq:conditional-b} at $\widehat a$. A positive-parameter unrestricted
+MLE exists exactly when $d_{ic}>0$ for every block and cause. Otherwise the
+finite optimum is a boundary supremum in the original positive domain.
+If every $m_i=1$, the likelihood is unbounded above and no finite maximum or
+finite boundary supremum exists.
+\end{theorem}
+\begin{proof}
+As $a\downarrow0$, $L_{ij}=\log a+\log u_{ij}+O(a)$, whence
+$W_i=n_i(-\log a)+O(1)$ by \eqref{eq:scheme}, and
+$H_i=m_i\log a+\sum_j\log u_{ij}+O(a)$. In \eqref{eq:profile}, the $M\log a$
+terms cancel, leaving
+\begin{equation}\label{eq:lower-tail}
+ \ell_p(a)=-M\log(-\log a)+O(1)\longrightarrow-\infty.
+\end{equation}
+As $a\to\infty$, the largest time in block $i$ dominates its sum in
+\eqref{eq:WH}, so
+$W_i(a)\sim w_{im_i}e^{-au_{im_i}}$ and $H_i(a)\to0$. Therefore
+\begin{equation}\label{eq:upper-tail}
+ \ell_p(a)=M\log a-aD+O(1),\qquad
+ D=\sum_{i,j}\log\left(\frac{x_{im_i}}{x_{ij}}\right)\ge0.
+\end{equation}
+Strict ordering implies $D>0$ exactly when some block has at least two failures.
+In that case both tails tend to $-\infty$; continuity and
+\cref{lem:concavity} give existence and uniqueness of the shape maximum.
+The conditional positive-count optima are unique, and each zero-count term
+has its unique closure optimum at zero. A feasible positive sequence converges
+to each such closure vector, but every strictly positive absent-cause value
+has lower likelihood at fixed other parameters. This proves the attainment
+statements. When every $m_i=1$, $D=0$ and \eqref{eq:upper-tail} tends to
+$+\infty$. If a conditional cause value is zero, its supremum can be approached
+arbitrarily closely with positive values at each $a$, so the unboundedness
+also holds in the original positive parameter space.
+\end{proof}
+Strict concavity is asserted in $a$, not in $\log a$. A single-failure block
+is allowed if another block identifies the finite maximizing shape.
+
+\subsection{Numerical estimation and verification}
+The profile algorithm solves $aU_p(a)=0$ in $\eta=\log a$. Starting at $a=1$
+by default, it doubles or halves $a$ until a sign change is found. The score
+$U_p$ is strictly decreasing; its unique root exists in the finite case of
+\cref{thm:existence}. Multiplying by $a>0$ preserves its sign, so Brent's
+bracketed root method is appropriate. The implementation permits 60 bracket
+expansions and 200 root iterations by default, with absolute and relative
+log-coordinate root tolerances $10^{-12}$. These budgets are numerical limits,
+not constraints on the statistical parameter space.
+
+Conditional parameters are evaluated through stable $\log W_i$, rather than
+underflowed powers. Acceptance requires solver success and active
+log-parameter scores of magnitude at most $10^{-7}M$ by default. The full
+likelihood must also agree with the profile; the default objective tolerance
+is $\max(10^{-8},10^{-7}M)$. Closure likelihoods use an exact linear correction:
+for a zero-count coordinate and any positive reference $t_0$,
+\begin{equation}\label{eq:closure-correction}
+ \ell(b=0)=\ell(b=t_0)+t_0W_i,
+\end{equation}
+with other parameters fixed. This is not a fitted epsilon.
+Numerical failure, budget exhaustion, a zero-parameter supremum and a
+mathematically unbounded likelihood have distinct result statuses.
+
+An independent multistart L-BFGS-B optimizer jointly fits the active log
+parameters without using the profile fit as a start or conditional update.
+Its float64 log-coordinate guards are $[-700,700]$; a guard hit cannot certify
+an MLE. These independent numerical comparisons supplement, rather than prove,
+the mathematical result. Additional numerical details appear in
+\cref{app:numerics}.
+
+\section{Within-Block Order-Restricted Maximum Likelihood Estimation}\label{sec:restricted}
+\subsection{Factorization and analytical pooling}
+Use the bijection between positive pairs and $B_i>0$, $0<p_i<1$:
+\begin{equation}\label{eq:Bp}
+ b_{i1}=B_ip_i,\qquad b_{i2}=B_i(1-p_i),\qquad
+ b_{i1}\le b_{i2}\ \Longleftrightarrow\ 0<p_i\le\tfrac12.
+\end{equation}
+Rewriting the likelihood introduces no Jacobian, because the sampling density
+is being evaluated at reparameterized parameters, not transformed as a
+probability density on parameter space. Equation~\eqref{eq:loglikelihood} becomes
+\begin{align}
+ \ell(a,\mathbf B,\mathbf p)&=\ell_T(a,\mathbf B)+\sum_i g_i(p_i),\label{eq:factor}\\
+ \ell_T&=\log C+M\log a+(a-1)T
+   +\sum_i\{m_i\log B_i-B_iW_i(a)-H_i(a)\},\nonumber\\
+ g_i(p)&=d_{i1}\log p+d_{i2}\log(1-p).\nonumber
+\end{align}
+Here $\mathbf B=(B_1,\ldots,B_k)$ and $\mathbf p=(p_1,\ldots,p_k)$.
+The feasible sets for $B_i$ and $p_i$ separate. Since
+$\partial\ell/\partial B_i=m_i/B_i-W_i$ and its derivative is
+$-m_i/B_i^2<0$, the total estimate remains $m_i/W_i(a)$.
+
+\begin{proposition}\label{prop:restriction}
+At fixed $a$, the unique restricted conditional optimum, including its
+zero-count closure interpretation, is
+\begin{equation}\label{eq:restricted-fit}
+ \widetilde B_i(a)=\frac{m_i}{W_i(a)},\qquad
+ \widetilde p_i=\min\{d_{i1}/m_i,1/2\},\qquad
+ (\widetilde b_{i1},\widetilde b_{i2})
+   =\widetilde B_i(\widetilde p_i,1-\widetilde p_i).
+\end{equation}
+Strict pooling occurs precisely when $d_{i1}>d_{i2}$. Equal counts give a
+feasible, active equality without changing the unrestricted pair.
+\end{proposition}
+\begin{proof}
+For positive counts,
+$g_i'(p)=d_{i1}/p-d_{i2}/(1-p)$ and
+$g_i''(p)=-d_{i1}/p^2-d_{i2}/(1-p)^2<0$.
+If $d_{i1}<d_{i2}$ the unique unrestricted root $d_{i1}/m_i$ lies below $1/2$.
+Equal counts put the root at the included endpoint. If $d_{i1}>d_{i2}$,
+$g_i'(1/2)=2(d_{i1}-d_{i2})>0$ and concavity implies the function is increasing
+throughout the feasible interval, giving $p=1/2$. If $d_{i2}=0$, the same
+conclusion follows from $g_i=m_i\log p$; both fitted parameters are positive.
+If $d_{i1}=0$, $g_i=m_i\log(1-p)$ strictly decreases, so its supremum is at
+$p\downarrow0$ and is not attained for $p>0$.
+\end{proof}
+Pooling splits the total equally. Clipping one parameter alone, sorting the
+pair or exchanging cause labels would not maximize the labeled-data likelihood.
+
+\subsection{KKT verification and profile invariance}
+On the closure interval $0\le p\le1/2$, with a finite one-sided derivative
+when $d_{i1}=0$, the maximization KKT equations are
+\begin{equation}\label{eq:kkt}
+ g_i'(p)-\mu_i+\nu_i=0,\quad
+ \mu_i,\nu_i\ge0,\quad
+ \mu_i(p-1/2)=0,\quad \nu_ip=0.
+\end{equation}
+At an interior optimum both multipliers vanish. At the upper endpoint,
+$\mu_i=2(d_{i1}-d_{i2})$, $\nu_i=0$. If $d_{i1}=0,p=0$, the derivative is
+$-m_i$, so $\nu_i=m_i$, $\mu_i=0$. At a positive equality the original raw
+scores need not vanish: they are $((d_{i1}-d_{i2})/B_i,
+-(d_{i1}-d_{i2})/B_i)$, the two sides of the order multiplier in original
+coordinates. Thus an equality with positive parameters is distinct from a
+zero-parameter boundary, and equal counts have zero upper multiplier.
+
+Put $p_i^U=d_{i1}/m_i$. The restricted profile is
+\begin{align}
+ \ell_p^R(a)={}&\log C+M\log a+(a-1)T-\sum_iH_i(a)\nonumber\\
+ &+\sum_i\{m_i\log m_i-m_i\log W_i(a)-m_i+g_i(\widetilde p_i)\}.
+ \label{eq:restricted-profile}
+\end{align}
+Consequently,
+\begin{equation}\label{eq:penalty}
+ \ell_p^R(a)=\ell_p(a)-\Delta,\quad
+ \Delta=\sum_i\{g_i(p_i^U)-g_i(\widetilde p_i)\}\ge0.
+\end{equation}
+Each nonviolating block contributes zero. For a violating block its contribution
+is $d_{i1}\log(2d_{i1}/m_i)+d_{i2}\log(2d_{i2}/m_i)>0$, using $0\log0=0$.
+The strict inequality follows because $p_i^U\ne1/2$ is the unique unrestricted
+maximizer of $g_i$ (or its unique closure maximizer). The penalty depends only
+on observed counts.
+
+\begin{theorem}\label{thm:restricted}
+In the finite-shape case of \cref{thm:existence},
+\begin{equation}\label{eq:invariance}
+ \widetilde a=\widehat a,\qquad
+ \widetilde B_i=\widehat B_i,\qquad
+ \sup\ell_R=\sup\ell_U-\Delta\le\sup\ell_U.
+\end{equation}
+The restricted maximizing vector on its relevant closure faces is unique.
+It is attained in the positive domain exactly when every $d_{i1}>0$.
+If every $m_i=1$, the restricted likelihood remains unbounded.
+\end{theorem}
+\begin{proof}
+The constant shift in \eqref{eq:penalty} preserves derivatives, strict
+concavity, tails and the shape argmax. Conditional totals are identical by
+\eqref{eq:restricted-fit}, and the conditional proportion optima are unique.
+A zero cause-1 count requires the excluded endpoint $p_i=0$; it can be
+approached feasibly with $b_{i1}=B_i\epsilon$,
+$b_{i2}=B_i(1-\epsilon)$ as $\epsilon\downarrow0$.
+A zero cause-2 count instead gives $p_i=1/2$ with positive equal parameters.
+These are the only count cases because $m_i>0$. Finally a finite constant
+cannot remove the unbounded growth in \eqref{eq:upper-tail} when every $m_i=1$.
+\end{proof}
+For the unbounded case, subtracting two infinite maximized values is not a
+valid calculation; \eqref{eq:penalty} still holds at each finite $a$.
+The software preserves all feasible unrestricted pairs exactly and pools only
+strict count violations. It checks total preservation, feasibility, KKT
+residuals, the shared shape score and the likelihood penalty. An active equality
+may have status \texttt{interior\_mle}, referring to positivity, with activity
+reported separately. No across-block restriction is implemented.
+
+\section{Observed Information and Asymptotic Inference}\label{sec:information}
+\subsection{Analytical negative Hessians}
+Let $q=(a,B_1,\ldots,B_k,p_1,\ldots,p_k)^\mathsf T$ and
+$J_q=-\nabla_q^2\ell$. The scores from \eqref{eq:factor} are
+$U_a$ in \eqref{eq:a-score},
+$U_{B_i}=m_i/B_i-W_i$ and $U_{p_i}=d_{i1}/p_i-d_{i2}/(1-p_i)$.
+Differentiating again gives all nonzero entries:
+\begin{align}
+ J_{aa}&=M/a^2+\sum_{i,j}(B_iw_{ij}-1)Q_{ij},&
+ J_{aB_i}&=J_{B_ia}=W_i'=-\sum_jw_{ij}P_{ij},\nonumber\\
+ J_{B_iB_i}&=m_i/B_i^2,&
+ J_{p_ip_i}&=d_{i1}/p_i^2+d_{i2}/(1-p_i)^2.\label{eq:information}
+\end{align}
+All $a/p$, $B/p$ and different-block $B/B$ or $p/p$ cross entries vanish.
+The sign of $J_{aB_i}$ follows by negating
+$\partial U_a/\partial B_i=-W_i'$. Writing
+$c=(W_1',\ldots,W_k')^\mathsf T$,
+$D_B=\diag(m_i/B_i^2)$ and
+$D_p=\diag(d_{i1}/p_i^2+d_{i2}/(1-p_i)^2)$,
+\begin{equation}\label{eq:block-information}
+ J_q=\begin{pmatrix}J_{aa}&c^\mathsf T&0\\c&D_B&0\\0&0&D_p\end{pmatrix}
+     =\diag(J_T,D_p),\qquad
+ J_T=\begin{pmatrix}J_{aa}&c^\mathsf T\\c&D_B\end{pmatrix}.
+\end{equation}
+These are \emph{observed} information matrices. Expected Fisher information
+would average over the censored experiment; that operation is not implemented.
+
+In original coordinates
+$\theta=(a,b_{11},b_{12},\ldots,b_{k1},b_{k2})^\mathsf T$,
+\begin{equation}\label{eq:original-information}
+ (J_\theta)_{aa}=J_{aa},\qquad
+ (J_\theta)_{a,b_{ic}}=W_i',\qquad
+ (J_\theta)_{b_{ic},b_{ic}}=d_{ic}/b_{ic}^2,
+\end{equation}
+and every other $b/b$ cross derivative is zero.
+Away from a stationary point, information does not transform by congruence alone.
+If $A=\partial q/\partial\theta^\mathsf T$, the chain rule gives
+\begin{equation}\label{eq:hessian-transform}
+ J_\theta=A^\mathsf T J_q A-\sum_i U_{p_i}\nabla_\theta^2p_i.
+\end{equation}
+Only the proportion mapping is nonlinear. For one block,
+$p_{b_1}=(1-p)/B$, $p_{b_2}=-p/B$, and
+\begin{equation}\label{eq:p-hessian}
+ \nabla_{(b_1,b_2)}^2p=
+ \frac1{B^2}\begin{pmatrix}-2(1-p)&2p-1\\2p-1&2p\end{pmatrix}.
+\end{equation}
+The score correction vanishes at the unrestricted positive MLE, but generally
+not at an active order constraint. Inverting an unrestricted original-coordinate
+Hessian at an active constrained fit would therefore not justify ordinary
+constrained-parameter Wald inference.
+
+\begin{proposition}\label{prop:positive-information}
+At the conditional optimum $B_i=m_i/W_i(a)$ for any finite $a>0$, $J_T$ is
+positive definite. If all fitted $p_i\in(0,1)$, $J_q$ is positive definite.
+\end{proposition}
+\begin{proof}
+$D_B$ has positive diagonal. Differentiating the conditional equations gives
+$\widehat{\mathbf B}'(a)=-D_B^{-1}c$. The chain rule applied to the profiled
+score then yields $-\ell_p''(a)=J_{aa}-c^\mathsf TD_B^{-1}c$.
+This Schur complement is positive by \cref{lem:concavity}; hence $J_T$ is
+positive definite. Every entry of $D_p$ is positive because $m_i>0$ and
+$0<p_i<1$, so \eqref{eq:block-information} proves the last assertion.
+\end{proof}
+Mathematical positive definiteness does not guarantee adequate numerical
+conditioning or regularity of a constrained estimator. Off a conditional
+optimum the matrix can be indefinite.
+
+\subsection{Covariance, standard errors and transformations}
+For an unrestricted positive MLE under regular large-sample conditions, the
+implemented approximation is
+\begin{equation}\label{eq:covariance}
+ \widehat{\Cov}(\widehat q)=J_q(\widehat q)^{-1}=:V_q,\qquad
+ \widehat{\Cov}(\widehat\theta)=G V_qG^\mathsf T,
+ \quad G=\frac{\partial\theta}{\partial q^\mathsf T}\bigg|_{\widehat q}.
+\end{equation}
+For each block the nonzero rows of $G$, besides the identity for $a$, are
+\begin{equation}\label{eq:covariance-jacobian}
+ \frac{\partial b_{i1}}{\partial(B_i,p_i)}=(p_i,B_i),\qquad
+ \frac{\partial b_{i2}}{\partial(B_i,p_i)}=(1-p_i,-B_i).
+\end{equation}
+At the unrestricted MLE, $(D_p^{-1})_{ii}=\widehat p_i(1-\widehat p_i)/m_i$
+and the estimated time/proportion cross covariances are zero. For example,
+\begin{align*}
+ \widehat\Var(\widehat b_{i1})&=\widehat p_i^2\widehat\Var(\widehat B_i)
+                          +\widehat B_i^2\widehat\Var(\widehat p_i),\\
+ \widehat\Cov(\widehat b_{i1},\widehat b_{i2})
+ &=\widehat p_i(1-\widehat p_i)\widehat\Var(\widehat B_i)
+                          -\widehat B_i^2\widehat\Var(\widehat p_i).
+\end{align*}
+Block totals can have nonzero estimated cross covariances through the common
+shape, despite independence between the original blocks. Standard errors are
+the square roots of diagonal estimated variances.
+
+The regular approximation presumes fixed $k$, interior true parameters,
+increasing informative failure counts in all blocks, nonsingular limiting
+time information and a censoring sequence admitting consistency and a suitable
+score central limit theorem. No general design-specific asymptotic theorem
+for arbitrary progressive schedules is claimed here. A finite-sample unique
+MLE and an invertible observed Hessian alone do not establish asymptotic
+normality or nominal coverage. All approximate intervals in this paper are
+conditional on those further regularity requirements.
+
+Numerical inversion uses diagonal equilibration: set $s_j=\sqrt{J_{jj}}$ and
+$R_{j\ell}=J_{j\ell}/(s_js_\ell)$, factor $R$ by Cholesky, solve $RX=I$, and
+recover $V_{j\ell}=X_{j\ell}/(s_js_\ell)$. The default condition-number limit
+is $10^{12}$ for $R$, with raw and equilibrated conditioning reported.
+Nonfinite, nonsymmetric, nonpositive-definite, singular or excessively
+ill-conditioned matrices do not produce regular covariance estimates.
+No ridge adjustment or pseudoinverse is substituted. Exact binomial sets
+remain available if this inversion fails.
+
+\subsection{Marginal Wald intervals}
+Let the desired confidence level be $1-\alpha$, with $0<\alpha<1$, and put
+$z_\alpha=\Phi^{-1}(1-\alpha/2)$ for the standard normal quantile.
+For estimate $\widehat v$ and standard error $s_v$, the ordinary interval is
+\begin{equation}\label{eq:wald}
+ [\widehat v-z_\alpha s_v,\ \widehat v+z_\alpha s_v].
+\end{equation}
+It can leave the parameter domain. For a positive quantity, the delta variance
+of its logarithm is approximately $s_v^2/\widehat v^2$, yielding
+\begin{equation}\label{eq:log-wald}
+ [\widehat v\exp(-z_\alpha s_v/\widehat v),\
+  \widehat v\exp(z_\alpha s_v/\widehat v)].
+\end{equation}
+For $0<\widehat v<1$, define
+$\logit(v)=\log\{v/(1-v)\}$ and $\expit(y)=1/(1+e^{-y})$.
+The logit interval has endpoints
+\begin{equation}\label{eq:logit-wald}
+ \expit\left\{\logit(\widehat v)\ \pm\
+       \frac{z_\alpha s_v}{\widehat v(1-\widehat v)}\right\}.
+\end{equation}
+The squared denominator in the logarithmic variance follows from the squared
+Taylor derivative, independently of any notation in the cited papers.
+Parameter inference supplies ordinary and log intervals for positive parameters,
+and ordinary and logit intervals for regular unrestricted proportions, alongside
+the exact sets below. These are marginal approximations, not exact finite-sample
+or simultaneous guarantees. Nonrepresentable or endpoint-saturated transformed
+intervals are explicitly unavailable rather than replaced by clipped intervals.
+
+\section{Inference Under the Order Restriction}\label{sec:restricted-inference}
+\subsection{Exact inference for cause probabilities}
+\begin{proposition}\label{prop:binomial}
+Under the fixed-count and noninformative-withdrawal assumptions,
+\begin{equation}\label{eq:binomial}
+ d_{i1}\sim\operatorname{Binomial}(m_i,p_i),
+\end{equation}
+independently across blocks, also conditional on the observed time experiment.
+\end{proposition}
+\begin{proof}
+By \cref{prop:minimum}, each unit's cause is Bernoulli with success probability
+$p_i$, independent of its minimum lifetime. Noninformative selection preserves
+this property in each successive risk set. Equivalently, the normalized
+joint density of the recorded ordered times and labels factors as
+\[
+ \left\{C_i\prod_j f(x_{ij};a,B_i)S_i(x_{ij})^{r_{ij}}\right\}
+       \prod_j p_i^{\ind\{\delta_{ij}=1\}}
+               (1-p_i)^{\ind\{\delta_{ij}=2\}}.
+\]
+The bracketed part is a normalized progressive time density by the conditional
+construction \eqref{eq:conditional-density}. Thus the observed marks are iid
+Bernoulli, independently of these times. Summing over the $\binom{m_i}{d}$
+sequences having $d$ successes gives \eqref{eq:binomial}. Independence of blocks
+completes the argument. A random cause-dependent stopping count or informative
+withdrawals would require a different proof and is not covered.
+\end{proof}
+
+Write $Q_\gamma(s,t)$ for the $\gamma$ quantile of $\operatorname{Beta}(s,t)$.
+For observed $d$ out of $m$, the equal-tailed Clopper--Pearson set $[L_d,U_d]$
+is defined by
+\begin{align}
+ L_d&=\begin{cases}0,&d=0,\\Q_{\alpha/2}(d,m-d+1),&d>0,\end{cases}&
+ U_d&=\begin{cases}1,&d=m,\\Q_{1-\alpha/2}(d+1,m-d),&d<m.\end{cases}
+ \label{eq:CP}
+\end{align}
+For $d>0$, $P_p(D\ge d)=I_p(d,m-d+1)$, where $I_p$ is the regularized
+beta CDF. For $d<m$, $P_p(D\le d)=1-I_p(d+1,m-d)$. Therefore
+\eqref{eq:CP} inverts binomial tail tests with tail levels $\alpha/2$.
+For a fixed true $p$, failure below the lower endpoint is an upper-tail
+rejection event of probability at most $\alpha/2$, and failure above the
+upper endpoint is a lower-tail event of probability at most $\alpha/2$.
+The discreteness can make these probabilities smaller, so the union bound gives
+$P_p\{p\in[L_D,U_D]\}\ge1-\alpha$. Endpoint cases $p=0,1$ have coverage one.
+Here ``exact'' means conservative finite-sample coverage in the binomial model,
+not that the attained coverage equals the nominal level or that floating-point
+quantiles are exact arithmetic.
+
+For the within-block restriction, return the set
+\begin{equation}\label{eq:restricted-set}
+ \mathcal C_R(d)=[L_d,U_d]\cap[0,1/2].
+\end{equation}
+If $L_d>1/2$, it is empty; its implementation retains an explicit empty status.
+It must not be collapsed to $\{1/2\}$. For every allowed true $p\le1/2$,
+\begin{equation}\label{eq:coverage}
+ \{p\in\mathcal C_R(D)\}=\{p\in[L_D,U_D]\},\qquad
+ P_p\{p\in\mathcal C_R(D)\}\ge1-\alpha.
+\end{equation}
+This proves marginal coverage under the correct restriction, including when
+some samples yield empty sets. The set need not contain the constrained point
+estimate. For example, $d=m=10$ at confidence $.95$ has
+$L_d=.025^{1/10}>1/2$, hence an empty restricted set. Cause-2 probability sets
+are obtained by reflection, $\{1-p:p\in\mathcal C_R\}$; this is not a
+set-theoretic complement. The sets are not simultaneous across blocks.
+
+\subsection{Supported and unsupported constrained uncertainty}
+At an active inequality the proportion estimate is a truncation of an
+unconstrained estimate; ordinary interior normal theory is not justified
+uniformly at the true order boundary. A positive equality is an attained MLE,
+but that fact does not make its constrained sampling distribution regular.
+The implementation therefore uses exact sets for restricted probabilities
+and supplies no ordinary restricted probability standard errors or individual
+$b_{ic}$ Wald intervals, including when a particular sample constraint is
+inactive. Likewise, unrestricted zero-cause samples do not receive a full
+cause-parameter covariance or ordinary probability/b-parameter Wald inference.
+No unsupported active-face covariance is inferred from \eqref{eq:information}.
+
+The time likelihood in $(a,\mathbf B)$ is unchanged, so its covariance
+$V_T=J_T^{-1}$ and associated approximate inference are supported under the
+separate regular time-model assumptions. This remains the time model when an
+observed cause count is zero; it makes no regularity assertion about a true
+zero latent cause parameter. All-single-failure designs, failed fits and
+nonstationary or nonfinite estimates cannot be used as valid finite fits.
+Restricted cumulative-incidence intervals are not supplied. These exclusions
+describe implemented scope, not a claim that other valid inference methods
+could never be developed.
+
+\section{Reliability Characteristics and Estimation}\label{sec:reliability}
+\subsection{Plug-in quantities and invariance}
+For block $i$, define its median $v_i=v(a,B_i)$ and, for fixed interior mission
+time $t$, the reliability quantities
+\begin{equation}\label{eq:reliability}
+ S_i(t)=(1-t^a)^{B_i},\quad h_i(t)=\frac{aB_it^{a-1}}{1-t^a},\quad
+ G_{i1}(t)=p_i[1-S_i(t)],\quad
+ G_{i2}(t)=(1-p_i)[1-S_i(t)].
+\end{equation}
+Their point estimators substitute the fitted parameters, or use the stated
+closure limits when an estimated cause share is zero. The estimates of
+$S_i,h_i,v_i$ depend only on $a,B_i$; by \eqref{eq:invariance} the unrestricted
+and restricted plug-in curves and medians coincide at all interior $t$.
+The eventual cause probabilities and incidences depend additionally on $p_i$,
+and can change. A weighted average of block parameters does not in general
+produce a pooled-population survival curve; such a target would require
+specified population weights and is not defined here.
+
+\subsection{Gradients and delta uncertainty}
+Suppress the block subscript for this calculation and set
+$L=\log(1-t^a)$, $P=\partial L/\partial a$,
+$S=e^{BL}$, $F=1-S$, $h=h(t;a,B)$, $v=v(a,B)$,
+$z_v=\log2/B$ and $\rho=z_v/(e^{z_v}-1)$.
+In the local coordinate order $(a,B,p)$,
+\begin{align}
+ \nabla S&=(SBP,SL,0)^\mathsf T,&
+ \nabla h&=h(1/a+\log t-P,1/B,0)^\mathsf T,\nonumber\\
+ \nabla v&=v(-\log v/a,-\rho/(aB),0)^\mathsf T,&
+ \nabla p&=(0,0,1)^\mathsf T,\nonumber\\
+ \nabla(1-p)&=(0,0,-1)^\mathsf T,&
+ \nabla G_1&=-p\nabla S+(0,0,F)^\mathsf T,\nonumber\\
+ &&\nabla G_2&=-(1-p)\nabla S-(0,0,F)^\mathsf T.\label{eq:gradients}
+\end{align}
+For $S$, differentiate $\log S=BL$. For $h$, differentiate
+$\log h=\log a+\log B+(a-1)\log t-L$.
+For the median, $\log v=\log(1-e^{-\log2/B})/a$, giving
+$\partial\log v/\partial a=-\log v/a$ and
+$\partial\log v/\partial B=-\rho/(aB)$. Multiplication by the point value
+gives the first three gradients. The last two follow from the product rule
+on $p(1-S)$ and $(1-p)(1-S)$.
+
+Embed a local gradient in the full parameter vector with zero entries for
+other block coordinates. If the required regular covariance $V$ is available,
+the implemented delta variance is
+\begin{equation}\label{eq:delta}
+ \widehat\Var(\widehat g)\approx
+       \nabla g(\widehat q)^\mathsf T V\nabla g(\widehat q).
+\end{equation}
+For $S,h,v$, use $V_T$; for unrestricted regular incidence, use $V_q$.
+Hazard intervals apply \eqref{eq:log-wald}; survival, median and regular
+unrestricted incidence apply \eqref{eq:logit-wald}. Probabilities retain the
+exact binomial sets, even when an unrestricted interior approximate standard
+error is also available. Restricted or zero-boundary incidence uncertainty is
+explicitly unavailable.
+
+Both $J_T$ and its fitted arguments are unchanged by the order restriction.
+Consequently the fitted time covariance and the delta calculations for $S,h,v$
+are invariant as well, up to numerical roundoff. These intervals at specified
+mission times are pointwise and marginal. Evaluating them on a grid does not
+produce a simultaneous confidence band. Numerical saturation of a bounded
+point value can prevent a transformed interval.
+
+\section{Numerical Verification of Implemented Methods}\label{sec:numerical}
+\subsection{Fixed illustrative data and estimates}
+The hand-constructed data in \cref{tab:data} are retained without transformation.
+For A, $(n_A,m_A)=(6,3)$ and $\mathbf R_A=(1,0,2)$.
+For B, $(n_B,m_B)=(7,4)$ and $\mathbf R_B=(0,1,0,2)$. The experiment starts with 13
+units, records seven failures and removes six survivors. The risk sets give
+$C_A=72$, $C_B=504$ and $C=36288$.
+\begin{table}[htbp]
+\centering
+\caption{Deterministic illustrative records. $Y$ is the risk set before the failure.}
+\label{tab:data}
+\begin{tabular}{cccccc}\toprule
+Block & $j$ & $x_{ij}$ & $\delta_{ij}$ & $r_{ij}$ & $Y_{ij}$\\\midrule
+A&1&.15&1&1&6\\ A&2&.40&2&0&4\\ A&3&.70&1&2&3\\
+B&1&.10&2&0&7\\ B&2&.25&1&1&6\\ B&3&.55&2&0&4\\ B&4&.80&2&2&3\\\bottomrule
+\end{tabular}
+\end{table}
+
+\Cref{tab:estimates} reports the executed fits. A has counts $(2,1)$ and
+therefore pools under the order; B has counts $(1,3)$ and remains unchanged.
+The fitted cause-1 probabilities change from $(2/3,1/4)$ to $(1/2,1/4)$,
+while totals remain approximately $(.776562164940,.715013718904)$.
+The likelihood loss equals $\Delta=2\log(4/3)+\log(2/3)
+\approx.169899036795$. Both analytical fits converge with positive parameters
+and no zero-parameter boundary.
+\begin{table}[htbp]
+\centering\small
+\caption{Executed parameter and objective values; all log-likelihoods include $\log C$.}
+\label{tab:estimates}
+\begin{tabular}{lrrr}\toprule
+Quantity & Unrestricted & Restricted & Independent SLSQP\\\midrule
+$a$&1.173959840838&1.173959840838&1.173959821550\\
+$b_{A1}$&.517708109960&.388281082470&.388281083610\\
+$b_{A2}$&.258854054980&.388281082470&.388281083610\\
+$b_{B1}$&.178753429726&.178753429726&.178753439640\\
+$b_{B2}$&.536260289178&.536260289178&.536260336209\\
+$\ell$&1.070678947337&.900779910542&.900779910542\\\bottomrule
+\end{tabular}
+\end{table}
+The independent unrestricted joint optimizer agrees with the profile objective
+to absolute difference $8.89\times10^{-16}$ (rounded upward). The restricted
+SLSQP verifier jointly optimizes a scaled log shape, log totals and bounded
+proportions from three fixed feasible starts; it uses no fitted start,
+conditional update or preset active set. All three starts pass independent
+stationarity, feasibility and guard checks. Its objective differs from the
+analytical restricted value by $1.93\times10^{-14}$; the absolute log-shape
+ratio is below $1.65\times10^{-8}$. These are deterministic agreement checks,
+not repeated-sample performance comparisons.
+
+\subsection{Supported uncertainty and reliability outputs}
+\Cref{tab:time-inference} gives standard errors and log-Wald intervals shared
+by both fits. The time information's raw and equilibrated condition numbers
+are approximately $6.39824$ and $5.96887$, respectively. Mathematical
+invariance does not assert exact bitwise equality of floating-point results.
+\begin{table}[htbp]
+\centering
+\caption{Time-parameter inference, identical under both fits to displayed precision.
+Intervals are marginal 95\% large-sample approximations.}
+\label{tab:time-inference}
+\begin{tabular}{lrrc}\toprule
+Parameter & Estimate & SE & Log-Wald interval\\\midrule
+$a$&1.173960&.542361&[.474684,2.903369]\\
+$B_A$&.776562&.554363&[.191660,3.146456]\\
+$B_B$&.715014&.438624&[.214855,2.379485]\\\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Unrestricted individual-cause inference. Restricted individual-cause
+SEs and intervals are unsupported, including for block B.}
+\label{tab:cause-inference}
+\begin{tabular}{lrrc}\toprule
+Parameter & Estimate & SE & 95\% log-Wald interval\\\midrule
+$b_{A1}$&.517708&.425742&[.103298,2.594646]\\
+$b_{A2}$&.258854&.280743&[.030894,2.168880]\\
+$b_{B1}$&.178753&.189708&[.022330,1.430933]\\
+$b_{B2}$&.536260&.363572&[.141997,2.025213]\\\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering\small
+\caption{Cause-1 probabilities and marginal 95\% exact sets.
+Restricted probability SEs are not supplied.}
+\label{tab:probabilities}
+\begin{tabular}{lrrcc}\toprule
+Block & $\widehat p_i$ & $\widetilde p_i$ & Unrestricted set & Restricted set\\\midrule
+A&.666667&.500000&[.094299,.991596]&[.094299,.500000]\\
+B&.250000&.250000&[.006309,.805880]&[.006309,.500000]\\\bottomrule
+\end{tabular}
+\end{table}
+The unrestricted approximate SEs for $p_A,p_B$ are $.272166,.216506$.
+The exact sets in \cref{tab:probabilities} use the same observed counts in both
+analyses; the restricted sets are their intersections with $[0,1/2]$.
+They demonstrate the set construction, not empirical coverage.
+
+\begin{table}[htbp]
+\centering
+\caption{Reliability and median estimates under both fits. Mission time is $.5$
+for survival and hazard; the median is a lifetime quantile. Intervals are
+pointwise marginal 95\% delta approximations.}
+\label{tab:reliability}
+\begin{tabular}{llrrcl}\toprule
+Block & Quantity & Estimate & SE & Interval & Transform\\\midrule
+A&$S_A(.5)$&.634626&.168675&[.294498,.878453]&logit\\
+A&$h_A(.5)$&1.451328&.889990&[.436303,4.827734]&log\\
+A&$v_A$&.638353&.194611&[.252750,.902071]&logit\\
+B&$S_B(.5)$&.657915&.144245&[.353854,.871039]&logit\\
+B&$h_B(.5)$&1.336299&.694657&[.482412,3.701597]&log\\
+B&$v_B$&.666148&.168168&[.311901,.897787]&logit\\\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering\small
+\caption{Cumulative incidence at $.5$. SEs and 95\% logit-delta intervals refer
+only to the unrestricted fit. No restricted incidence uncertainty is supplied.}
+\label{tab:CIF}
+\begin{tabular}{llrrrc}\toprule
+Block & Cause & Unrestricted & Restricted & Unrestricted SE & Unrestricted interval\\\midrule
+A&1&.243583&.182687&.150113&[.061228,.613889]\\
+A&2&.121791&.182687&.114237&[.016809,.529407]\\
+B&1&.085521&.085521&.082376&[.011727,.424299]\\
+B&2&.256564&.256564&.131107&[.082329,.570356]\\\bottomrule
+\end{tabular}
+\end{table}
+The incidence changes in A result entirely from its fitted proportion change;
+the minimum survival is unchanged. The lack of a restricted interval is an
+explicit scope limit, not a zero uncertainty estimate. Only seven failures
+are present, so the displayed asymptotic intervals are particularly tentative.
+
+\subsection{Independent mathematical and numerical audit}
+The complete existing test suite was executed with warnings treated as errors:
+325 tests passed, with no failures or skips. Tests include distribution
+normalization, conditional risk-set likelihoods, complete small-scheme
+accounting, derivative identities, zero-count limits, unbounded designs,
+independent optimizers, information conditioning, finite binomial enumeration
+and reliability gradients. The six existing demonstration modules also exited
+successfully with empty standard error output under the same warning policy.
+
+A new deterministic audit differentiates an independently expanded likelihood
+with 100-digit decimal arithmetic and step $10^{-20}$. It does not call the
+production score or Hessian to construct the numerical reference. Over
+$a=.35,1.3,4.5$ in both coordinate systems, the largest absolute negative-Hessian
+error is $1.43\times10^{-14}$ (rounded upward). Checks of all seven local
+reliability gradients at three varied parameter/time configurations give a
+maximum absolute error below $1.43\times10^{-14}$. Four additional shape
+points give profile-score error below $4.27\times10^{-14}$.
+The covariance transformed by \eqref{eq:covariance} agrees with a direct solve
+using the original information to $5.56\times10^{-17}$.
+These checks have finite configurations and finite arithmetic precision; they
+supplement the derivations rather than prove universal numerical accuracy.
+
+Restricted exact-set coverage was also evaluated by summing binomial masses
+for $m\in\{1,3,10,40\}$ and 101 equally spaced probabilities in $[0,1/2]$.
+The minimum over that finite grid was $.95187945$ at nominal $.95$.
+This is deterministic enumeration, not Monte Carlo evidence or a substitute
+for the all-parameter coverage argument in \eqref{eq:coverage}.
+The recorded JSON artifact contains the actual numbers, inputs' source hashes,
+full supported inference outputs and demonstration logs. Reproduction commands
+are in \cref{app:reproduction}.
+
+\section{Discussion and Limitations}\label{sec:discussion}
+The likelihood factorization explains why the restricted cause proportions
+can change without altering the fitted minimum-lifetime distribution. It also
+separates exact binomial inference from the approximate inference needed for
+the time parameters. The strict-concavity and tail arguments establish a
+finite-sample shape result under the precise data contract; they are not a
+blanket regularity theorem for every censoring sequence.
+
+Scientific interpretation requires independent latent causes, homogeneous
+units within each block, a defensible global shape, correct cause labels,
+noninformative withdrawals and a meaningful fixed bounded scale. These
+assumptions are not verified by optimizer convergence or structurally valid
+data. The optional order must be justified for the labeled causes before an
+application; it should not be selected merely to match observed counts.
+
+There are three separate statistical boundary issues. A finite shape can
+coexist with a zero-cause boundary supremum. A positive order equality can be
+attained while its cause-proportion inference is nonregular. An all-single-failure
+design has genuinely unbounded likelihood. None is equivalent to failure of a
+finite numerical search. Production arithmetic nevertheless has finite range,
+and nearly coincident times can require unrepresentable conditional parameters.
+The restricted production fit currently depends on successful unrestricted
+profiling, so it is not a general fallback when an unrestricted conditional
+parameter exceeds numerical range.
+
+The information matrices are observed rather than expected. The Wald and
+delta formulas are conditional large-sample approximations; no finite-sample
+coverage or estimator superiority is established by the illustration.
+No regular full covariance is supplied for restricted cause parameters or
+unrestricted zero-cause fits. Restricted individual-cause and incidence intervals,
+simultaneous bands, profile-likelihood intervals, expected-information integration
+and a general censoring-design CLT remain outside the completed implementation.
+Exact probability sets can be wide or empty and rely on the correct binomial
+model and, for intersection coverage, the correct order.
+
+The broader project still lacks Bayesian estimators and priors, posterior or
+credible-interval calculations, across-block or combined restrictions,
+a repeated-sample simulation study, compatible published-table reproduction
+and real-data validation. These are incomplete research components rather
+than results or bugs disguised by the present audit. The work reported here
+is a reproducible classical baseline for further scientific review.
+
+\appendix
+\section{Numerical Evaluation and Result Contracts}\label{app:numerics}
+The implementation uses logarithms and stable elementary functions.
+For $z=a\log t<0$, evaluate $\log(1-e^z)$ as
+$\log1p(-e^z)$ when $z\le-\log2$, and as $\log(-\operatorname{expm1}(z))$
+otherwise. Survival is exponentiated only when an ordinary probability is
+needed; the CDF uses $-\operatorname{expm1}(\log S)$.
+If $a(-\log t)$ is subnormal, its logarithm is retained as
+$\log a+\log(-\log t)$; the omitted correction to $\log(1-e^{-v})=\log v+O(v)$
+is below log-scale precision in that branch. In the opposite extreme tail,
+a scaled survival logarithm can remain representable after $t^a$ underflows:
+for nonzero $c$, evaluate
+$c\log(1-e^{-v})=-\operatorname{sign}(c)e^{\log|c|-v}(1+O(e^{-v}))$.
+No observed time or estimated parameter is replaced by an arbitrary epsilon.
+Ordinary densities can overflow and ordinary probabilities can underflow,
+while useful logarithms remain finite.
+
+The profile uses log-sum-exp to retain $\log W_i$. For information evaluation,
+with $z=au$, use the expansions
+\begin{align*}
+ 1-aP&=z/2-z^2/12+z^4/720-z^6/30240+O(z^8),\\
+ 1-a^2Q&=z^2/12-z^4/240+z^6/6048+O(z^8),
+\end{align*}
+and compute
+$J_{aa}=a^{-2}\sum_{i,j}\{(1-a^2Q_{ij})+B_iw_{ij}a^2Q_{ij}\}$.
+This avoids subtraction of nearly equal large terms. These formulas evaluate
+the same derivatives in \eqref{eq:information}.
+
+A fit has status \texttt{interior\_mle} only after numerical verification of a
+finite positive parameter vector, including possibly active order equalities.
+A finite cause-zero limit is \texttt{boundary\_supremum}; an unbounded profile
+is \texttt{unbounded\_likelihood}, with no finite vector.
+\texttt{optimization\_failed} and \texttt{numerical\_failure} do not certify an
+estimate. The uncertainty layer additionally validates score stationarity,
+conditional totals and declared restriction before accepting a fit.
+Regular full covariance is returned only for unrestricted positive fits;
+time covariance is evaluated separately. Numerical guards and condition-number
+limits are computational safeguards, not scientific parameter restrictions.
+
+\section{Reproduction and Verification Materials}\label{app:reproduction}
+All commands below run from the repository root in the existing Python
+environment. The exact installed versions are recorded in
+\path{requirements-lock.txt}; the input is
+\path{data/examples/two_blocks.json}.
+\begin{verbatim}
+.venv/bin/python -m pytest -q -W error
+.venv/bin/python -W error -m experiments.stage2_example
+.venv/bin/python -W error -m experiments.stage3_example
+.venv/bin/python -W error -m experiments.stage4_example
+.venv/bin/python -W error -m experiments.order_restricted_example
+.venv/bin/python -W error -m experiments.classical_inference_example
+.venv/bin/python -W error -m experiments.within_block_validation
+.venv/bin/python -W error -m experiments.manuscript_audit \
+    --output results/manuscript_audit.json
+\end{verbatim}
+The numerical audit in this paper was executed on 1 November 2026.
+Its verification checklist is \path{docs/MANUSCRIPT_AUDIT.md}; numerical
+checks and outputs are in \path{results/manuscript_audit.json}.
+Historical results in \path{docs/FINAL_AUDIT.md} and
+\path{docs/WITHIN_BLOCK_VALIDATION.md} describe their respective earlier
+milestones. They are supporting records, not substitutes for the proofs above.
+No random seed is required for these deterministic checks. Source and test
+files implement exactly the model and supported procedures stated here.
+
+\begin{thebibliography}{9}
+\bibitem{wang2023}
+L. Wang, S.-J. Wu, H. Lin, and Y. M. Tripathi,
+``Inference for block progressive censored competing risks data from an
+inverted exponentiated exponential model,''
+\emph{Quality and Reliability Engineering International}, vol. 39,
+pp. 2736--2764, 2023. \url{https://doi.org/10.1002/qre.3382}.
+
+\bibitem{wang2018}
+L. Wang, ``Inference of progressively censored competing risks data from
+Kumaraswamy distributions,''
+\emph{Journal of Computational and Applied Mathematics}, vol. 343,
+pp. 719--736, 2018. \url{https://doi.org/10.1016/j.cam.2018.05.013}.
+
+\bibitem{mahto2022}
+A. K. Mahto, C. Lodhi, Y. M. Tripathi, and L. Wang,
+``Inference for partially observed competing risks model for Kumaraswamy
+distribution under generalized progressive hybrid censoring,''
+\emph{Journal of Applied Statistics}, vol. 49, no. 8,
+pp. 2064--2092, 2022. \url{https://doi.org/10.1080/02664763.2021.1889999}.
+\end{thebibliography}
 \end{document}

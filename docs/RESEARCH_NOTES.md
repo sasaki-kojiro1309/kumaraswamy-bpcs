@@ -416,3 +416,21 @@ cover these cases and additional off-fit Hessian configurations. All 325 tests
 pass with warnings as errors; all six numerical example/validation modules run
 without stderr. A minimal GitHub Actions workflow was added but not remotely run.
 See FINAL_AUDIT.md for exact comparisons, reproduction commands and limits.
+
+## 2026-11-01: independent mathematical audit and manuscript
+
+Rechecked the completed classical scope before drafting Report.tex. The claim
+checklist is in MANUSCRIPT_AUDIT.md and independent reproducible calculations
+are in experiments/manuscript_audit.py and results/manuscript_audit.json.
+The 325 existing tests passed with warnings treated as errors; all six existing
+examples ran successfully. A 100-digit row-expanded likelihood independently
+verified both information parameterizations, the profile score and all seven
+reliability gradients. Exact-set coverage was also enumerated over fixed
+binomial configurations; the general coverage statement is proved separately.
+No confirmed production formula or estimator defect was found; src/ and all
+existing tests remain unchanged. MODEL_SPEC's stale opening uncertainty status
+was corrected. The manuscript treats all asymptotic inference conditionally;
+no universal design-specific CLT is claimed. Placeholder authors and unrelated
+RA/entropy/Bayesian-performance prose were removed from the template, retaining
+the specified article format and original institutional affiliation.
+Compilation/layout results are recorded in MANUSCRIPT_AUDIT.md after QA.

@@ -3,8 +3,9 @@
 Status: provisional design approved by the user on 2026-10-23. Distribution
 primitives, completed BPCS data validation, likelihood evaluation, and profile/
 direct MLE estimation are implemented. The provisional within-block
-order-restricted MLE is implemented and validated on 2026-10-26. Uncertainty, experimental simulation,
-Bayesian estimation, and real-data analysis remain deferred.
+order-restricted MLE is implemented and validated on 2026-10-26. Supported
+classical observed-information and interval inference is also implemented;
+experimental simulation, Bayesian estimation, and real-data analysis remain deferred.
 The repository root is the project root; existing `Readme.md` is updated in place and `References/` retains its original
 capitalization. The filesystem treats README.md and Readme.md as the same path.
 

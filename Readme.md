@@ -327,3 +327,20 @@ overflow, unavailable Wald endpoint reporting and a malformed-pair error case.
 No error in the statistical derivations or MLE algorithms was found. A minimal
 [GitHub Actions workflow](.github/workflows/tests.yml) runs the suite on Python
 3.12; its hosted execution requires pushing the changes and was not run locally.
+
+## Verified research manuscript
+
+[Report.tex](Report.tex) presents the completed classical model, likelihood,
+unrestricted and within-block restricted MLE, observed information, exact
+probability sets and supported reliability inference. The independent
+[manuscript audit](docs/MANUSCRIPT_AUDIT.md) lists assumptions, proofs,
+implementation/test mappings and remaining limitations. Its reproducible
+100-digit derivative checks and numerical outputs can be regenerated with:
+
+```sh
+.venv/bin/python -W error -m experiments.manuscript_audit --output results/manuscript_audit.json
+```
+
+The manuscript includes no Bayesian estimates, simulation-performance claims,
+or real-data findings. Its author names remain unspecified; the supplied
+institutional affiliation is retained.

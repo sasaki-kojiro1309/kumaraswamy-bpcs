@@ -1,0 +1,116 @@
+{
+  "pages": 17,
+  "page_size": "A4",
+  "tex_warnings": 0,
+  "duplicate_labels": 0,
+  "unresolved_labels": 0,
+  "unresolved_citations": 0,
+  "source_label_count": 76,
+  "bibliography_entries": 3,
+  "page_character_bounds": [
+    {
+      "page": 1,
+      "characters": 2844,
+      "left": 64.79956999999999,
+      "right": 530.4845367264
+    },
+    {
+      "page": 2,
+      "characters": 3019,
+      "left": 64.49631,
+      "right": 530.4910721792002
+    },
+    {
+      "page": 3,
+      "characters": 1924,
+      "left": 64.79952999999989,
+      "right": 530.4921385759999
+    },
+    {
+      "page": 4,
+      "characters": 1909,
+      "left": 64.79953000000012,
+      "right": 530.4845267264
+    },
+    {
+      "page": 5,
+      "characters": 1823,
+      "left": 64.7995199999998,
+      "right": 530.4879875839998
+    },
+    {
+      "page": 6,
+      "characters": 2308,
+      "left": 64.65247,
+      "right": 530.4921661919998
+    },
+    {
+      "page": 7,
+      "characters": 2329,
+      "left": 64.79954999999993,
+      "right": 530.4906306815999
+    },
+    {
+      "page": 8,
+      "characters": 2451,
+      "left": 64.79953999999998,
+      "right": 530.4877794527999
+    },
+    {
+      "page": 9,
+      "characters": 1845,
+      "left": 64.79953,
+      "right": 530.4878652415999
+    },
+    {
+      "page": 10,
+      "characters": 2553,
+      "left": 64.79955999999987,
+      "right": 530.4952218751998
+    },
+    {
+      "page": 11,
+      "characters": 2232,
+      "left": 64.79954999999984,
+      "right": 530.4870937824
+    },
+    {
+      "page": 12,
+      "characters": 2493,
+      "left": 64.79953000000006,
+      "right": 530.4998094495999
+    },
+    {
+      "page": 13,
+      "characters": 2100,
+      "left": 64.79955999999999,
+      "right": 530.4867185439997
+    },
+    {
+      "page": 14,
+      "characters": 2255,
+      "left": 64.79956999999996,
+      "right": 530.492173088
+    },
+    {
+      "page": 15,
+      "characters": 2736,
+      "left": 64.79956999999996,
+      "right": 530.4932639968
+    },
+    {
+      "page": 16,
+      "characters": 3344,
+      "left": 64.79957,
+      "right": 530.492173088
+    },
+    {
+      "page": 17,
+      "characters": 1957,
+      "left": 64.79955999999999,
+      "right": 530.4875638592
+    }
+  ],
+  "Report_tex_sha256": "d31fd3d3e663b3ab4ab781a0c6978efeb19867d943051a0c69e058d84629fa82",
+  "Report_pdf_sha256": "2d5388dd1c4f35e3ff731dd6a3ba41fb9c9f60b08fc9567dc74a9429ec323c7c"
+}
