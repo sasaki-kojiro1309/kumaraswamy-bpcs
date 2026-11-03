@@ -1,4 +1,4 @@
-name: Classical estimation tests
+name: Numerical and workflow tests
 
 on: [push, pull_request, workflow_dispatch]
 

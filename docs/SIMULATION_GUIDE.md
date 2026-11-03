@@ -1,12 +1,11 @@
 # Kumaraswamy BPCS simulation framework
 
-**Implementation written. Simulation and tests have NOT been executed.**
-
-This delivery is source/configuration/test authoring and static review only.
-There are no new simulated datasets, pilot runs, MCMC runs, benchmarks or
-performance results. Run and inspect the tests yourself before commissioning
-an expensive study. Existing estimator mathematics and interfaces are unchanged.
-The open Report.tex and existing research results are not modified by this task.
+The framework has been executed on the submission configuration. Saved datasets,
+partial Bayesian results, classical fits and versioned summaries are available
+in `results/simulation_submission/`. Its `manifest.json` records the authoritative
+counts; a planned configuration size does not imply that every fit succeeded.
+The [main README](../Readme.md) contains current setup and execution instructions,
+and the [code guide](CODE_GUIDE.md) explains the grouped workflow packages.
 
 ## Components and data flow
 
@@ -25,10 +24,12 @@ commit -> disk reload/validation -> the six adapters -> immutable task records
 before the fitting stage begins. A fit-only command cannot generate a dataset.
 An analysis command cannot invoke an estimator or sampler.
 
-The framework is sequential. Separate workers can handle explicitly disjoint
+The core runner is sequential. Separate workers can handle explicitly disjoint
 scenario/method selections, with exclusive task locks preventing duplicate
-commits. Run one analysis publisher at a time. No multiprocessing runtime or
-new statistical method is introduced. Filesystem operations target POSIX local
+commits. Run one analysis publisher at a time. The optional
+`experiments.execution.submission_supervisor` launches scenario workers; its
+worker count and future deadline must be supplied deliberately. Filesystem
+operations target POSIX local
 filesystems (macOS/Linux) with atomic hard links, symlinks and directory fsync;
 unsupported filesystems fail explicitly rather than weakening atomicity.
 

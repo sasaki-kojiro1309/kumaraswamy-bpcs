@@ -1,395 +1,293 @@
 # Kumaraswamy competing risks under block progressive censoring
 
-Research project in progress. **Completed scope: Stage 1 distribution layer,
-Stage 2 BPCS data structures/validation, Stage 3 likelihood construction, and
-Stage 4 profile/direct maximum likelihood estimation, plus provisional
-within-block order-restricted MLE, and classical observed-information/interval
-inference.** Simulation and real-data pipelines are not implemented.
-Bayesian estimation is implemented for the independent scale prior and proper
-hierarchical Gamma prior, each unrestricted or within-block restricted. See
-[BAYESIAN_GUIDE.md](docs/BAYESIAN_GUIDE.md).
+Python implementation of classical and Bayesian estimation for two competing
+failure causes under block progressive Type-II censoring (BPCS).
 
-The classical baseline audit on 2026-10-26 reported **325 passing tests**.
-The Bayesian extension adds independently checked posterior computations; its
-current executed verification is recorded in
-[BAYESIAN_GUIDE.md](docs/BAYESIAN_GUIDE.md). **397 tests pass**, including
-all 325 classical baseline cases and 72 Bayesian cases, using Python 3.12; exact package versions are recorded in
-`requirements-lock.txt`.
+Each block has two independent latent Kumaraswamy lifetimes, a shared positive
+shape parameter `a`, and block-specific positive parameters `b1` and `b2`.
+The order-restricted methods impose **`b1 <= b2` within each block**. There is
+no restriction across blocks.
 
-The original project statement is preserved verbatim in
-[PROJECT_STATEMENT.md](docs/PROJECT_STATEMENT.md), and the
-three source PDFs remain in `References/`. This repository itself is the project
-root; no nested duplicate project folder is needed.
+The repository includes the model, validated data structures, likelihood,
+unrestricted and restricted MLE, supported uncertainty procedures, four
+Bayesian methods, a reproducible simulation pipeline, tests and saved results.
+The simulation is partially completed; its exact successful and failed counts
+are recorded in the saved manifest.
 
-## Model and learning notes
+## Start here
 
-The user-approved provisional model has configurable k blocks, one common a>0,
-and block-specific b_i1,b_i2>0 for two independent latent Kumaraswamy causes.
-Causes are initially fully observed, baseline parameters are unrestricted, and
-the teaching example uses k=2 with different sizes and withdrawal schedules.
-Block counts, sizes, and schedules are configurable. See [MODEL_SPEC.md](docs/MODEL_SPEC.md) for the precise
-assumptions and their provenance.
+1. Follow **Installation** below.
+2. Run the tests and the small teaching examples.
+3. Read the saved results without launching another simulation.
+4. Use the simulation commands only when you intend to perform new computation.
 
-Start with [DERIVATIONS.md](docs/DERIVATIONS.md): survival of the observed minimum
-is the product of the two latent survivals, so its distribution is Kw(a,b_i1+b_i2).
-A known cause-c failure has joint density f_ic(t)S_i,other(t), which integrates
-to b_ic/(b_i1+b_i2). This separates latent probabilities from observed competing
-failure probabilities. [RESEARCH_NOTES.md](docs/RESEARCH_NOTES.md) tracks source
-locations, apparent paper notation errors, and what has not been reproduced.
+For a guided explanation of the modules, see [Code guide](docs/CODE_GUIDE.md).
+The original assignment is [Project statement](docs/PROJECT_STATEMENT.md).
+The documentation index is [docs/README.md](docs/README.md).
 
-[STAGE1_GUIDE.md](docs/STAGE1_GUIDE.md) explains every distribution function and
-the original 20 passing tests. [BPCS_GUIDE.md](docs/BPCS_GUIDE.md) explains the
-block experiment, risk-set accounting, data contracts, and two-block example.
-The Stage 3 section of DERIVATIONS.md derives the ordered-data censoring
-constant, block and combined likelihoods, and full log-likelihood from first
-principles, then works through the same two-block data.
-The Stage 4 section derives scores, conditional estimates, the profile,
-concavity/tail results, boundary behavior, and independent direct optimization.
+## Installation
 
-## Reproduce the current milestones
-
-Use Python 3.10 or newer from the repository root:
+Use Python **3.12** and run commands from the repository root. The storage and
+time-budget mechanisms target **macOS/Linux local filesystems** and use POSIX
+features. A native Windows execution environment is not supported by these
+mechanisms.
 
 ```sh
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python -m pytest -q
-.venv/bin/python -m experiments.stage2_example
-.venv/bin/python -m experiments.stage3_example
-.venv/bin/python -m experiments.stage4_example
-.venv/bin/python -m experiments.order_restricted_example
-.venv/bin/python -m experiments.within_block_validation --output results/within_block_validation.json
 ```
 
-`requirements.txt` lists the intended stack. `requirements-lock.txt` records the
-exact environment used for the current validation; install that file instead
-when reproducing this environment. No random seed is needed for the deterministic
-tests and the hand-constructed teaching example. SciPy supplies numerical
-quadrature and an independent transformed Beta distribution oracle; NumPy supplies
-the distribution implementation. pandas exports observation and summary tables.
-Matplotlib is reserved for later analysis stages.
+NumPy and SciPy provide the numerical routines; pandas supplies data tables;
+Matplotlib is available for plotting; pytest runs the checks.
 
-```python
-from src.model import CompetingRisks
-
-# Illustrative single-block parameter values, not fitted or published estimates.
-block = CompetingRisks(a=2.0, b1=1.0, b2=2.0)
-print(block.minimum.sf(0.5))       # 0.421875: block survival
-print(block.minimum.hazard(0.5))   # 4.0: block hazard
-print(block.minimum.median())     # block median time to failure
-print(block.cause_probability(1)) # 1/3: eventual cause-1 failure probability
-print(block.cause_cdf(0.5, 1))     # P(X <= 0.5, cause = 1)
-```
-
-All times are on a fixed (0,1) scale. Hazard accepts interior times only. Density
-is assigned zero at the endpoints; limiting densities can differ. Parameters
-are positive finite scalars; time arrays are supported. See the numerical
-conventions and float64 limits in DERIVATIONS.md.
-
-## Stage 2: validated block data
-
-`src/censoring.py` separates the fixed `BlockScheme` from `Observation` rows,
-validates them together as `BlockData`, and combines any positive number of
-uniquely named blocks in `BPCSExperiment`. Unknown causes remain reserved and
-are rejected by the known-cause baseline. Both the objects and their internal
-sequences are immutable; `.to_frame()` and `.summary_frame()` return fresh tables.
-
-The example in `data/examples/two_blocks.json` has A: n=6,m=3,R=(1,0,2) and
-B: n=7,m=4,R=(0,1,0,2). Before-failure risk sets are (6,4,3) and (7,6,4,3).
-Both blocks empty at their terminal failures: 13 original units = 7 observed
-failures + 6 withdrawals. All times are in (0,1), and each block is independently
-ordered. These are teaching data, not simulated, real, or published observations.
-Chosen parameters printed by the example illustrate Stage 1 reliability only;
-they have not been estimated from these data.
-
-## Stage 3: likelihood evaluation
-
-`src/likelihood.py` reuses the unchanged model and censoring implementations.
-It supplies block/joint likelihood and log-likelihood functions, plus the log
-censoring constant. With the existing teaching data:
-
-```python
-from experiments.stage2_example import load_example
-from src.likelihood import loglikelihood
-
-data = load_example()
-b = {"A": (1.0, 2.0), "B": (0.8, 1.2)}
-print(loglikelihood(data, a=2.0, b_by_block=b))
-# -2.833127754473: full log density at these chosen parameters
-print(loglikelihood(data, a=2.0, b_by_block=b, include_constant=False))
-# -13.332370141561: omits only log C, with C=36288
-```
-
-Full constants are included by default for the recorded ordered times and cause
-sequence, conditional on fixed schemes. `include_constant=False` omits only the
-parameter-independent product of risk sets, retaining all time factors. Prefer
-log functions for later inference; ordinary likelihoods can underflow/overflow.
-Invalid parameters/mappings raise ValueError, while unrepresentable log
-arithmetic raises FloatingPointError. Exact data/model assumptions and API
-contracts are in DERIVATIONS.md, (L1)-(L8). No prior or fitting is performed.
-
-## Stage 4: profile and independent direct MLE
-
-`src/mle.py` derives and fits one shared a with separate cause parameters for
-each block. Given a, the conditional estimates are b_ic=d_ic/W_i(a), where
-W_i(a)=-sum_j(r_ij+1)log(1-x_ij**a). Substitution leaves a one-dimensional
-profile. The default method solves its unique score root in log(a) with an
-adaptive sign bracket. A separate multistart joint optimizer uses log(a) and
-log(b_ic), without starting from the profile fit.
-
-```python
-from experiments.stage2_example import load_example
-from src.mle import fit_mle, fit_direct
-
-data = load_example()
-profile = fit_mle(data)
-direct = fit_direct(data)
-print(profile.status, profile.converged)
-# interior_mle True
-print(profile.a, profile.b_by_block, profile.loglikelihood)
-# a=1.173959840838; A=(.517708109960,.258854054980)
-# B=(.178753429726,.536260289178); log L=1.070678947337
-print(direct.loglikelihood - profile.loglikelihood)
-# about 9e-16 in the validated environment
-```
-
-Check both `converged` and `status`. A zero observed cause count produces an
-exact zero closure estimate with `boundary_supremum`: no positive-parameter
-MLE is claimed. The unchanged Stage 1/3 classes still require positive b; the
-MLE module evaluates the boundary limit by an exact linear likelihood identity.
-If every block has just one observed failure, the likelihood is unbounded;
-the result has `unbounded_likelihood`, a=None, and no finite parameter vector.
-Solver budget/gradient failures and numerical range failures have separate
-failure statuses. Diagnostics include active log-parameter scores, boundary
-one-sided scores, root or multistart details, and a profile/joint likelihood check.
-
-The teaching example fits the existing hand-constructed data, not a simulation.
-Parameter-recovery tests use deterministic distribution-quantile fixtures,
-including the complete-data special case of BPCS. No random lifetime/censoring
-generator, standard errors, intervals, or Bayesian estimator was added.
-
-## Provisional order-restricted MLE
-
-`src/order_restricted.py` implements only b_i1<=b_i2 independently per block,
-using the same likelihood as the unrestricted fit. Given a, put
-B_i=m_i/W_i(a), p_i=min(d_i1/m_i,1/2), then b_i1=B_i*p_i and
-b_i2=B_i*(1-p_i). The common a and all B_i stay unchanged; violating pairs
-are pooled equally. The derivation, zero-count limits, and source comparisons
-are in DERIVATIONS.md (R1)-(R6). The order requires future scientific justification.
-
-```python
-from src.order_restricted import fit_order_restricted_mle
-
-restricted = fit_order_restricted_mle(data)  # existing validated BPCSExperiment
-print(restricted.status, restricted.converged)
-print(restricted.b_by_block)
-print(restricted.diagnostics["active_constraints"])
-```
-
-On the teaching data, a=1.173959840838, A=(.388281082470,.388281082470),
-and B=(.178753429726,.536260289178). Only A's equality is active. Full log L
-is .900779910542, compared with 1.070678947337 unrestricted. Both fits converge
-with positive parameters. Equality is an attained order constraint, not a
-zero-parameter boundary. No cause-1 failures in a block instead gives a finite
-zero-b1 boundary supremum when a is identified; no cause-2 failures gives an
-attained positive equality. All single-failure blocks still give unbounded
-likelihood. Check status and convergence before using any result.
-
-The original 52 restricted tests include independent joint constrained SLSQP
-verification, invalid inputs, numerical failures, and boundary cases. The audit
-adds 32 checks covering exact equality retention, KKT stationarity, survival
-invariance, extreme valid times, and a standalone independently scaled SLSQP fit.
-The latter uses three fixed starts, no profile-based initial values or pooling
-updates, and verifies convergence, feasibility, and projected scores. Its
-machine-readable result is `results/within_block_validation.json`.
-Run the expanded teaching example with
-`.venv/bin/python -m experiments.order_restricted_example`; it prints inputs,
-unrestricted/restricted/numerical fits, pooling decisions, cause probabilities,
-and unchanged minimum survival. See [the audit report](docs/WITHIN_BLOCK_VALIDATION.md)
-for modified files, mathematical checks, numerical comparisons, and limitations.
-No later research stage is implemented.
-
-## Roadmap
-
-1. **Stage 1 (complete):** validate distribution primitives and explain
-   independent competing-risk identities.
-2. **Stage 2 (complete):** block data structure, withdrawal schedule and risk-set checks.
-3. **Stage 3 (complete):** derive and validate block/joint likelihoods and constants.
-4. **Stage 4 (complete):** scores, conditional estimates, profile and direct MLE,
-   convergence diagnostics, boundary/unbounded cases, and deterministic validation.
-   **Order-restricted MLE extension complete:** provisional within-block b_i1<=b_i2,
-   derivation, exact pooling, boundary diagnostics, and independent numerical checks.
-5. **Stage 5 (classical uncertainty implemented):** analytical observed information,
-   covariance/ACI and reliability uncertainty with boundary qualifications.
-   Compatible published numerical-table reproduction remains pending.
-6. **Stages 6-7:** simulate the actual experimental process and evaluate estimators
-   on identical datasets with reproducible configurations, tables, and plots.
-7. **Stages 8-10:** assess real-data compatibility, integrate estimator comparisons,
-   investigate labeled extensions, and produce reproducible results.
-
-Current files: `src/model.py`, `src/censoring.py`, `src/likelihood.py`, `src/mle.py`,
-their test modules, `src/order_restricted.py`, `src/uncertainty.py`, `docs/`, the two-block JSON data,
-Stage 2/3/4 and order-restricted example scripts, and `src/bayesian.py` / `src/bayesian_sampling.py`. Reserved directories
-`data/real/` and `results/` contain no simulation or real-data research results. Later modules will be
-created when their mathematics and contracts are
-established; empty implementation stubs would not constitute completed stages.
-
-## Classical uncertainty and reliability
-
-Run the deterministic teaching analysis and full tests from the repository root:
-
-```bash
-.venv/bin/python -m experiments.classical_inference_example
-.venv/bin/python -m pytest -q
-```
-
-```python
-from experiments.stage2_example import load_example
-from src.mle import fit_mle
-from src.order_restricted import fit_order_restricted_mle
-from src.uncertainty import parameter_inference, reliability_inference
-
-data = load_example()
-fit = fit_mle(data)
-report = parameter_inference(data, fit, confidence=.95)
-print(report.standard_errors)
-print(report.intervals["a"]["log"])
-print(report.original_names, report.covariance_original)
-reliability = reliability_inference(data, fit, t=.5)
-restricted = parameter_inference(data, fit_order_restricted_mle(data))
-print(restricted.intervals["p[A]"]["exact"])
-```
-
-`observed_information` supplies analytical negative Hessians in `(a,B...,p...)`
-or original `(a,b11,b12,...)` coordinates. Covariance uses equilibrated Cholesky
-solves with symmetry/definiteness/conditioning checks. For unrestricted interior
-fits, reports include SEs and marginal normal/log/logit intervals, full covariance
-and its correct transformation to b coordinates. These are asymptotic
-approximations. The actual information matrix is observed, not expected.
-
-Cause probabilities use exact marginal Clopper–Pearson sets. Under b_i1<=b_i2,
-the cause-1 set is intersected with [0,1/2]; it can be **empty**, represented by
-`status="empty"`, with None endpoints. This retains at-least-nominal marginal
-coverage for true allowed probabilities under fixed counts and noninformative
-withdrawals. It does not assert simultaneous coverage or coverage under a false
-order. Cause-2 intervals complement the endpoints.
-
-Separate time-component inference supports a and B even when restricted cause
-estimates are nonregular. Survival, hazard and median (the project's MTF) use
-Stage 1 point values and time-based delta uncertainty, unchanged by the order.
-Unrestricted interior cumulative incidence also has delta uncertainty. All
-reliability intervals are pointwise marginal approximations, not simultaneous
-bands. The teaching dataset has only seven failures and does not validate
-asymptotic coverage.
-
-Restricted individual-b intervals, restricted probability Wald SEs and
-restricted/zero-boundary cumulative-incidence uncertainty are explicitly
-unsupported. Unrestricted zero-cause fits lack full covariance and b/probability
-Wald SEs. Unavailable SEs are None; inspect report diagnostics for numerical
-failures and unsupported procedures. Exact probability sets survive information
-inversion failure. No ridge, pseudoinverse, or epsilon boundary substitution is
-used. See [DERIVATIONS.md I1–I7](docs/DERIVATIONS.md#classical-uncertainty-i1i7-2026-10-26)
-for all formulas, reference notation issues, coverage arguments and limitations.
-
-At the classical-uncertainty milestone, 55 focused tests compared both analytical
-Hessians with independent
-likelihood differences for 1–3 blocks, verify covariance transformations and
-nonlinear Hessian corrections, enumerate binomial coverage, check boundaries,
-confirm reliability gradients numerically and verify delta calculations. At that
-milestone, the
-254 preexisting tests and model/estimator source files were unchanged. The final
-audit subsequently added focused distribution-tail and uncertainty robustness
-fixes; the MLE algorithms remain unchanged. No error in the MLE derivations was
-identified. Published-table
-reproduction, Monte Carlo coverage and new experimental stages remain pending.
-Bayesian inference was added subsequently; see the guide below.
-
-## References
-
-- **Reference 1 — Wang et al. (2023):** *Inference for block progressive censored
-  competing risks data from an inverted exponentiated exponential model.*
-  [Local PDF](References/Reference_1.pdf). DOI: 10.1002/qre.3382.
-- **Reference 2 — Wang (2018):** *Inference of progressively censored competing
-  risks data from Kumaraswamy distributions.*
-  [Local PDF](References/Reference_2.pdf). DOI: 10.1016/j.cam.2018.05.013.
-- **Reference 3 — Mahto et al. (2022):** *Inference for partially observed competing
-  risks model for Kumaraswamy distribution under generalized progressive hybrid
-  censoring.* [Local PDF](References/Reference_3.pdf).
-  DOI: 10.1080/02664763.2021.1889999.
-
-The references have different distributions or censoring designs. Neither IEED
-formulas nor hybrid-stopping likelihoods are substituted into this model.
-
-## Final classical-code audit
-
-See [FINAL_AUDIT.md](docs/FINAL_AUDIT.md) for confirmed defects, corrections,
-independent verification and numerical limits. All 325 tests pass with warnings
-as errors; all six numerical example/verification modules execute successfully.
-The audit corrected two extreme-tail arithmetic defects, covariance averaging
-overflow, unavailable Wald endpoint reporting and a malformed-pair error case.
-No error in the statistical derivations or MLE algorithms was found. A minimal
-[GitHub Actions workflow](.github/workflows/tests.yml) runs the suite on Python
-3.12; its hosted execution requires pushing the changes and was not run locally.
-
-## Verified research manuscript
-
-[Report.tex](Report.tex) presents the completed classical model, likelihood,
-unrestricted and within-block restricted MLE, observed information, exact
-probability sets and supported reliability inference. The independent
-[manuscript audit](docs/MANUSCRIPT_AUDIT.md) lists assumptions, proofs,
-implementation/test mappings and remaining limitations. Its reproducible
-100-digit derivative checks and numerical outputs can be regenerated with:
+For the exact recorded dependency versions, use the lock file instead:
 
 ```sh
-.venv/bin/python -W error -m experiments.manuscript_audit --output results/manuscript_audit.json
+.venv/bin/python -m pip install -r requirements-lock.txt
 ```
 
-The manuscript includes no Bayesian estimates, simulation-performance claims,
-or real-data findings. Its author names remain unspecified; the supplied
-institutional affiliation is retained.
+The lock file describes the recorded environment. It does not replace the
+platform and Python-version requirements. No package installation of this
+repository is needed: run the modules from this directory with `python -m`.
 
-## Bayesian extension (2026-11-01)
+## Folder structure
 
-Four methods share the existing data and likelihood: independent scale-invariant
-or hierarchical Gamma prior, each unrestricted or with b_i1<=b_i2 within every
-block. The independent prior uses a one-dimensional marginal sampler plus
-Gamma totals and Beta proportions; the hierarchy uses Gamma Gibbs and log-scale
-slice updates, with stable truncated Gamma updates under restriction. There is
-no ordering between facilities and no projection of posterior means.
+```text
+Under-Construction/
+├── src/                         # Statistical implementation and data contracts
+├── experiments/
+│   ├── examples/                # Small teaching demonstrations
+│   ├── validation/              # Independent numerical verification
+│   ├── real_data/               # Source screening and real-data estimation
+│   ├── execution/               # Submission supervision and publication
+│   ├── legacy/                  # Historical, date-specific execution scripts
+│   ├── simulation_*.py          # Stable simulation engine and command line
+│   └── *_example.py, ...        # Compatibility entry points for older commands
+├── configs/                     # Study designs and prior configurations
+├── data/examples/               # Hand-constructed teaching observations
+├── results/                     # Saved datasets, estimates, diagnostics, CSVs
+├── tests/                       # Numerical and workflow regression tests
+├── docs/                        # Derivations, usage guides and historical audits
+├── References/                  # Supplied research references
+├── requirements.txt             # Dependency requirements
+└── requirements-lock.txt        # Recorded exact environment
+```
+
+The short compatibility files in `experiments/` forward to the grouped
+implementations. Existing imports and commands continue to work. Statistical
+and simulation-engine modules retain their original paths because saved
+campaigns fingerprint those source files.
+
+## Run the tests
 
 ```sh
-.venv/bin/python -W error -m experiments.bayesian_example --output results/bayesian_teaching_example.json
 .venv/bin/python -m pytest -q -W error
 ```
 
-The [guide](docs/BAYESIAN_GUIDE.md) explains priors, controls and structured
-results. [Verified derivations](docs/BAYESIAN_DERIVATIONS.md) cover propriety,
-first/second moments, transformations and all conditional distributions, based
-on the supplied [Group_22-4 report](References/Group_22-4.pdf), independently
-checked against our likelihood. The three published reference labels retain
-their original meanings. The supplied report is not treated as a new published
-reference or as authority for methods beyond this scope.
+A smaller workflow check is:
 
-Finite posterior means and finite-variance mean MCSEs require separate checks.
-Improper/unsupported independent priors are refused before sampling; numerical
-failures and failed rank Rhat/ESS diagnostics never certify estimates.
-Intervals are shortest contiguous sample intervals, qualified as HPD
-approximations for suitable unimodal marginals. Reliability is averaged over
-joint draws. The recorded demonstration is a teaching analysis, not a simulation
-performance study, real-data application or prior-sensitivity investigation.
-Classical source code, the manuscript and the original reference PDFs are
-preserved. No new runtime dependency is required.
+```sh
+.venv/bin/python -m pytest -q tests/test_simulation_generator.py tests/test_simulation_pipeline.py tests/test_simulation_analysis.py tests/test_simulation_budget.py tests/test_priority_supervisor.py
+```
 
-## Simulation framework (written, not executed)
+Tests include distribution identities, risk sets, likelihood derivatives,
+independent optimizer comparisons, order restrictions, uncertainty calculations,
+posterior conditions, sampler diagnostics, reproducible storage and resumption.
+They use small test fixtures; they do not launch the full submission study.
 
-The framework now has separate generation, fitting and offline analysis modes,
-immutable saved observed datasets, six existing-estimator adapters, reproducible
-seed domains, resumable task records and parameter-wise AB/MSE/CP/AW summaries.
-See [SIMULATION_GUIDE.md](docs/SIMULATION_GUIDE.md) for schemas, failure policies,
-prior sensitivity, interval exclusions and the exact commands for later execution.
-Pilot and main specifications are in `configs/simulation_pilot.json` and
-`configs/simulation_main.json`; the new test files are `tests/test_simulation_*.py`.
+## Teaching examples
 
-**Implementation written. Simulation and tests have NOT been executed.**
-No datasets, MCMC runs or performance results were generated for this delivery.
-Existing estimator source files and the manuscript are unchanged.
+These examples use the same small hand-constructed dataset in
+`data/examples/two_blocks.json`; they are not real-data or simulation results.
+
+```sh
+.venv/bin/python -m experiments.examples.stage2_example
+.venv/bin/python -m experiments.examples.stage3_example
+.venv/bin/python -m experiments.examples.stage4_example
+.venv/bin/python -m experiments.examples.order_restricted_example
+.venv/bin/python -m experiments.examples.classical_inference_example
+```
+
+They demonstrate validated blocks, likelihood evaluation, profile/direct MLE,
+within-block pooling, and classical intervals/reliability, respectively.
+
+The Bayesian example performs MCMC and therefore takes longer:
+
+```sh
+.venv/bin/python -m experiments.examples.bayesian_example --output results/local/bayesian_example.json
+```
+
+The example writes the selected output path. Use a fresh local path to keep
+published outputs separate. Old commands such as
+`python -m experiments.stage4_example` remain valid.
+
+## Use the statistical API
+
+```python
+from experiments.examples.stage2_example import load_example
+from src.mle import fit_mle
+from src.order_restricted import fit_order_restricted_mle
+from src.uncertainty import parameter_inference
+
+observations = load_example()
+unrestricted = fit_mle(observations)
+restricted = fit_order_restricted_mle(observations)
+
+print(unrestricted.status, unrestricted.converged)
+print(unrestricted.a, unrestricted.b_by_block)
+print(restricted.diagnostics["active_constraints"])
+
+if unrestricted.converged and unrestricted.status == "interior_mle":
+    intervals = parameter_inference(observations, unrestricted)
+    print(intervals.intervals["a"])
+```
+
+Always check status and convergence before interpreting estimates. Boundary
+suprema, unbounded likelihoods, numerical failures and unsupported intervals
+are represented explicitly. The Bayesian API and prior specification are
+explained in [Bayesian guide](docs/BAYESIAN_GUIDE.md).
+
+## The six estimation methods
+
+| Method ID | Estimator |
+|---|---|
+| `mle_unrestricted` | Unrestricted maximum likelihood |
+| `mle_within_block` | MLE with within-block ordering |
+| `bayes_independent_unrestricted` | Independent-prior Bayesian estimator |
+| `bayes_independent_within_block` | Independent-prior estimator with ordering |
+| `bayes_hierarchical_unrestricted` | Hierarchical Gamma Bayesian estimator |
+| `bayes_hierarchical_within_block` | Hierarchical Gamma estimator with ordering |
+
+Bayesian posterior propriety, first/second moments, R-hat and bulk/tail ESS
+are checked. Diagnostic failures are retained and excluded from valid results.
+The submission configuration uses four chains, 1,000 warmup iterations and
+2,000 retained draws per chain, R-hat <= 1.01 and minimum ESS 400.
+
+## Inspect the saved submission results
+
+Start with these files; reading them does not run estimators:
+
+| Path under `results/simulation_submission/` | Contents |
+|---|---|
+| `manifest.json` | Current execution audit, exact counts and analysis reference |
+| `metadata/latest_analysis.json` | Current versioned export manifest |
+| `datasets/` | Saved observed datasets and integrity metadata |
+| `estimates/replication_estimates.csv` | Individual estimates and validity flags |
+| `estimates/replication_intervals.csv` | Individual confidence/credible intervals |
+| `summaries/parameter_performance.csv` | Means, signed/absolute bias, MSE and valid counts |
+| `summaries/interval_performance.csv` | Coverage, average width and valid counts |
+| `summaries/relative_mse_comparison.csv` | Comparisons on common valid datasets |
+| `summaries/method_success_rates.csv` | Successful, failed and missing fit counts |
+| `diagnostics/bayesian_diagnostics.csv` | R-hat, ESS, MCSE and moment checks |
+| `diagnostics/failure_log.csv` | Recorded failures and unrun tasks |
+
+The submission has 60 saved datasets: 20 each for `strict_order_late`,
+`equality_late` and `violation_late`. Both MLE methods have 60 successful fits.
+The saved manifest currently reports Bayesian successes of 31, 31, 31 and 27
+in the order shown above, with 11 restricted-hierarchical diagnostic failures.
+All four Bayesian methods succeeded together on 12 strict-order, 13 equality
+and 1 violation dataset. These are **partial, exploratory results**, not a
+completed 60-dataset Bayesian comparison. Use the manifest for authoritative
+counts if results are extended later.
+
+JSON research records use an integrity envelope with `payload` and `sha256`.
+CSV convenience paths and `manifest.json` can be symlinks to immutable versions;
+keep their referenced directories when copying the repository.
+
+## Run or resume a simulation
+
+Check the command interface first:
+
+```sh
+.venv/bin/python -m experiments.simulation_runner --help
+```
+
+Configuration sizes differ substantially:
+
+| Configuration | Scenarios × repetitions | Planned datasets |
+|---|---:|---:|
+| `configs/simulation_submission.json` | 3 × 20 | 60 |
+| `configs/simulation_pilot.json` | 12 × 50 | 600 |
+| `configs/simulation_main.json` | 12 × 2,000 | 24,000 |
+
+For a new local study, copy a configuration, give it a **new output directory**,
+then run generation, fitting and analysis separately. For example:
+
+```sh
+.venv/bin/python -m experiments.simulation_runner generate --config configs/simulation_submission.json --output results/local_study
+.venv/bin/python -m experiments.simulation_runner fit --config configs/simulation_submission.json --output results/local_study --methods mle_unrestricted mle_within_block --budget-seconds 900
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m experiments.simulation_runner fit --config configs/simulation_submission.json --output results/local_study --methods bayes_independent_unrestricted bayes_independent_within_block bayes_hierarchical_unrestricted bayes_hierarchical_within_block --budget-seconds 900
+```
+
+The fitting command prints its campaign ID. Use that exact ID for analysis:
+
+```sh
+.venv/bin/python -m experiments.simulation_runner analyze --config configs/simulation_submission.json --output results/local_study --fit-id YOUR_PRINTED_CAMPAIGN_ID
+```
+
+`generate` persists observations before estimation. `fit` reloads saved data;
+it does not generate replacements. `analyze` reads saved fits without sampling.
+`run` combines the stages and can be expensive; it is not needed to view results.
+
+Repeating a fit command with the same campaign settings reuses committed
+results, including recorded failures. Interrupted tasks without a final record
+can resume. `--attempt` creates a separate campaign for an explicit retry;
+it never overwrites prior success. Source/configuration/environment changes
+can produce a different campaign ID. Do not delete locks while workers run;
+`--recover-locks` is only for confirmed stopped workers.
+
+`--budget-seconds` supervises fits using POSIX alarms and a monotonic clock.
+It is not a deadline for reading documentation or publishing summaries.
+Historical runs demonstrated that this does not guarantee a strict wall-clock
+limit across machine suspension. The dated scripts in `experiments/legacy/`
+retain their original behavior and are not general-purpose launchers.
+
+For parallel submission execution, the reusable launcher is
+`experiments.execution.submission_supervisor`; inspect its `--help`, supply a
+new future `--deadline-unix`, and use `--workers-per-scenario 1` for three
+workers on the three-scenario configuration. Limit BLAS/OpenMP threads to one.
+See [Simulation guide](docs/SIMULATION_GUIDE.md) for complete schemas, seed
+rules, optional draw storage, prior configuration and interval exclusions.
+
+## Real-data application
+
+The saved application uses 39 appliance failures in one complete-data block.
+Start with `results/real_data/manifest.json`,
+`results/real_data/appliance_source_metadata.json` and
+`results/real_data/validation/completed_validation_summary.json`.
+
+Original source files are in `results/real_data/original/`; processed observations,
+estimates, intervals, diagnostics and validation are stored separately. Both MLE
+methods and all four Bayesian methods completed successfully on this application.
+The manifest also identifies the corrected draw artifact from the initial run.
+
+The grouped commands, when reproduction is intended, are:
+
+```sh
+.venv/bin/python -m experiments.real_data.real_data_validation
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m experiments.real_data.appliance_validation --budget-seconds 900
+```
+
+They require the saved source files in `results/real_data/original/` and must
+be launched from the repository root. They preserve existing committed results.
+Hoel/melanoma screening records describe rejected candidates, not the selected
+application. Times in the appliance table were divided by 5 (thousands of
+cycles), equivalent to dividing cycles by 5,000. This is a chosen analysis scale,
+not a verified physical lifetime bound. Independence and common-shape assumptions
+remain working assumptions. Complete-data validation is not evidence of a real
+progressive-withdrawal experiment. No real-data AB/MSE/coverage is calculated.
+
+## Submission and reproducibility
+
+Include `src/`, `experiments/`, `tests/`, `configs/`, `data/`, `docs/`,
+`Readme.md`, both requirements files and the supplied references. Include
+`results/` when saved datasets/results are required; preserve symlink targets,
+immutable versions, source metadata and failure records together.
+
+Do not include `.venv/`, `.git/`, `__pycache__/`, `.pytest_cache/` or `.DS_Store`.
+The receiving machine should create its own environment using the instructions
+above. Keep the repository folder structure intact and run from its root.
+
+The report and reference PDFs are separate research artifacts. This code
+organization change does not edit them. Historical milestone counts and dated
+execution notes are retained in `docs/`; current usage is documented here.
