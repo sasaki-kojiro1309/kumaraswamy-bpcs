@@ -5,15 +5,37 @@
 \usepackage{setspace}
 \usepackage{cite}
 \usepackage{enumitem}
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\definecolor{ink}{HTML}{17324F}
+\definecolor{teal}{HTML}{087F7A}
+\definecolor{paperblue}{HTML}{F1F6FA}
+\definecolor{linegray}{HTML}{D5E0E8}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{ink} Kumaraswamy competing-risks estimation}
+\fancyhead[R]{\small\color{teal} Final study}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\setlength{\headheight}{14pt}
+\setlength{\parskip}{6pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\newcommand{\methodU}{Unrestricted}
+\newcommand{\methodR}{Restricted}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \usepackage[capitalize]{cleveref}
+\hypersetup{linkcolor=ink,citecolor=teal,urlcolor=teal}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}{Proposition}[section]
 \newtheorem{remark}{Remark}[section]
 \newtheorem{lemma}{Lemma}[section]
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt}
-\title{Classical and Bayesian Estimation for Block Progressively Censored\\Competing Risks from the Kumaraswamy Distribution}
+\title{\textcolor{ink}{Classical and Bayesian Estimation for Block Progressively Censored\\Competing Risks from the Kumaraswamy Distribution}\\[0.3em]\large\textcolor{teal}{Completed Computational Study and Real-Data Application}}
 \author{Harsh Verma \& Deepak Dhakad \\ Mehta Family School of Data Science and AI, IIT Guwahati, India}
 \date{}
 \begin{document}
@@ -22,11 +44,15 @@
 \end{singlespace}
 
 \begin{abstract}
-We investigate failure times when an item can fail from either of two causes and some surviving items are removed during testing. We model the failure times with a Kumaraswamy distribution under block progressive Type-II censoring. The shape parameter is shared across blocks, while the cause parameters can vary. We develop maximum likelihood and Bayesian estimators, both with and without an order restriction within each block. Classical inference uses a profile likelihood; Bayesian inference uses either an independent scale prior or a hierarchical Gamma prior. We explain uncertainty intervals, posterior checks, and reliability quantities, and provide a reproducible simulation design and a real-data application. The exploratory simulation comprises 60 saved datasets and compares all six methods with explicit diagnostic screening. All six methods have 60 diagnostically acceptable fits, with comparisons paired on identical original dataset IDs. Hierarchical unrestricted Bayes has lower observed MSE than independent unrestricted Bayes for all primary parameters in this small design. Incorrect ordering can severely reduce cause-specific interval coverage. A published 39-failure appliance dataset illustrates the effect of imposing an ordering assumption that the recorded cause frequencies do not support.
+We investigate failure times when an item can fail from either of two causes and some surviving items are removed during testing. We model the failure times with a Kumaraswamy distribution under block progressive Type-II censoring. The shape parameter is shared across blocks, while the cause parameters can vary. We develop maximum likelihood and Bayesian estimators, both with and without an order restriction within each block. Classical inference uses a profile likelihood; Bayesian inference uses either an independent scale prior or a hierarchical Gamma prior. We report likelihood derivations, uncertainty estimation, posterior diagnostics, a fully paired simulation analysis and an application to recorded appliance failures. The completed simulation contains 60 preserved datasets and 360 diagnostically accepted estimator fits, with all six methods compared using the same 20 original datasets in each of three scenarios. All six methods have 60 diagnostically acceptable fits, with comparisons paired on identical original dataset IDs. Hierarchical unrestricted Bayes has lower observed MSE than independent unrestricted Bayes for all primary parameters in this small design. Incorrect ordering can severely reduce cause-specific interval coverage. A published 39-failure appliance dataset illustrates the effect of imposing an ordering assumption that the recorded cause frequencies do not support.
 
 \noindent\textbf{Keywords:} Kumaraswamy distribution; competing risks; block progressive censoring; maximum likelihood estimation; Bayesian estimation; order restriction; credible interval; simulation.
 \end{abstract}
 
+\tableofcontents
+\vspace{0.4em}
+\noindent\colorbox{paperblue}{\parbox{0.96\linewidth}{\textbf{Study at a glance.} Two blocks, two competing causes, six estimators, three ordering scenarios, 60 original datasets, 360 validated fits, and paired 20-dataset comparisons within each scenario. The real-data application contains 39 observed appliance failures.}}
+\medskip
 \section{Introduction}\label{sec:introduction}
 In reliability studies, an item can fail for different reasons. We observe the time of the first failure and, when known, its cause. Sometimes testing ends before every item fails. Progressive Type-II censoring allows a predetermined number of surviving items to be removed after each observed failure. In block progressive censoring, this procedure is conducted separately in different groups or facilities.
 
@@ -226,7 +252,7 @@ b_{ic}\mid\kappa_c,\lambda_c&\stackrel{\mathrm{ind}}\sim\operatorname{Gamma}(\ka
 \kappa_c&\sim\operatorname{Gamma}(A_c,B_c),\qquad
 \lambda_c\sim\operatorname{Gamma}(C_c,D_c),\qquad c=1,2.
 \end{align}
-All fixed hyperparameters are positive and the two causes have separate hyperparameter pairs. Up to a factor independent of unknowns, the joint posterior is
+In the completed study we used $a\sim\operatorname{Gamma}(2,2)$, $\kappa_c\sim\operatorname{Gamma}(3,2)$, and $\lambda_c\sim\operatorname{Gamma}(2,2)$, all in shape--rate notation. All fixed hyperparameters are positive and the two causes have separate hyperparameter pairs. Up to a factor independent of unknowns, the joint posterior is
 \begin{align}\label{eq:hierpost}
 \pi_H(a,\mathbf b,\boldsymbol\kappa,\boldsymbol\lambda\mid D)
 &\propto a^{M+A_a-1}e^{-B_aa+(a-1)T-\sum_iH_i(a)}\\
@@ -267,10 +293,9 @@ All four Bayesian analyses use posterior means under squared-error loss where th
 
 Marginal intervals are the shortest contiguous intervals containing at least a prespecified fraction (typically $0.95$) of pooled retained draws. These approximate highest-posterior-density (HPD) intervals for suitable unimodal marginals; they are not guaranteed to represent disconnected HPD regions and are not invariant under reparameterization. Credible probabilities are posterior probabilities, not empirical frequentist coverage claims.
 
-Sampling uses multiple independently initialized chains, a warm-up phase, and retained draws. Diagnostics include rank-normalized and folded split $\widehat R$, bulk and tail effective sample sizes, and Monte Carlo standard errors when posterior second moments are established. The configured default checks are $\widehat R\le1.01$ and bulk and tail ESS $\ge400$; these are diagnostics rather than proofs of convergence. Numerical failures, convergence failures, posterior impropriety and unsupported moment conditions are recorded explicitly. The sensitivity of hierarchical estimates to prior choices remains a limitation. In the numerical study below, all reported Bayesian point estimates and intervals are restricted to fits that passed the recorded diagnostic and moment checks.
+Sampling uses four independently initialized chains, a baseline of 1,000 warm-up and 2,000 retained draws per chain, and predefined longer sampling levels for fits needing additional precision. Diagnostics include rank-normalized and folded split $\widehat R$, bulk and tail effective sample sizes, and Monte Carlo standard errors when posterior second moments are established. The configured default checks are $\widehat R\le1.01$ and bulk and tail ESS $\ge400$; these are diagnostics rather than proofs of convergence. Numerical failures, convergence failures, posterior impropriety and unsupported moment conditions are recorded explicitly. The sensitivity of hierarchical estimates to prior choices remains a limitation. In the numerical study below, all reported Bayesian point estimates and intervals are restricted to fits that passed the recorded diagnostic and moment checks.
 
-\section{Numerical Illustration}\label{sec:numerical}
-\subsection{Simulation Study}\label{sec:simulation}
+\section{Simulation Study}\label{sec:simulation}
 The simulation uses $k=2$ independent blocks and two latent failure causes per item. For each unit independently draw $U_{iuc}\sim\operatorname{Uniform}(0,1)$ and set
 \begin{equation}\label{eq:sim-inverse}
 T_{iuc}=\left[1-(1-U_{iuc})^{1/b_{ic}}\right]^{1/a},\qquad
@@ -301,15 +326,179 @@ For a supported interval $[L_m^{(r)},U_m^{(r)}]$, use the valid interval subset 
 \operatorname{CP}_m(\theta)=\frac{1}{N^I_{m\theta}}\sum_{r\in\mathcal I_{m\theta}}\mathbf1\{L_m^{(r)}\le\theta_0\le U_m^{(r)}\},\qquad
 \operatorname{AW}_m(\theta)=\frac{1}{N^I_{m\theta}}\sum_{r\in\mathcal I_{m\theta}}(U_m^{(r)}-L_m^{(r)}).
 \end{equation}
-Every summary reports its valid numerator and denominator as well as method-specific numerical and MCMC failure rates. Empty confidence sets, where defined, have zero coverage and zero set length; unavailable individual constrained-parameter intervals are marked not applicable, never fabricated. Restricted-model results under violated true ordering are a deliberate misspecification assessment. A method's smaller conditional MSE should not conceal a poor success rate.
+Every summary reports valid denominators and distinguishes a computed interval from an unsupported interval procedure. Empty confidence sets, where defined, have zero coverage and zero set length; unavailable individual constrained-parameter intervals are marked not applicable, never fabricated. Restricted-model results under violated true ordering are a deliberate misspecification assessment. A method's smaller conditional MSE should not conceal a poor success rate.
 
 \subsubsection*{How to read the numerical results}
-Absolute bias (AB) measures systematic departure from the true parameter: smaller values are preferable. Mean squared error (MSE) also penalizes variability, so a method can have small bias but still have a large MSE. Coverage probability (CP) checks how often an interval contains the true parameter; we compare it with the nominal 95\% target. Average width (AW) measures interval precision, but a narrow interval is only attractive when its coverage is adequate. Because the simulation is small and Bayesian fits may not complete for every dataset, we give the number of usable replications beside every metric. For fair head-to-head MSE comparisons, we use the same successfully analyzed datasets for both methods.
+Absolute bias (AB) measures systematic departure from the true parameter: smaller values are preferable. Mean squared error (MSE) also penalizes variability, so a method can have small bias but still have a large MSE. Coverage probability (CP) checks how often an interval contains the true parameter; we compare it with the nominal 95\% target. Average width (AW) measures interval precision, but a narrow interval is only attractive when its coverage is adequate. The final completed study uses the same 20 original dataset IDs for all six methods in each scenario. Each supported metric is calculated from those validated records, with its denominator stated. Unsupported intervals are labelled unavailable rather than assigned artificial values.
 
 
-\input{results/simulation_completion_v1/latest/manuscript_simulation.tex}
 
-\subsection{Application to observed appliance failures}\label{sec:real-data}
+\subsection{Completion and comparability of the final study}
+The final analysis retains all 60 originally generated datasets and all six estimators have
+20 diagnostically accepted fits per scenario. Thus every one of the 360 planned estimator--dataset
+combinations is represented by a valid selected fit. Every six-method comparison is made on
+\emph{identical original dataset IDs}, rather than on six method-specific subsets. The selected
+Bayesian fits passed the prespecified checks for every monitored parameter and derived reliability
+quantity: maximum $\widehat R=1.009529$, minimum bulk ESS $419.64$ and minimum tail ESS $865.86$.
+These computational diagnostics are necessary quality checks, not proofs of posterior convergence.
+
+\begin{table}[htbp]\centering\small
+\caption{Final validated fit counts. Each entry uses the original 20 datasets in that scenario.}\label{tab:sim-completion}
+\rowcolors{2}{paperblue}{white}
+\begin{tabular}{lrrrr}\toprule
+Method & Strict & Equality & Violation & Total\\\midrule
+MLE, unrestricted &20&20&20&60\\
+MLE, restricted &20&20&20&60\\
+Independent Bayes, unrestricted &20&20&20&60\\
+Independent Bayes, restricted &20&20&20&60\\
+Hierarchical Bayes, unrestricted &20&20&20&60\\
+Hierarchical Bayes, restricted &20&20&20&60\\\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Point-estimation results: all six methods}
+Tables~\ref{tab:mse-strict}--\ref{tab:mse-violation} report MSE for all five primary
+parameters under the three scenarios. Smaller MSE indicates less squared error relative to the
+known truth. These are \emph{descriptive} comparisons based on 20 repeated datasets per scenario.
+The unrestricted and restricted MLE estimates of $a$ agree exactly because the order constraint
+acts on cause proportions rather than on the lifetime parameters. Small independent-Bayesian
+restricted/unrestricted differences for $a$ are Monte Carlo sampling differences.
+
+\begin{table}[htbp]\centering\small
+\caption{Strict ordering: primary-parameter MSE (all methods, same 20 datasets).}\label{tab:mse-strict}
+\rowcolors{2}{paperblue}{white}
+\begin{tabular}{lrrrrr}\toprule
+Method & $a$ & $b_{1A}$ & $b_{2A}$ & $b_{1B}$ & $b_{2B}$\\\midrule
+MLE U & 0.0515 & 0.0457 & 0.3700 & 0.1289 & 0.9497\\
+MLE R & 0.0515 & 0.0457 & 0.3700 & 0.1289 & 0.9497\\
+Independent U & 0.0493 & 0.0479 & 0.3932 & 0.1409 & 1.0716\\
+Independent R & 0.0492 & 0.0432 & 0.3895 & 0.1350 & 1.0625\\
+Hierarchical U & 0.0364 & 0.0459 & 0.3149 & 0.1052 & 0.6426\\
+Hierarchical R & 0.0368 & 0.0431 & 0.3185 & 0.1036 & 0.6527\\
+\bottomrule\end{tabular}
+\end{table}
+
+\begin{table}[htbp]\centering\small
+\caption{Equality: primary-parameter MSE (all methods, same 20 datasets).}\label{tab:mse-equality}
+\rowcolors{2}{paperblue}{white}
+\begin{tabular}{lrrrrr}\toprule
+Method & $a$ & $b_{1A}$ & $b_{2A}$ & $b_{1B}$ & $b_{2B}$\\\midrule
+MLE U & 0.0377 & 0.1265 & 0.1830 & 0.3714 & 0.1749\\
+MLE R & 0.0377 & 0.0963 & 0.1904 & 0.2614 & 0.2325\\
+Independent U & 0.0372 & 0.1313 & 0.1936 & 0.4020 & 0.1915\\
+Independent R & 0.0373 & 0.0982 & 0.2313 & 0.2419 & 0.3912\\
+Hierarchical U & 0.0288 & 0.1113 & 0.1693 & 0.2588 & 0.1213\\
+Hierarchical R & 0.0287 & 0.0765 & 0.2014 & 0.1739 & 0.2401\\
+\bottomrule\end{tabular}
+\end{table}
+
+\begin{table}[htbp]\centering\small
+\caption{Ordering violation: primary-parameter MSE (all methods, same 20 datasets).}\label{tab:mse-violation}
+\rowcolors{2}{paperblue}{white}
+\begin{tabular}{lrrrrr}\toprule
+Method & $a$ & $b_{1A}$ & $b_{2A}$ & $b_{1B}$ & $b_{2B}$\\\midrule
+MLE U & 0.0694 & 1.0008 & 0.0641 & 3.0892 & 0.3488\\
+MLE R & 0.0694 & 0.3962 & 0.8296 & 1.0613 & 2.4718\\
+Independent U & 0.0674 & 1.0696 & 0.0684 & 3.4621 & 0.3945\\
+Independent R & 0.0673 & 0.4216 & 1.0045 & 1.1003 & 3.1209\\
+Hierarchical U & 0.0461 & 0.8114 & 0.0571 & 1.7655 & 0.1798\\
+Hierarchical R & 0.0438 & 0.3507 & 0.8441 & 0.7221 & 1.9243\\
+\bottomrule\end{tabular}
+\end{table}
+
+\subsection{Interpretation of ordering effects}
+\paragraph{Strict ordering.} The assumed inequality is true and the unrestricted classical estimates
+already satisfy it in all 20 original datasets; the two MLE rows consequently coincide.
+For $b_{2B}$, the final paired MSE is $0.9497$ for MLE, $1.0716$ for unrestricted independent
+Bayes, and $0.6426$ for unrestricted hierarchical Bayes. This is a \emph{different conclusion}
+from comparing the historical partial Bayesian fits: the updated figures use the same datasets
+for all methods. Hierarchical Bayes has lower observed squared error for this coefficient,
+but not every estimator and every coefficient follows the same ranking.
+
+\paragraph{Equality.} Restriction can reduce error for cause 1 while worsening cause 2. For block A,
+classical MSE changes $0.1265\to0.0963$ for $b_{1A}$ but $0.1830\to0.1904$ for $b_{2A}$.
+This pattern occurs in the restricted independent and hierarchical posterior means as well,
+so one favorable coefficient cannot establish total improvement.
+
+\paragraph{Violation.} The true order is reversed. Restricted classical MSE for $b_{1A}$ falls
+from $1.0008$ to $0.3962$, but for $b_{2A}$ rises from $0.0641$ to $0.8296$.
+Block B likewise shows substantial degradation for cause 2. The error redistribution reflects
+bias induced by an incorrect constraint, even where a particular parameter's variance falls.
+
+\paragraph{Bayesian comparisons.} Across all five primary coefficients and all three scenarios,
+unrestricted hierarchical Bayes has smaller observed MSE than unrestricted independent Bayes
+in this particular design. For shape $a$, the hierarchical-unrestricted MSEs are
+$0.036386$, $0.028812$ and $0.046078$, respectively, compared with unrestricted MLE values
+$0.051452$, $0.037730$ and $0.069376$. With only 20 repetitions and multiple comparisons,
+these findings are descriptive rather than a universal superiority claim.
+
+\subsection{Interval estimation and its interpretation}
+Classical results are approximate frequentist confidence intervals; Bayesian results are posterior
+credible intervals. Simulation coverage evaluates both using the known generating parameters.
+The positive log-Wald interval for $a$ and the four Bayesian credible procedures are compared
+in Table~\ref{tab:shape-intervals}. The interval width is measured on the original scale of $a$.
+
+\begin{table}[htbp]\centering\small
+\caption{Interval results for $a$: coverage (CP) and average width (AW), using 20 matched datasets per scenario.}\label{tab:shape-intervals}
+\rowcolors{2}{paperblue}{white}
+\begin{tabular}{lrrrrrr}\toprule
+&\multicolumn{2}{c}{Strict} &\multicolumn{2}{c}{Equality} &\multicolumn{2}{c}{Violation}\\
+Method & CP & AW & CP & AW & CP & AW\\\midrule
+MLE U/R, log-Wald &.95&.8715&1.00&.8335&.85&.8639\\
+Independent U, credible &.95&.8520&.95&.8163&.90&.8511\\
+Independent R, credible &.95&.8510&1.00&.8167&.90&.8469\\
+Hierarchical U, credible &.95&.7907&1.00&.7579&.90&.7822\\
+Hierarchical R, credible &.95&.7977&1.00&.7664&.90&.7780\\\bottomrule
+\end{tabular}
+\end{table}
+
+The shape-parameter coverage varies between $0.85$ and $1.00$ in the table. A single additional
+miss among 20 intervals changes empirical coverage by $0.05$; nominal $95\%$ coverage
+has a Monte Carlo standard error near $0.049$ with 20 independent replications.
+A narrow interval is not necessarily reliable if its coverage is poor.
+
+\begin{table}[htbp]\centering\small
+\caption{Ordering-violation scenario: cause-2 Bayesian credible-interval coverage (20 datasets each).}\label{tab:violation-coverage}
+\rowcolors{2}{paperblue}{white}
+\begin{tabular}{lrr}\toprule
+Method & CP for $b_{2A}$ & CP for $b_{2B}$\\\midrule
+Independent Bayes U & .90 & 1.00\\
+Independent Bayes R & .35 & .45\\
+Hierarchical Bayes U & 1.00 & 1.00\\
+Hierarchical Bayes R & .25 & .45\\\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:violation-coverage} gives particularly strong evidence of the \emph{consequence
+of imposing a false restriction}: restricted Bayesian cause-2 credible intervals cover the true
+cause-2 parameter far less often. Posterior credibility is conditional on the assumed model
+and does not ensure frequentist coverage when that model excludes the truth.
+
+Not every interval construction is mathematically supported. Restricted individual cause-parameter
+classical Wald intervals at active boundaries are marked unavailable rather than invented.
+The historical unrestricted raw Wald export contains 11 negative endpoint flags; the primary
+positive log-Wald analysis avoids negative limits. The full reproducible analysis records
+additional derived reliability measures, precise bias, Monte Carlo standard errors of paired
+MSE differences, and diagnostic summaries; the current paper highlights the primary five parameters.
+
+\subsection{Verification, reproducibility and limitations}
+The independent saved-results audit reports 702 point-performance groups, 756 interval-performance
+groups, 702 complete six-method groups, 1,755 paired contrasts and 444 recomputed parameter-wise
+posterior-draw diagnostics. The manuscript's primary numerical values were checked against the
+reported CSV outputs. In addition, the local project test suite passed 457 tests (13 November 2026).
+These checks provide evidence of computational consistency, not a mathematical proof that every
+model assumption holds for real-world data.
+
+The completed numerical analysis is reproducible from the original stored datasets and selected
+fit records using \texttt{python -m experiments.completion\_study analyze} in the project environment.
+Full-precision parameter and interval tables, dataset IDs, diagnostic checks, and paired contrasts
+are stored under \texttt{results/simulation\_completion\_v1/latest/} in the source repository.
+Study limitations remain: only 20 replications per scenario, one sample size and terminal-only
+withdrawals, fixed hierarchical hyperpriors, and dependence on the chosen competing-risk model.
+The observed timing of historical and new computations is not a controlled runtime benchmark.
+
+
+\section{Real-Data Application}\label{sec:real-data}
 We also apply the methods to a published example involving 39 appliance failures. The observations are attributed to Nelson's reliability data and reproduced as Table~6 in a later study by Shi, Yan and Peng~\cite{shi2025}. Each observation has a recorded failure time and one of two cause labels: failure mechanism 5 or all other recorded failure mechanisms. There are 26 failures in the first category and 13 in the second.
 
 The source records no withdrawals or unobserved failure causes. We therefore use the \emph{complete-data special case} of our likelihood, with one block, $n=m=39$ and $r_j=0$ for all observations. This checks whether the estimation procedures can be applied to genuine failures; it is not a real experiment with progressive removals. We use a single block rather than inventing an additional grouping.
@@ -350,7 +539,7 @@ All six estimates were obtained successfully, and the four Bayesian fits passed 
 
 The recorded descriptive maximum difference between the fitted and empirical distribution functions is approximately 0.090; this is not a calibrated goodness-of-fit $p$-value. The source also discusses possible dependence between causes, whereas our latent failure times are assumed independent. Thus this application shows how the methods behave on real observations, but does not prove that the model assumptions hold. We do not compute simulation bias, MSE, or coverage for this dataset because the true parameters are unknown. Table~\ref{tab:real-intervals} presents the primary marginal uncertainty intervals. Additional reliability predictions and computational diagnostics were recorded during the analysis. The application remains conditional on the selected scaling and independence assumptions.
 
-\section{Conclusion}\label{sec:conclusion}
+\section{Discussion, Limitations and Conclusion}\label{sec:conclusion}
 This study provides a common framework for classical and Bayesian estimation with two competing causes and block progressive Type-II censoring. The classical problem becomes simpler after separating total failure risk from the proportions of the two causes. Under the within-block order restriction, the classical total risk and shape estimates stay the same, while cause parameters may be pooled. The independent-scale Bayesian model has a related invariance for overall lifetime quantities, whereas the hierarchical Gamma model does not generally have it.
 
 The appliance example remains unchanged: 26 of 39 failures belong to cause 1, and the stipulated order pools the classical cause coefficients. This restriction requires scientific justification. The completed simulation now has 360 verified valid fits on the original 60 datasets, with all six methods compared on the same 20 datasets per scenario. The hierarchical unrestricted estimator has lower observed MSE than the independent unrestricted estimator for every primary parameter in this design. The order constraint can improve one cause while worsening the other, including at true equality; under false ordering it substantially degrades cause-specific interval coverage. Classical procedures are much cheaper computationally. These descriptive results do not establish a universal best estimator: twenty replications per scenario, one sample size, terminal withdrawals only, and a fixed hierarchical prior remain substantive limitations. Broader designs and prior sensitivity analysis are needed.
