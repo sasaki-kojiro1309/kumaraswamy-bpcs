@@ -111,6 +111,18 @@ def test_all_hierarchical_conditionals_by_joint_density_ratios(prior):
         a_logconditional(data, other_a, pairs, prior)-a_logconditional(data, a, pairs, prior), abs=1e-13)
 
 
+@pytest.mark.parametrize('a,other_a', [(.01, .03), (.3, 1.7), (2., 5.), (25., 40.)])
+def test_cached_a_kernel_matches_independent_row_likelihood(prior, a, other_a):
+    from src.bayesian import _Context, _a_conditional_kernel
+    data = load_example()
+    pairs = {'A': (.3, .8), 'B': (.5, 1.1)}
+    ctx = _Context(data)
+    totals = np.array([sum(pairs[s]) for s in ctx.labels])
+    fast = _a_conditional_kernel(ctx, other_a, totals, prior)-_a_conditional_kernel(ctx, a, totals, prior)
+    oracle = a_logconditional(data, other_a, pairs, prior)-a_logconditional(data, a, pairs, prior)
+    assert fast == pytest.approx(oracle, abs=2e-12)
+
+
 @pytest.mark.parametrize('causes', [(1, 1), (2, 2), (1,)])
 def test_independent_zero_counts_rejected_before_sampler(causes):
     data = make_data(np.linspace(.2, .7, len(causes)), causes)

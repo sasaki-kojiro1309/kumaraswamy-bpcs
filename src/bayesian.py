@@ -318,6 +318,14 @@ def _marginal(ctx, a):
     return float((ctx.problem.M-1)*np.log(a)+(a-1)*ctx.problem.T-H.sum()-ctx.m@logW)
 
 
+def _a_conditional_kernel(ctx, a, totals, prior):
+    """B8, omitting only terms constant in a; reuse validated block arrays."""
+    logW, H = ctx.summaries(a)
+    penalty = np.exp(np.log(totals)+logW).sum()
+    return float((ctx.problem.M+prior.a.shape-1)*np.log(a)
+                 +(a-1)*ctx.problem.T-prior.a.rate*a-H.sum()-penalty)
+
+
 def _hierarchical_chain(ctx, prior, config, seed, restricted):
     rng = np.random.default_rng(seed)
     def initial(p, width):
@@ -351,9 +359,9 @@ def _hierarchical_chain(ctx, prior, config, seed, restricted):
                 return _positive_log_target(z, lambda k: kappa_logconditional(k, b[:, s], lam[s], prior.kappa[s]))
             kap[s] = np.exp(slice_step(target, np.log(kap[s]), rng,
                         width=config.slice_width, max_steps=config.max_slice_steps))
-        pairs = ctx.pairs(b)
+        totals = b.sum(axis=1)
         def target_a(z):
-            return _positive_log_target(z, lambda v: loglikelihood(ctx.data, v, pairs)+prior.a.logpdf(v))
+            return _positive_log_target(z, lambda v: _a_conditional_kernel(ctx, v, totals, prior))
         a = np.exp(slice_step(target_a, np.log(a), rng, width=config.slice_width,
                               max_steps=config.max_slice_steps))
         if j >= config.warmup:
