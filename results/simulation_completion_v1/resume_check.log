@@ -1,0 +1,2 @@
+{('mle_unrestricted', 'complete'): 60, ('mle_within_block', 'complete'): 60, ('bayes_independent_unrestricted', 'complete'): 60, ('bayes_independent_within_block', 'complete'): 60, ('bayes_hierarchical_unrestricted', 'complete'): 60, ('bayes_hierarchical_within_block', 'complete'): 60}
+Final: {('mle_unrestricted', 'complete'): 60, ('mle_within_block', 'complete'): 60, ('bayes_independent_unrestricted', 'complete'): 60, ('bayes_independent_within_block', 'complete'): 60, ('bayes_hierarchical_unrestricted', 'complete'): 60, ('bayes_hierarchical_within_block', 'complete'): 60}
