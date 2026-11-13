@@ -70,13 +70,29 @@ Truth belongs to generation/evaluation metadata. Estimators receive only the
 validated observed-data object. All methods for a repetition use the same saved
 dataset. Missing fits and diagnostic failures remain visible in summaries.
 
+## Completed-study entry points
+
+| Module | Purpose |
+|---|---|
+| `experiments.completion_qc` | Verify the saved 360-fit study without fitting or compiling |
+| `experiments.completion_analysis` | Rebuild matched comparisons, tables and figures from saved fits |
+| `experiments.completion_study` | Inventory, resumable completion fitting, or analysis plus PDF compilation |
+| `experiments.completion_publication` | Generate manuscript tables and compile the report |
+
+The final registry is `results/simulation_completion_v1/latest/`. It combines
+preserved valid historical records with separately identified completion records;
+`results/simulation_submission/summaries/` remains a historical partial export.
+Current commands are maintained in the root [README](../README.md).
+
 ## Data and outputs
 
 - `data/examples/two_blocks.json` is hand-constructed teaching data.
 - `results/simulation_submission/datasets/` contains observed simulated datasets.
 - `results/simulation_submission/estimates/tasks/` contains immutable fit records.
 - `results/simulation_submission/metadata/` tracks campaigns, analyses and audits.
-- `results/simulation_submission/summaries/` contains performance CSVs.
+- `results/simulation_submission/summaries/` preserves historical performance CSVs.
+- `results/simulation_completion_v1/latest/` contains the final matched tables and plots.
+- `results/simulation_completion_v1/attempts/` contains successful and failed completion attempts.
 - `results/real_data/original/` preserves downloaded source material.
 - `results/real_data/processed/` records the reproducible transformation.
 

@@ -1,7 +1,28 @@
+# Local Python environments and generated caches
 .venv/
+venv/
+env/
 __pycache__/
 *.py[cod]
 .pytest_cache/
-.DS_Store
+.mypy_cache/
+.ruff_cache/
+
+# Local scratch space and operating-system/editor files
 tmp/
+.DS_Store
+._*
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Disposable LaTeX intermediates; keep PDFs, figures and scientific records
+*.aux
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
 output/pdf/Report.log

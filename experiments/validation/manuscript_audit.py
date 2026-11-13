@@ -155,7 +155,7 @@ def main():
         assert run.returncode==0 and not run.stderr,(module,run.stderr)
         examples[module]={'returncode':run.returncode,'stdout':run.stdout,'stderr':run.stderr}
     sources=[p for folder in ('src','tests','experiments','docs','References') for p in sorted((root/folder).glob('*')) if p.is_file()]
-    sources += [root/'Readme.md',root/'Report.tex',root/'requirements-lock.txt',root/'data/examples/two_blocks.json']
+    sources += [root/'README.md',root/'Report.tex',root/'requirements-lock.txt',root/'data/examples/two_blocks.json']
     output={'description':'Independent deterministic manuscript audit, 2026-11-01; no simulation or coverage-performance claim',
             'checks':checks,'fits':{name:asdict(fit) for name,fit in [('unrestricted',U),('restricted',R),('direct',D),('slsqp',N)]},
             'parameter_inference':{'unrestricted':asdict(pU),'restricted':asdict(pR)},

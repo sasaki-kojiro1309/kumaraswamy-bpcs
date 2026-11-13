@@ -9,9 +9,9 @@ implementation milestone, not the final verified completion.
 
 The framework has been executed on the submission configuration. Saved datasets,
 partial Bayesian results, classical fits and versioned summaries are available
-in `results/simulation_submission/`. Its `manifest.json` records the authoritative
+in `results/simulation_submission/`. Its `manifest.json` records that historical campaign's
 counts; a planned configuration size does not imply that every fit succeeded.
-The [main README](../Readme.md) contains current setup and execution instructions,
+The [main README](../README.md) contains current setup and execution instructions,
 and the [code guide](CODE_GUIDE.md) explains the grouped workflow packages.
 
 ## Components and data flow
@@ -321,10 +321,10 @@ and equality/difference of success sets are reported. No universally best method
 is selected. Interpret regime-specific tables alongside misspecification,
 interval availability, failures, runtime and MCMC diagnostics.
 
-## Exact commands for later execution by the user
+## Commands for deliberate future studies
 
-Run from the repository root with the existing environment. These commands
-have NOT been executed in this implementation task.
+Run from the repository root with the existing environment. These commands are for intentional future computation, not for reading the
+completed study. Current saved-result commands are in the root README.
 
 ### 1. Create pilot datasets only
 
@@ -399,14 +399,13 @@ Scenario selection and repetition count for fit-only must match datasets that
 exist, or have explicit generation-failure records. No missing observations
 are generated to satisfy a fit request.
 
-## Delivery status and limits
+## Validation and limits
 
-Only static inspection/editing has been performed. Neither the new modules nor
-their tests have been executed or certified. There are no empirical results
-from this framework. Default scenarios/prior choices require researcher review;
-Bayesian moment conditions can be sufficient-only, and zero-count independent
-priors retain the existing conservative unsupported policy. Float64 generation,
-fit/sampler range, diagnostics and information conditioning can fail. These
-failures are recorded without deleting the dataset or substituting a different
-prior. Examine tests and a pilot on your own before a main study. No change to
-Report.tex or any classical/Bayesian estimation mathematics is included.
+The completed submission study and its independent QC are documented in
+[SIMULATION_COMPLETION.md](SIMULATION_COMPLETION.md). The statistical modules,
+source fingerprints, saved observations and original result records are retained.
+This generic engine also supports larger configurations; their planned size does
+not imply they have been executed. Float64 generation and inference, posterior
+moment conditions, MCMC diagnostics, and information conditioning retain the
+limitations documented above. Failures must remain explicit without replacing
+the dataset or prior.

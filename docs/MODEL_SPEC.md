@@ -1,18 +1,19 @@
 # Model specification: classical and Bayesian Kumaraswamy BPCS
 
-Status: provisional design approved by the user on 2026-10-23. Distribution
-primitives, completed BPCS data validation, likelihood evaluation, and profile/
-direct MLE estimation are implemented. The provisional within-block
-order-restricted MLE is implemented and validated on 2026-10-26. Supported
-classical observed-information and interval inference is also implemented;
-Bayesian estimation under the two specified priors is implemented on 2026-11-01;
-experimental simulation and real-data analysis remain deferred.
-The repository root is the project root; existing `Readme.md` is updated in place and `References/` retains its original
-capitalization. The filesystem treats README.md and Readme.md as the same path.
+Current scope: the distribution, BPCS likelihood, both MLEs, both independent
+Bayesian estimators and both hierarchical Bayesian estimators are implemented.
+The original 60-dataset study has 360 valid fits; the selected appliance
+application is also saved. See [simulation completion](SIMULATION_COMPLETION.md)
+and the root [README](../README.md) for executed workflows and current results.
+
+The dated design decisions and development milestones below preserve the
+project's original reasoning. Statements about deferred experiments refer to
+those historical milestones, not the completed study. `References/` retains its
+original capitalization.
 
 ## Evidence and design decisions
 
-The original project statement from `../Readme.md` is preserved verbatim in
+The original project statement from the early README is preserved verbatim in
 `PROJECT_STATEMENT.md`. It requires MLEs, independent
 or joint Bayesian priors, unrestricted and order-restricted estimation, a full
 simulation study, and validation using suitable datasets. It supplies no block

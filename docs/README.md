@@ -2,7 +2,7 @@
 
 ## Usage and code
 
-- [Main README](../Readme.md): installation, commands, data, results and submission.
+- [Main README](../README.md): installation, commands, data, results and submission.
 - [Code guide](CODE_GUIDE.md): module responsibilities and reading order.
 - [Simulation guide](SIMULATION_GUIDE.md): configuration, seeds, storage and analysis.
 - [Completed simulation](SIMULATION_COMPLETION.md): 360 verified fits, matched comparisons, figures, manuscript and exact reproduction commands.

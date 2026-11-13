@@ -14,5 +14,6 @@ not as fresh experiment launchers. The statistical algorithms are elsewhere.
 
 For new work use `experiments.simulation_runner` with an explicit configuration
 and budget, or inspect `experiments.execution.submission_supervisor --help`.
-The old flat module paths remain import/command compatibility aliases. Moving
-these modules did not repair or alter their historical timing behavior.
+Use the canonical `experiments.legacy.<module>` paths for these implementations.
+Flat aliases referenced by tests or historical commands are retained. The
+implementations preserve their historical timing behavior.

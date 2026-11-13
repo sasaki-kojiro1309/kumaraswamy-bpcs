@@ -154,15 +154,12 @@ From `/Users/mac_m5/Desktop/Personal/Stat's Project`:
 MPLCONFIGDIR=tmp/matplotlib OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m experiments.completion_study analyze
 ```
 
-This single command reads saved experimental records, verifies the data and
-selected fits, regenerates CSV/Markdown tables and figures, independently checks
-the metrics, generates the manuscript simulation input, and compiles `Report.pdf`
-locally using cached TeX resources. It never invokes a fitter or generator.
-Tectonic is discovered on PATH or at the bundled ChatGPT executable; set
-`TECTONIC` to another local binary if needed. The current Mac's needed TeX
-resources were cached during completion. A fresh machine needs the same Python
-dependencies and a populated TeX cache; the compiler intentionally uses `-C`
-to forbid an implicit network dependency during reproduction.
+This original end-to-end command reads saved experimental records, rebuilds the
+analysis and additionally invokes the PDF compiler. Current saved-result-only
+reproduction, which does not need TeX, is documented in the root
+[README](../README.md). The later-edited manuscript requires TeX packages that
+are not all in the current local cache; the statistical analysis does not depend
+on them. No manuscript recompilation is needed to inspect or verify the results.
 
 Resume unfinished fitting with:
 
@@ -190,8 +187,11 @@ The base directory is
 `/Users/mac_m5/Desktop/Personal/Stat's Project/results/simulation_completion_v1/latest/`.
 `latest` is a symlink to the final immutable-input analysis snapshot. Every file
 below is beneath that exact directory. `artifact_manifest.json` provides exact
-resolved paths, SHA-256 hashes and sizes for every generated artifact and the
-updated top-level manuscript/PDF.
+resolved paths, SHA-256 hashes and sizes for the generated analysis artifacts.
+Its root-report entries refer to the original completion build: the manuscript
+was subsequently edited, and the broken root PDF was removed at the user's
+request. The manifest is preserved as historical provenance, not rewritten to
+claim a new report verification.
 
 | File | Contents |
 |---|---|
@@ -239,8 +239,9 @@ all 46 figure paths individually.
 
 Additional exact repository-root-relative paths:
 
-- `Report.tex`: updated manuscript, including generated simulation section.
-- `Report.pdf` and `output/pdf/Report.pdf`: updated compiled 18-page manuscript.
+- `Report.tex`: current manuscript source, preserved unchanged during cleanup.
+- `output/pdf/Report.pdf`: valid saved 18-page completion build. The broken
+  later root PDF was removed as requested; no replacement was compiled.
 - `output/pdf/Report_pre_completion.pdf`: preserved previous top-level PDF.
 - `output/pdf/Report_output_pre_completion.pdf`: preserved previous output PDF.
 - `output/pdf/compilation.txt`: local compiler output.
