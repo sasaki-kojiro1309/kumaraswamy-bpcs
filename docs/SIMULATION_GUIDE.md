@@ -1,5 +1,12 @@
 # Kumaraswamy BPCS simulation framework
 
+**Current completion (13 November 2026):** all 360 original combinations have
+valid selected fits. See [Simulation completion](SIMULATION_COMPLETION.md) for
+the final registry, paired comparisons and the local saved-result reproduction
+command. The original submission pointers below remain a preserved historical
+campaign. Statements below about an unexecuted framework describe its original
+implementation milestone, not the final verified completion.
+
 The framework has been executed on the submission configuration. Saved datasets,
 partial Bayesian results, classical fits and versioned summaries are available
 in `results/simulation_submission/`. Its `manifest.json` records the authoritative

@@ -5,6 +5,7 @@
 - [Main README](../Readme.md): installation, commands, data, results and submission.
 - [Code guide](CODE_GUIDE.md): module responsibilities and reading order.
 - [Simulation guide](SIMULATION_GUIDE.md): configuration, seeds, storage and analysis.
+- [Completed simulation](SIMULATION_COMPLETION.md): 360 verified fits, matched comparisons, figures, manuscript and exact reproduction commands.
 - [Bayesian guide](BAYESIAN_GUIDE.md): priors, sampling settings and result checks.
 - [BPCS guide](BPCS_GUIDE.md): schemes, risk sets and teaching observations.
 - [Distribution guide](STAGE1_GUIDE.md): distribution primitives and conventions.
@@ -20,7 +21,8 @@
 ## Historical audits and execution records
 
 These files describe particular milestones; their counts are not live status.
-Read `results/simulation_submission/manifest.json` for current simulation counts.
+Read `results/simulation_completion_v1/latest/validation.json` for final simulation
+counts. The original submission manifest retains its historical partial counts.
 
 - [Within-block validation](WITHIN_BLOCK_VALIDATION.md)
 - [Classical audit](FINAL_AUDIT.md)

@@ -1,5 +1,9 @@
 # Submission computation, 1 November 2026
 
+Historical execution record. The 13 November completion has 360 valid fits;
+see [Simulation completion](SIMULATION_COMPLETION.md). Original counts and
+submission pointers in this dated record remain preserved.
+
 This execution uses `configs/simulation_submission.json`, not the original pilot.
 There are exactly 60 saved datasets: 20 each for strict ordering, equality, and
 ordering violation, with two independent blocks, n=50, m=30, a=1.5, and

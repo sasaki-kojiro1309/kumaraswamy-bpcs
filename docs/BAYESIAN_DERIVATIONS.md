@@ -53,6 +53,12 @@ a-conditional call the existing `src/likelihood.py` implementation.
 The conjugate summaries use Stage 1 log survival, with log-sum-exp for W_i;
 no inconsistent replacement likelihood is introduced.
 
+Completion optimization, 13 November 2026: the hierarchical a update now uses
+the B8 sufficient-statistic kernel directly. Terms constant in a are omitted
+only inside that conditional slice update. Regression tests compare its log
+ratios with the original row-wise likelihood plus Gamma prior. The public joint
+log-posterior and posterior target remain unchanged.
+
 ## B2. Independent scale prior
 
 The prior is pi_I proportional to a^(-1) product_is b_is^(-1). It is improper,
