@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "point_groups": 702,
+  "interval_groups": 756,
+  "six_method_groups": 702,
+  "paired_contrasts": 1755,
+  "selected_fits": 360,
+  "datasets": 60,
+  "all_six_dataset_denominator": 20,
+  "recomputed_parameterwise_draw_diagnostics": 444,
+  "publication_primary_values_match_csv": true
+}

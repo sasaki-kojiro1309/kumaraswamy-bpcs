@@ -1,0 +1,9 @@
+method,target_kind,maximum_relative_mean_mcse,monitored_entries,note
+bayes_hierarchical_unrestricted,primary,0.01208614171456738,300,Relative MCSE is MCSE/abs(posterior mean); small tail probabilities can inflate this ratio.
+bayes_hierarchical_unrestricted,reliability,0.03848084659648429,1800,Relative MCSE is MCSE/abs(posterior mean); small tail probabilities can inflate this ratio.
+bayes_hierarchical_within_block,primary,0.014661168030883737,300,Relative MCSE is MCSE/abs(posterior mean); small tail probabilities can inflate this ratio.
+bayes_hierarchical_within_block,reliability,0.04023850664747574,1800,Relative MCSE is MCSE/abs(posterior mean); small tail probabilities can inflate this ratio.
+bayes_independent_unrestricted,primary,0.008808319481041008,300,Relative MCSE is MCSE/abs(posterior mean); small tail probabilities can inflate this ratio.
+bayes_independent_unrestricted,reliability,0.029405645310057613,1800,Relative MCSE is MCSE/abs(posterior mean); small tail probabilities can inflate this ratio.
+bayes_independent_within_block,primary,0.008713855705239292,300,Relative MCSE is MCSE/abs(posterior mean); small tail probabilities can inflate this ratio.
+bayes_independent_within_block,reliability,0.0314678787756963,1800,Relative MCSE is MCSE/abs(posterior mean); small tail probabilities can inflate this ratio.
