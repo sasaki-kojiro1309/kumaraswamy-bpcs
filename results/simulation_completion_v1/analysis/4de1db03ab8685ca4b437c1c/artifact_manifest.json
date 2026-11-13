@@ -1,0 +1,322 @@
+{
+  "Report.pdf": {
+    "bytes": 185722,
+    "sha256": "60e3d5636fda5825c443e21174b74aa532d9c971a9749e4b8a8ec793dd28666a"
+  },
+  "Report.tex": {
+    "bytes": 34220,
+    "sha256": "5f4db95f0c164878873b679bc05ba4d1d184200483eeefc4d1aa2ba783315aaf"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/SUMMARY.md": {
+    "bytes": 14128,
+    "sha256": "40b1941754e124c21fa51a94dbc28285740dc3f9001a8f3cb2e82fbc3ae62dd4"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/attempt_history.csv": {
+    "bytes": 127926,
+    "sha256": "93277832c6fd35c00096b375d04b2139b0c5d1cc45fb53830daeeb821573d99d"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/bayesian_diagnostics.csv": {
+    "bytes": 4413705,
+    "sha256": "c7ccd18feba1d3c9406b2f4c5d0fc6277d2ce84c4fd2988c611ceb8d9e878cad"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/datasets.csv": {
+    "bytes": 18948,
+    "sha256": "da959f18105bf30bb231af0a0aa9146d9f6bc817f18160467587283d95a04154"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/absolute_bias.pdf": {
+    "bytes": 20436,
+    "sha256": "58b6255401a391e15424eb3aa15dc4f36994c5d7c2ce4e72cdf06a4533e8c810"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/absolute_bias.png": {
+    "bytes": 236345,
+    "sha256": "d2912e7dd486c5d5a71d95f803990ddada6f8c34b86b1e5117b4c9852ce10a2d"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/average_width.pdf": {
+    "bytes": 24625,
+    "sha256": "25ce6e9f22c861ba766b2fda04a2a493c686e563aee957679c0ed5f785befd06"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/average_width.png": {
+    "bytes": 230850,
+    "sha256": "8c023f1c13bd31146d643b655b572b91b111af26ed2f4baddd57efac8fd82894"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/coverage_probability.pdf": {
+    "bytes": 22877,
+    "sha256": "b8477d3b33ec7bc87f5532a8a7ae31201bd65c2d028c598298593ed4e41b5de7"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/coverage_probability.png": {
+    "bytes": 190860,
+    "sha256": "fdbf189c2f6c193e2953329081f50920fd59c8454f9f91e3add1aef964317eed"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/estimated_vs_true.pdf": {
+    "bytes": 40921,
+    "sha256": "68daaae6ac50979e53ff20d6f93e7be3cfbc8318edac201e6c8182748ff9f2ab"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/estimated_vs_true.png": {
+    "bytes": 226896,
+    "sha256": "1d9604d90459d60491fb2d831eacb574fc2681cbe2fab4045f4181656719005b"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/hierarchical_vs_independent.pdf": {
+    "bytes": 17195,
+    "sha256": "52a37b121041eac30d314eca6cf2d4c6326978e77496e0d022ff8306f6a44cca"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/hierarchical_vs_independent.png": {
+    "bytes": 143059,
+    "sha256": "3cedfb26fc21a871795a710d0890e6f0222be08f2332180803d8562c47d436d6"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/mcmc_diagnostics.pdf": {
+    "bytes": 26622,
+    "sha256": "e5f83336021b28939e5ae207664a7d429645c01e23b83ded7faea069b5f2a98f"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/mcmc_diagnostics.png": {
+    "bytes": 115252,
+    "sha256": "bcc0bedaf439886048e73c7e1e8ed1f1cdfb0ace2bd309c0a37b08fd45770eaa"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/mse.pdf": {
+    "bytes": 20470,
+    "sha256": "70afdb6cc9a70539a3d8af7899d8c5362be69818d8f1e18cf4f0faa077b6ab33"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/mse.png": {
+    "bytes": 235169,
+    "sha256": "c8401b407a55cde4a036bcb1a1f0b0247fcc238d1aeccceb19bafe8777e1684a"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/mse_equality_late.pdf": {
+    "bytes": 15079,
+    "sha256": "3a7d35897f7f0a853b2c77138f7519d32a131ca87155c1075b59b055197e0994"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/mse_equality_late.png": {
+    "bytes": 104991,
+    "sha256": "17bcb6ffd8ecbe705ba55a72d35c9c7f63735cf38ad56941f7e04293f3c3b0ad"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/mse_strict_order_late.pdf": {
+    "bytes": 14534,
+    "sha256": "a05d449ff305d10b361801c8d0237998271c90ba8818d879a404cea377ded51e"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/mse_strict_order_late.png": {
+    "bytes": 106085,
+    "sha256": "91aa6722d6c4b88c846b330f44a5ace75354af506fc11f963d3ef2975ef258cc"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/mse_violation_late.pdf": {
+    "bytes": 14890,
+    "sha256": "e901bd6ffa0baf6bfc2b8262974f3db527ac331557d847f8ac430176c6286fd2"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/mse_violation_late.png": {
+    "bytes": 107232,
+    "sha256": "e0d4c04ea471910d105e9030c01120e26ba2402648f44c964fac988f0d026cd1"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/restriction_effects.pdf": {
+    "bytes": 22598,
+    "sha256": "908cf370dbe1a15e577746ffa3d9a08f766f656b5ba892b5d8b87c7829e2b50d"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/restriction_effects.png": {
+    "bytes": 207866,
+    "sha256": "df45a7acd6d150594ea24e53a45b117b3171ad31be29839312740c85972cbb64"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_equality_late_bayes_hierarchical_unrestricted.pdf": {
+    "bytes": 571733,
+    "sha256": "eb19558faa3a809535ca2842ef68ad0b66f1c8051b837e6528d127c38127eb89"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_equality_late_bayes_hierarchical_unrestricted.png": {
+    "bytes": 755552,
+    "sha256": "9801ab03dc2216608106b6e1d46276fc29299087809517c76ce59da45b28efe1"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_equality_late_bayes_hierarchical_within_block.pdf": {
+    "bytes": 571890,
+    "sha256": "a0dabda091d5464ad39e1d5afebd554a7c50ed85477ebcd8367554dacfff45a6"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_equality_late_bayes_hierarchical_within_block.png": {
+    "bytes": 752865,
+    "sha256": "4f8fcc89262f5977f1a9d98d012c7a621300388888480ec4cfaa53fe3b592ad3"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_equality_late_bayes_independent_unrestricted.pdf": {
+    "bytes": 338657,
+    "sha256": "b4501ea457a85961e8a230c15a8a18e85da0f12a51e2f552ea3886014718eea7"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_equality_late_bayes_independent_unrestricted.png": {
+    "bytes": 358340,
+    "sha256": "b0496b0db376dbbf99229efc2ac50667d679d2b6dc107075277a14a8b4557bf5"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_equality_late_bayes_independent_within_block.pdf": {
+    "bytes": 340609,
+    "sha256": "38e63e7bf8b569133d825eb10cbd44ff0b309cec066e99f4ac9298f1d1eec025"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_equality_late_bayes_independent_within_block.png": {
+    "bytes": 388097,
+    "sha256": "d9d0001fa39bd2901db303a123f90f69f8f3878c237a974570088774dc537efe"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_strict_order_late_bayes_hierarchical_unrestricted.pdf": {
+    "bytes": 572484,
+    "sha256": "02f94403091fea217e732302e24e65c5b43e6d28529db37078fc039574f72617"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_strict_order_late_bayes_hierarchical_unrestricted.png": {
+    "bytes": 792354,
+    "sha256": "541df2e2a5ee26f7fff65051d661a82831027121152bf1fa73992f7c606efd35"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_strict_order_late_bayes_hierarchical_within_block.pdf": {
+    "bytes": 571846,
+    "sha256": "c78c10d26718cea5dbe287751f7f8cd71a37d84b38e4de12bec4f3843a7ffc6a"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_strict_order_late_bayes_hierarchical_within_block.png": {
+    "bytes": 794708,
+    "sha256": "9fb406527cbecd52f079f5a805980c84a68a9bef4766aa1e70622a22a346cc86"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_strict_order_late_bayes_independent_unrestricted.pdf": {
+    "bytes": 342605,
+    "sha256": "51aa0de8d0fde4dcef460964a7d04fb279ec11d8d1a9a01f387f02348a965d0d"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_strict_order_late_bayes_independent_unrestricted.png": {
+    "bytes": 408803,
+    "sha256": "16d112aa1476f195a6d3ca2adaf9c98fcf248e62c24a79d3ab9bff3c4cb77b9d"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_strict_order_late_bayes_independent_within_block.pdf": {
+    "bytes": 342926,
+    "sha256": "a6954b67a2ce28e8601d0ed0228816d9743dfe8ef7d24bd2f6a3c14cfa8cd1f4"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_strict_order_late_bayes_independent_within_block.png": {
+    "bytes": 416075,
+    "sha256": "67bd7570b4415fe0608e10bc8788ec0a4a2cc321f0ecc532dfe3cc0204252cc3"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_violation_late_bayes_hierarchical_unrestricted.pdf": {
+    "bytes": 564498,
+    "sha256": "fe56d5beeaf92acf840b58aadf9ae8a83f8ba6cc2895ee11ca8db9bfa77a1548"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_violation_late_bayes_hierarchical_unrestricted.png": {
+    "bytes": 755968,
+    "sha256": "e7124b753c1da8e105111e7ed51590be8b442a8a1ba53e1fcfacb490f8b04259"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_violation_late_bayes_hierarchical_within_block.pdf": {
+    "bytes": 1164970,
+    "sha256": "31a8df13cb6888615a57d62b194100b390708761c8dd337bc69668d3e4ddd0c0"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_violation_late_bayes_hierarchical_within_block.png": {
+    "bytes": 622748,
+    "sha256": "3a10e422631817fce2394b648d9029dd7307b52bd5ac84ad38e264e339d3a7bc"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_violation_late_bayes_independent_unrestricted.pdf": {
+    "bytes": 340750,
+    "sha256": "df591c0131ffb919410ec6133df1492ca095ef71cd71248420174438cc78a487"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_violation_late_bayes_independent_unrestricted.png": {
+    "bytes": 356301,
+    "sha256": "04b1fb763ce51c2c9a4ba9a1313d7d1440296ce91490cc15afa635fad82a3ddf"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_violation_late_bayes_independent_within_block.pdf": {
+    "bytes": 343056,
+    "sha256": "49e10f39f76c6d333be48a7a59a3c103e218423129691414b72ee1ae4235716c"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/figures/trace_posterior_violation_late_bayes_independent_within_block.png": {
+    "bytes": 368529,
+    "sha256": "980008717df003b6d5e4f4a3db989dc449606b3a5d0d81f82346643f33dd0389"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/independent_qc.json": {
+    "bytes": 309,
+    "sha256": "c1421b47489e416e55d56e5b96494e63f2f1228c7d3626c7fe555475ff1a3329"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/interval_performance.csv": {
+    "bytes": 149397,
+    "sha256": "d01c4b6477d005f0782c04ea36cda28e58fc7d1fc82de5315a2e6d3634c7a749"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/inventory.csv": {
+    "bytes": 152017,
+    "sha256": "9bd57c417451bac1b79aefef64f4133b6236c4b975df091ca950e2125c817b29"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/issues.csv": {
+    "bytes": 4465,
+    "sha256": "aae9d26f5045dfea69ae7cae109e18814cc1c9927b373478d0254e5ea2e93d38"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/manuscript_simulation.tex": {
+    "bytes": 16153,
+    "sha256": "a1f0606977c3c4011697aaea4629c29aeede0b87647216603dff65a1da413692"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/markdown/interval_performance.md": {
+    "bytes": 93631,
+    "sha256": "e9702733399cf4640ab34cf782ebd626ce0d46afcc618c34c013dcc3ba7cad70"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/markdown/mcmc_summary.md": {
+    "bytes": 18997,
+    "sha256": "0b98333301afe77141d4985c8c30faf660ba51a7ccfbf122c5dbfb09862ceb66"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/markdown/mcse_summary.md": {
+    "bytes": 822,
+    "sha256": "505a7a02340c89138aac36a5ba405ac9c35183aa79add281d534caccd056e09a"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/markdown/parameter_performance.md": {
+    "bytes": 75515,
+    "sha256": "f1125b6980854b95d7208663fca4342cb7430a91b0113be9cf4b098e87895f97"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/markdown/rankings.md": {
+    "bytes": 65836,
+    "sha256": "d60663c8cbd34f33ae32a38551f8125ed996b6b1876b98e879156822712dc186"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/markdown/relative_mse_comparisons.md": {
+    "bytes": 300038,
+    "sha256": "e8cffcfa55cc28d74f63431b88a52171b8742833d1046737f19893855ca3b131"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/markdown/runtime_summary.md": {
+    "bytes": 871,
+    "sha256": "f731725cf26c809be7b5b95e0577d001a17496f90d3a4a29507881c933da508f"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/markdown/six_method_paired.md": {
+    "bytes": 75511,
+    "sha256": "0b0acaf16d9e3a938325dd02b5d2e58548b1413b6587d2b66278e64cd85d90e4"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/markdown/valid_fit_counts.md": {
+    "bytes": 1521,
+    "sha256": "01b9fdb7bc252fa5844f5a12c331ca7fd90777486ba62202f47d71eb34c16ca4"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/mcmc_summary.csv": {
+    "bytes": 18965,
+    "sha256": "c8071c0bb7db334e2258cd2eaade87f164919304641f4a66f4c77d144e282a9e"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/mcse_summary.csv": {
+    "bytes": 1336,
+    "sha256": "3c2e742aa3eb38e267b0324babe281c7502be214ccb45b6e88c2dbe4639425ce"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/paired_dataset_ids.csv": {
+    "bytes": 116107,
+    "sha256": "36faa9f0b531e16306bd44f58542e9eff9d88cd90a853440a45e6a16bb142bd1"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/parameter_performance.csv": {
+    "bytes": 149852,
+    "sha256": "208cf2b15caf7323c39de583f34afd2c704045bb29702b585962fba8cd60f24f"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/rankings.csv": {
+    "bytes": 113594,
+    "sha256": "8389780118610d2db2fe4e184ce1b94708bc4b35de20d2e4230a7cde10c73516"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/relative_mse_comparisons.csv": {
+    "bytes": 2091990,
+    "sha256": "6bd98d3bfd69d51e709c1a810490acd77652acc9121db959fc261bd2c5253654"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/replication_estimates.csv": {
+    "bytes": 6406739,
+    "sha256": "3252cf5ccb42c14f038c4f086d7030dc08442d1ad3be072e328a1cce7a77bae3"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/replication_intervals.csv": {
+    "bytes": 8755088,
+    "sha256": "3f580f77f2f589481ad9c46e39dfef81b36468fb7e01a123afc2147bead236cd"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/runtime.csv": {
+    "bytes": 176739,
+    "sha256": "95176f307f3ec8f17b432d8d1d46629635d3740a7a4c158233a99786ae5b7428"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/runtime_summary.csv": {
+    "bytes": 1329,
+    "sha256": "74eb8da252bc8a42d10cc5e53c41ff8d41b1602708411707e666b1a0f9cfbdc2"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/selected_fits.csv": {
+    "bytes": 139744,
+    "sha256": "06e481488be481943489ec7924a93a30cf20ec769e4ff16b94c350b8ca35270b"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/six_method_paired.csv": {
+    "bytes": 821912,
+    "sha256": "43e3fde37b9207cc9b8f324b95416a95970ce4b282a926531da4ea78dbf1c469"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/valid_fit_counts.csv": {
+    "bytes": 991,
+    "sha256": "7b38e94c993bcdf66528bc0760aec468f023bcf073976eed01a1b3062db791b4"
+  },
+  "results/simulation_completion_v1/analysis/4de1db03ab8685ca4b437c1c/validation.json": {
+    "bytes": 120549,
+    "sha256": "09f43a2776b0e4e4d91012664f20d7f9115088d2e5ad941263fc2ff9dd8bcab1"
+  }
+}

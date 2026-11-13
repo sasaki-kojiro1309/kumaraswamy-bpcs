@@ -1,0 +1,7 @@
+method,mean_selected_seconds,median_selected_seconds,note,selected_fits,total_all_attempt_seconds,total_selected_seconds
+bayes_hierarchical_unrestricted,75.01746709656508,80.79124454200064,Includes historical and new implementations/chain lengths; excludes I/O and supervisor overhead.,60,4513.558540251906,4501.048025793905
+bayes_hierarchical_within_block,80.05910195555104,56.96773622899491,Includes historical and new implementations/chain lengths; excludes I/O and supervisor overhead.,60,6421.927712375065,4803.546117333062
+bayes_independent_unrestricted,12.649469298616411,10.61306479149789,Includes historical and new implementations/chain lengths; excludes I/O and supervisor overhead.,60,758.9681579169846,758.9681579169846
+bayes_independent_within_block,12.47329310484917,10.650338979008666,Includes historical and new implementations/chain lengths; excludes I/O and supervisor overhead.,60,748.3975862909501,748.3975862909501
+mle_unrestricted,0.010537857616994491,0.009227021000697277,Includes historical and new implementations/chain lengths; excludes I/O and supervisor overhead.,60,0.6322714570196695,0.6322714570196695
+mle_within_block,0.00989653398343459,0.00858360400161473,Includes historical and new implementations/chain lengths; excludes I/O and supervisor overhead.,60,0.5937920390060754,0.5937920390060754

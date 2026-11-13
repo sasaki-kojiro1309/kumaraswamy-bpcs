@@ -11,8 +11,10 @@ no restriction across blocks.
 The repository includes the model, validated data structures, likelihood,
 unrestricted and restricted MLE, supported uncertainty procedures, four
 Bayesian methods, a reproducible simulation pipeline, tests and saved results.
-The simulation is partially completed; its exact successful and failed counts
-are recorded in the saved manifest.
+The original 60-dataset simulation is complete: all six methods have 60 verified
+valid fits. The final registry and comparisons are under
+`results/simulation_completion_v1/latest/`; historical partial submission
+records remain preserved separately.
 
 ## Start here
 
@@ -163,7 +165,35 @@ are checked. Diagnostic failures are retained and excluded from valid results.
 The submission configuration uses four chains, 1,000 warmup iterations and
 2,000 retained draws per chain, R-hat <= 1.01 and minimum ESS 400.
 
-## Inspect the saved submission results
+## Completed simulation: current results
+
+See [Simulation completion](docs/SIMULATION_COMPLETION.md) for the full model
+audit, execution, findings, exact artifact paths, limitations and reproducibility.
+All six methods are compared on the identical 20 original datasets per scenario.
+No datasets or successful fits were regenerated, no priors or diagnostic
+thresholds were changed, and no remote computation was used.
+
+The final artifact index is
+`results/simulation_completion_v1/latest/artifact_manifest.json`.
+Start with `SUMMARY.md`, `valid_fit_counts.csv`, `six_method_paired.csv`,
+`interval_performance.csv`, `independent_qc.json` and `figures/` in that directory.
+`Report.tex` and `Report.pdf` reflect these completed results; previous PDFs
+remain in `output/pdf/Report_pre_completion.pdf` and
+`output/pdf/Report_output_pre_completion.pdf`. The real-data estimates are unchanged.
+
+Rebuild all analysis artifacts and compile the manuscript from saved results:
+
+```sh
+MPLCONFIGDIR=tmp/matplotlib OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m experiments.completion_study analyze
+```
+
+Resume only unfinished fits (currently none):
+
+```sh
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m experiments.completion_study fit --workers 3
+```
+
+## Historical submission results
 
 Start with these files; reading them does not run estimators:
 
@@ -183,12 +213,12 @@ Start with these files; reading them does not run estimators:
 
 The submission has 60 saved datasets: 20 each for `strict_order_late`,
 `equality_late` and `violation_late`. Both MLE methods have 60 successful fits.
-The saved manifest currently reports Bayesian successes of 31, 31, 31 and 27
+The preserved historical manifest reports Bayesian successes of 31, 31, 31 and 27
 in the order shown above, with 11 restricted-hierarchical diagnostic failures.
 All four Bayesian methods succeeded together on 12 strict-order, 13 equality
 and 1 violation dataset. These are **partial, exploratory results**, not a
-completed 60-dataset Bayesian comparison. Use the manifest for authoritative
-counts if results are extended later.
+completed 60-dataset Bayesian comparison. The separate completion registry above
+now contains all 360 valid fits; original submission pointers were not overwritten.
 
 JSON research records use an integrity envelope with `payload` and `sha256`.
 CSV convenience paths and `manifest.json` can be symlinks to immutable versions;

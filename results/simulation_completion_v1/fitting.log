@@ -1,0 +1,250 @@
+{('mle_unrestricted', 'complete'): 60, ('mle_within_block', 'complete'): 60, ('bayes_independent_unrestricted', 'complete'): 31, ('bayes_independent_within_block', 'complete'): 31, ('bayes_hierarchical_unrestricted', 'complete'): 31, ('bayes_hierarchical_within_block', 'complete'): 27, ('bayes_independent_unrestricted', 'missing'): 29, ('bayes_independent_within_block', 'missing'): 29, ('bayes_hierarchical_unrestricted', 'missing'): 29, ('bayes_hierarchical_within_block', 'missing'): 22, ('bayes_hierarchical_within_block', 'invalid'): 11}
+{"scenario": "violation_late", "rep": 3, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 53.52976325000054}
+('violation_late', 3, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 2, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 54.261584874999244}
+('violation_late', 2, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 4, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 54.268093959006364}
+('violation_late', 4, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 7, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 11.837136624992127}
+('violation_late', 7, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 5, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 54.29669954199926}
+('violation_late', 5, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 6, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 55.45189512500656}
+('violation_late', 6, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 8, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 13.692688208000618}
+('violation_late', 8, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 7, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 56.59773574999417}
+('violation_late', 7, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 9, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.164153166988399}
+('violation_late', 9, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 10, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 13.026123709001695}
+('violation_late', 10, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 8, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 57.77939954200701}
+('violation_late', 8, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 9, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 56.24512287499965}
+('violation_late', 9, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 11, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 13.109882166987518}
+('violation_late', 11, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "equality_late", "rep": 12, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.534157458008849}
+('equality_late', 12, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 10, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 55.82040300000517}
+('violation_late', 10, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 12, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.868586042008246}
+('violation_late', 12, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 13, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.466759667004226}
+('strict_order_late', 13, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 13, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 16.20611691699014}
+('strict_order_late', 13, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 11, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 57.4090183340013}
+('violation_late', 11, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 13, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.392880416999105}
+('violation_late', 13, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 13, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_failed", "seconds": 16.529702874991926}
+{"scenario": "violation_late", "rep": 12, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 55.06421370799944}
+('violation_late', 12, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "strict_order_late", "rep": 14, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.85042458299722}
+('strict_order_late', 14, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 14, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.378855958988424}
+('violation_late', 14, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 14, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 16.34174950000306}
+('strict_order_late', 14, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "strict_order_late", "rep": 15, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.492887708998751}
+('strict_order_late', 15, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 14, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_failed", "seconds": 16.098901666002348}
+{"scenario": "strict_order_late", "rep": 15, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 16.30867629199929}
+('strict_order_late', 15, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 13, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 55.01480299999821}
+('violation_late', 13, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "equality_late", "rep": 15, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.329978833004134}
+('equality_late', 15, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "equality_late", "rep": 15, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 16.237106582993874}
+('equality_late', 15, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 15, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.263438708992908}
+('violation_late', 15, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 16, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.17335329100024}
+('strict_order_late', 16, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 15, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 16.106242374997237}
+('violation_late', 15, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 14, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 55.15617345800274}
+('violation_late', 14, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "equality_late", "rep": 16, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.430425792001188}
+('equality_late', 16, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 16, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 15.776577875003568}
+('strict_order_late', 16, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "equality_late", "rep": 16, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 16.279139208010747}
+('equality_late', 16, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 16, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.264012166997418}
+('violation_late', 16, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 16, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_failed", "seconds": 16.021485499994014}
+{"scenario": "strict_order_late", "rep": 17, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.34803666699736}
+('strict_order_late', 17, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 17, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 16.098149792000186}
+('strict_order_late', 17, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "equality_late", "rep": 17, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.174699040988344}
+('equality_late', 17, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 17, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_failed", "seconds": 12.510514458001126}
+{"scenario": "equality_late", "rep": 17, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 16.073923875010223}
+('equality_late', 17, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 17, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_failed", "seconds": 16.34310754200851}
+{"scenario": "violation_late", "rep": 16, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 54.983544667004026}
+('violation_late', 16, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "strict_order_late", "rep": 18, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.495506207997096}
+('strict_order_late', 18, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 17, "method": "bayes_hierarchical_unrestricted", "level": 1, "status": "diagnostics_passed", "seconds": 43.520848625004874}
+('violation_late', 17, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "equality_late", "rep": 18, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.426629166991916}
+('equality_late', 18, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 18, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 16.28044229101215}
+('strict_order_late', 18, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 18, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.91525016700325}
+('violation_late', 18, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "equality_late", "rep": 18, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 17.043332165994798}
+('equality_late', 18, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 17, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 57.337736707995646}
+('violation_late', 17, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "strict_order_late", "rep": 19, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 13.146182374999626}
+('strict_order_late', 19, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 18, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_failed", "seconds": 16.85640200000489}
+{"scenario": "strict_order_late", "rep": 19, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 16.944331208011135}
+('strict_order_late', 19, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "equality_late", "rep": 19, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.616833332998795}
+('equality_late', 19, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "equality_late", "rep": 19, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 16.698166333997506}
+('equality_late', 19, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 19, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.997408208000707}
+('violation_late', 19, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 19, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_failed", "seconds": 16.81053020899708}
+{"scenario": "strict_order_late", "rep": 20, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.729893291005283}
+('strict_order_late', 20, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 20, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 16.072684124999796}
+('strict_order_late', 20, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 18, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 56.109597582995775}
+('violation_late', 18, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "equality_late", "rep": 20, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.302995916994405}
+('equality_late', 20, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "equality_late", "rep": 20, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 15.980101834007655}
+('equality_late', 20, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 20, "method": "bayes_hierarchical_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 12.557082999992417}
+('violation_late', 20, 'bayes_hierarchical_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 6, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.224891749996459}
+('violation_late', 6, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 20, "method": "bayes_hierarchical_within_block", "level": 0, "status": "diagnostics_failed", "seconds": 16.25727920900681}
+{"scenario": "violation_late", "rep": 19, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 54.93687595799565}
+('violation_late', 19, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 6, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.279743790990324}
+('violation_late', 6, 'bayes_independent_within_block', 'completed')
+{"scenario": "violation_late", "rep": 7, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.094960083006299}
+('violation_late', 7, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 7, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.401162833004491}
+('violation_late', 7, 'bayes_independent_within_block', 'completed')
+{"scenario": "violation_late", "rep": 8, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.303145875004702}
+('violation_late', 8, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 8, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.248745042001246}
+('violation_late', 8, 'bayes_independent_within_block', 'completed')
+{"scenario": "violation_late", "rep": 9, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.14907637500437}
+('violation_late', 9, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 9, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.268218917000922}
+('violation_late', 9, 'bayes_independent_within_block', 'completed')
+{"scenario": "violation_late", "rep": 10, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.189670499996282}
+('violation_late', 10, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 10, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.283519958000397}
+('violation_late', 10, 'bayes_independent_within_block', 'completed')
+{"scenario": "violation_late", "rep": 11, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.15096991599421}
+('violation_late', 11, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 20, "method": "bayes_hierarchical_within_block", "level": 1, "status": "diagnostics_passed", "seconds": 56.194082208006876}
+('violation_late', 20, 'bayes_hierarchical_within_block', 'completed')
+{"scenario": "violation_late", "rep": 11, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.381409958004951}
+('violation_late', 11, 'bayes_independent_within_block', 'completed')
+{"scenario": "violation_late", "rep": 12, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.350868249995983}
+('violation_late', 12, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 12, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.4227661670011}
+('violation_late', 12, 'bayes_independent_within_block', 'completed')
+{"scenario": "strict_order_late", "rep": 13, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.308129249999183}
+('strict_order_late', 13, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 13, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.222913917008555}
+('strict_order_late', 13, 'bayes_independent_within_block', 'completed')
+{"scenario": "violation_late", "rep": 13, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.209560917006456}
+('violation_late', 13, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 13, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.410160083003575}
+('violation_late', 13, 'bayes_independent_within_block', 'completed')
+{"scenario": "strict_order_late", "rep": 14, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.356332042007125}
+('strict_order_late', 14, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 14, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.455423874998814}
+('strict_order_late', 14, 'bayes_independent_within_block', 'completed')
+{"scenario": "violation_late", "rep": 14, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.394162917000358}
+('violation_late', 14, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 14, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.40713783299725}
+('violation_late', 14, 'bayes_independent_within_block', 'completed')
+{"scenario": "strict_order_late", "rep": 15, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.3941643750004}
+('strict_order_late', 15, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 15, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.357964582988643}
+('strict_order_late', 15, 'bayes_independent_within_block', 'completed')
+{"scenario": "equality_late", "rep": 15, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.226435415999731}
+('equality_late', 15, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "equality_late", "rep": 15, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.216743249999126}
+('equality_late', 15, 'bayes_independent_within_block', 'completed')
+{"scenario": "violation_late", "rep": 15, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.252919124992331}
+('violation_late', 15, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 15, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.248745499993674}
+('violation_late', 15, 'bayes_independent_within_block', 'completed')
+{"scenario": "strict_order_late", "rep": 16, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.125581624990446}
+('strict_order_late', 16, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 16, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.276224166998873}
+('strict_order_late', 16, 'bayes_independent_within_block', 'completed')
+{"scenario": "equality_late", "rep": 16, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.342000207994715}
+('equality_late', 16, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "equality_late", "rep": 16, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.559301957997377}
+('equality_late', 16, 'bayes_independent_within_block', 'completed')
+{"scenario": "violation_late", "rep": 16, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.796621083005448}
+('violation_late', 16, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 16, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.938166167004965}
+('violation_late', 16, 'bayes_independent_within_block', 'completed')
+{"scenario": "strict_order_late", "rep": 17, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.861957125001936}
+('strict_order_late', 17, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 17, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.818828958988888}
+('strict_order_late', 17, 'bayes_independent_within_block', 'completed')
+{"scenario": "equality_late", "rep": 17, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.632057666007313}
+('equality_late', 17, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "equality_late", "rep": 17, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.511117834001197}
+('equality_late', 17, 'bayes_independent_within_block', 'completed')
+{"scenario": "violation_late", "rep": 17, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.566545709007187}
+('violation_late', 17, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 17, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.61402145800821}
+('violation_late', 17, 'bayes_independent_within_block', 'completed')
+{"scenario": "strict_order_late", "rep": 18, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.656599750000169}
+('strict_order_late', 18, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 18, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.613903459001449}
+('strict_order_late', 18, 'bayes_independent_within_block', 'completed')
+{"scenario": "equality_late", "rep": 18, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.452956207998795}
+('equality_late', 18, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "equality_late", "rep": 18, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.514604415991926}
+('equality_late', 18, 'bayes_independent_within_block', 'completed')
+{"scenario": "violation_late", "rep": 18, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.543208667004365}
+('violation_late', 18, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 18, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.564998292000382}
+('violation_late', 18, 'bayes_independent_within_block', 'completed')
+{"scenario": "strict_order_late", "rep": 19, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.579444959003013}
+('strict_order_late', 19, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 19, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.628829624998616}
+('strict_order_late', 19, 'bayes_independent_within_block', 'completed')
+{"scenario": "equality_late", "rep": 19, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.567092665995006}
+('equality_late', 19, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "equality_late", "rep": 19, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.630620666008326}
+('equality_late', 19, 'bayes_independent_within_block', 'completed')
+{"scenario": "violation_late", "rep": 19, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.57890791700629}
+('violation_late', 19, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 19, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.59024762500485}
+('violation_late', 19, 'bayes_independent_within_block', 'completed')
+{"scenario": "strict_order_late", "rep": 20, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.52797191600257}
+('strict_order_late', 20, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "strict_order_late", "rep": 20, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.56436154099356}
+('strict_order_late', 20, 'bayes_independent_within_block', 'completed')
+{"scenario": "equality_late", "rep": 20, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 10.572473417007132}
+('equality_late', 20, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "equality_late", "rep": 20, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 10.638889125009882}
+('equality_late', 20, 'bayes_independent_within_block', 'completed')
+{"scenario": "violation_late", "rep": 20, "method": "bayes_independent_unrestricted", "level": 0, "status": "diagnostics_passed", "seconds": 9.978919415996643}
+('violation_late', 20, 'bayes_independent_unrestricted', 'completed')
+{"scenario": "violation_late", "rep": 20, "method": "bayes_independent_within_block", "level": 0, "status": "diagnostics_passed", "seconds": 9.437678624992259}
+('violation_late', 20, 'bayes_independent_within_block', 'completed')
+Final: {('mle_unrestricted', 'complete'): 60, ('mle_within_block', 'complete'): 60, ('bayes_independent_unrestricted', 'complete'): 60, ('bayes_independent_within_block', 'complete'): 60, ('bayes_hierarchical_unrestricted', 'complete'): 60, ('bayes_hierarchical_within_block', 'complete'): 60}

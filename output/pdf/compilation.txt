@@ -1,0 +1,10 @@
+note: using only cached resource files
+note: Running TeX ...
+note: Rerunning TeX because "Report.aux" changed ...
+note: Running xdvipdfmx ...
+note: Writing `output/pdf/Report.log` (13.6884765625 KiB)
+note: Writing `output/pdf/Report.pdf` (181.369140625 KiB)
+note: Skipped writing 2 intermediate files (use --keep-intermediates to keep them)
+warning: Report.tex:362: Underfull \hbox (badness 8170) in paragraph at lines 361--362
+warning: Report.tex:362: Underfull \hbox (badness 8170) in paragraph at lines 361--362
+warning: warnings were issued by the TeX engine; use --print and/or --keep-logs for details.

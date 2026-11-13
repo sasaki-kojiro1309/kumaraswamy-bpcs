@@ -1,0 +1,289 @@
+\subsubsection*{Completed local execution and validation}
+
+All 60 original datasets were retained with their recorded identities and seeds. The final registry has 360 valid fits out of 360 planned combinations, with 0 missing and 0 unresolved invalid combinations. All computation was executed locally on the MacBook (10 CPU cores, 16 GiB RAM), with three worker processes and one BLAS/OpenMP thread per worker.
+
+The baseline MCMC uses four independent chains, 1,000 warm-up and 2,000 retained iterations per chain. Failed diagnostics trigger a predetermined increase to 2,000/8,000 warm-up/retained iterations, then 4,000/32,000 if needed. The original method--dataset seed, priors, likelihood and thresholds ($\widehat R\le1.01$, bulk and tail ESS $\ge400$ for every monitored parameter and reliability quantity) are retained. Historical successes are reused without refitting. Historical failures remain available. The first acceptable effort level is selected; no favorable-seed selection is performed.
+
+The historical counts were 60, 60, 31, 31, 31 and 27. There were 109 uncompleted combinations and 11 restricted hierarchical diagnostic failures. The completion computed 120 successful replacements/additions and preserved eight additional baseline diagnostic failures before longer retries. All 19 historical/new failed records are retained. All additional successful fits passed by the second effort level; the third level was unnecessary.
+
+The hierarchical shape update now evaluates the identical conditional kernel $(M+A_a-1)\log a+(a-1)T-B_a a-\sum_iH_i(a)-\sum_iB_iW_i(a)$ from validated block arrays rather than rebuilding each observation contribution at every slice proposal. Independent row-likelihood ratio regression checks verify this optimization. The posterior target and Gibbs/slice kernels are unchanged.
+
+\begin{table}[htbp]\centering\small
+
+\caption{Verified valid fits. Every method uses the same original 20 datasets within each scenario.}\label{tab:sim-counts}
+
+\begin{tabular}{lrrrr}\hline Method & Strict & Equality & Violation & Total\\\hline
+
+MLE U & 20 & 20 & 20 & 60\\
+
+MLE R & 20 & 20 & 20 & 60\\
+
+Independent U & 20 & 20 & 20 & 60\\
+
+Independent R & 20 & 20 & 20 & 60\\
+
+Hierarchical U & 20 & 20 & 20 & 60\\
+
+Hierarchical R & 20 & 20 & 20 & 60\\
+
+\hline\end{tabular}\end{table}
+
+\subsubsection*{Fair six-method parameter accuracy}
+
+The six-way comparison takes the intersection of actual original dataset IDs and verifies their data hashes and truths. It contains all 20 datasets in every scenario for all five primary parameters. Tables below report AB and MSE for both causes in both blocks; no ranking is based on incompatible subsets. Full precision estimates, auxiliary quantities, 15 pairwise contrasts, paired squared-error-difference Monte Carlo SEs, and dataset memberships are saved in the versioned CSV exports.
+
+\begin{table}[htbp]\centering\small
+
+\caption{Strict ordering: absolute bias on the identical 20 datasets. All denominators are 20.}
+
+\begin{tabular}{lrrrrr}\hline Method & $a$ & $b_{A1}$ & $b_{A2}$ & $b_{B1}$ & $b_{B2}$\\\hline
+
+MLE U & 0.099645 & 0.067722 & 0.212042 & 0.150948 & 0.555558\\
+
+MLE R & 0.099645 & 0.067722 & 0.212042 & 0.150948 & 0.555558\\
+
+Independent U & 0.090574 & 0.072589 & 0.229392 & 0.169395 & 0.615072\\
+
+Independent R & 0.090213 & 0.065758 & 0.236511 & 0.158939 & 0.619236\\
+
+Hierarchical U & 0.071780 & 0.100886 & 0.203799 & 0.152663 & 0.440865\\
+
+Hierarchical R & 0.075417 & 0.095180 & 0.220013 & 0.148532 & 0.464578\\
+
+\hline\end{tabular}\end{table}
+
+\begin{table}[htbp]\centering\small
+
+\caption{Strict ordering: mean squared error on the identical 20 datasets. All denominators are 20.}
+
+\begin{tabular}{lrrrrr}\hline Method & $a$ & $b_{A1}$ & $b_{A2}$ & $b_{B1}$ & $b_{B2}$\\\hline
+
+MLE U & 0.051452 & 0.045749 & 0.369954 & 0.128948 & 0.949672\\
+
+MLE R & 0.051452 & 0.045749 & 0.369954 & 0.128948 & 0.949672\\
+
+Independent U & 0.049317 & 0.047925 & 0.393239 & 0.140906 & 1.071643\\
+
+Independent R & 0.049215 & 0.043173 & 0.389503 & 0.135021 & 1.062474\\
+
+Hierarchical U & 0.036386 & 0.045906 & 0.314938 & 0.105174 & 0.642633\\
+
+Hierarchical R & 0.036750 & 0.043125 & 0.318495 & 0.103559 & 0.652734\\
+
+\hline\end{tabular}\end{table}
+
+\paragraph{Strict ordering.} Neither block activates classical pooling, so both MLEs coincide. Hierarchical unrestricted shape MSE is 0.036386, versus 0.051452 for MLE (29.3\% lower in this experiment). The hierarchical prior also lowers the observed MSE of both cause coefficients in block B. The independent Bayesian procedure does not uniformly improve cause-parameter MSE over MLE. Restriction changes Bayesian cause allocation slightly, with mixed effects across coefficients.
+
+\begin{table}[htbp]\centering\small
+
+\caption{Equality: absolute bias on the identical 20 datasets. All denominators are 20.}
+
+\begin{tabular}{lrrrrr}\hline Method & $a$ & $b_{A1}$ & $b_{A2}$ & $b_{B1}$ & $b_{B2}$\\\hline
+
+MLE U & 0.004033 & 0.014241 & 0.056455 & 0.061062 & 0.067459\\
+
+MLE R & 0.004033 & 0.081653 & 0.123867 & 0.028251 & 0.156772\\
+
+Independent U & 0.004822 & 0.005685 & 0.066396 & 0.088925 & 0.093642\\
+
+Independent R & 0.005117 & 0.164463 & 0.223269 & 0.160703 & 0.341958\\
+
+Hierarchical U & 0.012988 & 0.011302 & 0.078076 & 0.028199 & 0.043036\\
+
+Hierarchical R & 0.011571 & 0.145226 & 0.231858 & 0.200870 & 0.278959\\
+
+\hline\end{tabular}\end{table}
+
+\begin{table}[htbp]\centering\small
+
+\caption{Equality: mean squared error on the identical 20 datasets. All denominators are 20.}
+
+\begin{tabular}{lrrrrr}\hline Method & $a$ & $b_{A1}$ & $b_{A2}$ & $b_{B1}$ & $b_{B2}$\\\hline
+
+MLE U & 0.037730 & 0.126493 & 0.182972 & 0.371354 & 0.174918\\
+
+MLE R & 0.037730 & 0.096261 & 0.190394 & 0.261375 & 0.232453\\
+
+Independent U & 0.037176 & 0.131260 & 0.193594 & 0.402000 & 0.191549\\
+
+Independent R & 0.037293 & 0.098249 & 0.231350 & 0.241922 & 0.391189\\
+
+Hierarchical U & 0.028812 & 0.111292 & 0.169270 & 0.258799 & 0.121313\\
+
+Hierarchical R & 0.028690 & 0.076524 & 0.201372 & 0.173942 & 0.240126\\
+
+\hline\end{tabular}\end{table}
+
+\paragraph{Equality.} Restricted MLE reduces block-A cause-1 MSE from 0.126493 to 0.096261, while cause-2 MSE rises from 0.182972 to 0.190394. The corresponding Bayesian restrictions also improve cause 1 and worsen cause 2 in both blocks. Pooling and one-sided posterior truncation therefore trade variance reduction against asymmetric estimation bias even at a correct equality boundary.
+
+\begin{table}[htbp]\centering\small
+
+\caption{Ordering violation: absolute bias on the identical 20 datasets. All denominators are 20.}
+
+\begin{tabular}{lrrrrr}\hline Method & $a$ & $b_{A1}$ & $b_{A2}$ & $b_{B1}$ & $b_{B2}$\\\hline
+
+MLE U & 0.091063 & 0.381013 & 0.052366 & 0.766011 & 0.174321\\
+
+MLE R & 0.091063 & 0.283311 & 0.716689 & 0.279834 & 1.220166\\
+
+Independent U & 0.082042 & 0.403670 & 0.058222 & 0.841169 & 0.198857\\
+
+Independent R & 0.081104 & 0.334792 & 0.796629 & 0.343048 & 1.380331\\
+
+Hierarchical U & 0.060655 & 0.351821 & 0.078592 & 0.567210 & 0.146451\\
+
+Hierarchical R & 0.051623 & 0.362966 & 0.764470 & 0.525702 & 1.175022\\
+
+\hline\end{tabular}\end{table}
+
+\begin{table}[htbp]\centering\small
+
+\caption{Ordering violation: mean squared error on the identical 20 datasets. All denominators are 20.}
+
+\begin{tabular}{lrrrrr}\hline Method & $a$ & $b_{A1}$ & $b_{A2}$ & $b_{B1}$ & $b_{B2}$\\\hline
+
+MLE U & 0.069376 & 1.000758 & 0.064089 & 3.089227 & 0.348802\\
+
+MLE R & 0.069376 & 0.396180 & 0.829559 & 1.061293 & 2.471790\\
+
+Independent U & 0.067366 & 1.069561 & 0.068385 & 3.462135 & 0.394503\\
+
+Independent R & 0.067298 & 0.421634 & 1.004535 & 1.100288 & 3.120898\\
+
+Hierarchical U & 0.046078 & 0.811352 & 0.057145 & 1.765545 & 0.179757\\
+
+Hierarchical R & 0.043810 & 0.350683 & 0.844107 & 0.722053 & 1.924343\\
+
+\hline\end{tabular}\end{table}
+
+\paragraph{Ordering violation.} Restricted MLE changes block-A cause-1 MSE from 1.000758 to 0.396180, but cause-2 MSE rises from 0.064089 to 0.829559. Both Bayesian families show the same direction of tradeoff, including block B. A lower MSE for the larger true coefficient does not validate the false restriction; bias and variance can offset for one coordinate while worsening the other. The complete data-ID comparison resolves the earlier one-dataset restricted-hierarchical subset limitation.
+
+\subsubsection*{Interval coverage and precision}
+
+Classical entries below are positive log-Wald confidence intervals; Bayesian entries are 95\% shortest contiguous posterior-draw credible intervals. These are distinct procedures. Restricted individual-cause classical intervals remain unsupported and are not replaced by ordinary Wald intervals. All supported primary intervals have 20 valid replications per scenario. Coverage changes in steps of 0.05; at nominal 0.95 its binomial Monte Carlo SE is about 0.049. Narrower intervals cannot be interpreted independently of coverage.
+
+\begin{table}[htbp]\centering\scriptsize
+
+\caption{Strict ordering: CP / AW for marginal 95\% intervals. Each available entry has denominator 20; -- denotes unsupported.}
+
+\begin{tabular}{lrrrrr}\hline Method & $a$ & $b_{A1}$ & $b_{A2}$ & $b_{B1}$ & $b_{B2}$\\\hline
+
+MLE U & 0.95 / 0.872 & 0.95 / 1.052 & 0.90 / 2.152 & 0.95 / 1.835 & 1.00 / 4.028\\
+
+MLE R & 0.95 / 0.872 & -- & -- & -- & --\\
+
+Independent U & 0.95 / 0.852 & 1.00 / 0.887 & 0.90 / 1.986 & 0.95 / 1.533 & 0.95 / 3.685\\
+
+Independent R & 0.95 / 0.851 & 1.00 / 0.869 & 0.90 / 1.978 & 0.95 / 1.508 & 0.95 / 3.662\\
+
+Hierarchical U & 0.95 / 0.791 & 1.00 / 0.874 & 0.95 / 1.855 & 0.95 / 1.392 & 0.95 / 3.214\\
+
+Hierarchical R & 0.95 / 0.798 & 1.00 / 0.860 & 0.90 / 1.869 & 0.95 / 1.375 & 0.95 / 3.235\\
+
+\hline\end{tabular}\end{table}
+
+\begin{table}[htbp]\centering\scriptsize
+
+\caption{Equality: CP / AW for marginal 95\% intervals. Each available entry has denominator 20; -- denotes unsupported.}
+
+\begin{tabular}{lrrrrr}\hline Method & $a$ & $b_{A1}$ & $b_{A2}$ & $b_{B1}$ & $b_{B2}$\\\hline
+
+MLE U & 1.00 / 0.834 & 0.95 / 1.391 & 0.95 / 1.464 & 0.95 / 2.415 & 1.00 / 2.404\\
+
+MLE R & 1.00 / 0.834 & -- & -- & -- & --\\
+
+Independent U & 0.95 / 0.816 & 0.95 / 1.255 & 0.90 / 1.333 & 0.90 / 2.172 & 1.00 / 2.160\\
+
+Independent R & 1.00 / 0.817 & 0.85 / 0.994 & 0.95 / 1.368 & 0.90 / 1.725 & 1.00 / 2.268\\
+
+Hierarchical U & 1.00 / 0.758 & 0.95 / 1.207 & 0.90 / 1.273 & 0.90 / 1.934 & 1.00 / 1.948\\
+
+Hierarchical R & 1.00 / 0.766 & 0.85 / 0.965 & 0.95 / 1.304 & 0.85 / 1.559 & 1.00 / 2.034\\
+
+\hline\end{tabular}\end{table}
+
+\begin{table}[htbp]\centering\scriptsize
+
+\caption{Ordering violation: CP / AW for marginal 95\% intervals. Each available entry has denominator 20; -- denotes unsupported.}
+
+\begin{tabular}{lrrrrr}\hline Method & $a$ & $b_{A1}$ & $b_{A2}$ & $b_{B1}$ & $b_{B2}$\\\hline
+
+MLE U & 0.85 / 0.864 & 0.75 / 2.416 & 1.00 / 1.085 & 0.80 / 4.491 & 0.90 / 1.956\\
+
+MLE R & 0.85 / 0.864 & -- & -- & -- & --\\
+
+Independent U & 0.90 / 0.851 & 0.75 / 2.231 & 0.90 / 0.911 & 0.90 / 4.085 & 1.00 / 1.629\\
+
+Independent R & 0.90 / 0.847 & 0.50 / 1.315 & 0.35 / 1.458 & 0.60 / 2.464 & 0.45 / 2.738\\
+
+Hierarchical U & 0.90 / 0.782 & 0.80 / 2.046 & 1.00 / 0.874 & 0.95 / 3.405 & 1.00 / 1.404\\
+
+Hierarchical R & 0.90 / 0.778 & 0.50 / 1.187 & 0.25 / 1.316 & 0.55 / 1.977 & 0.45 / 2.199\\
+
+\hline\end{tabular}\end{table}
+
+Under the deliberately false restriction, Bayesian credible intervals for the smaller true cause-2 coefficients can have very poor repeated-sampling coverage. An interval is conditional on the assumed restricted model; a nominal 95\% posterior probability does not protect against a scientifically false constraint. The exact restricted probability confidence-set intersections can be empty: those are retained as zero coverage and zero set length. All interval families, explicit denominators and negative raw-Wald endpoint flags remain in the supplementary CSV files.
+
+\subsubsection*{MCMC and computational performance}
+
+The historical restricted hierarchical failures were concentrated in order violation, with low bulk ESS and sometimes elevated split rank R-hat. Coordinate-wise truncated Gamma updates near the equality boundary mix more slowly in these cases. Longer fixed-seed runs resolved them without changing the ordering implementation. All monitored model parameters, hyperparameters and reliability transforms in every selected Bayesian fit meet the original criteria. Parameter-wise R-hat, bulk/tail ESS and posterior-mean MCSE are exported; representative traces and posterior densities use original repetition 20 in every scenario.
+
+\begin{table}[htbp]\centering\small
+
+\caption{Observed local fitting cost in seconds. Selected means combine historical and optimized code and different chain lengths; they are not controlled speed benchmarks. All-attempt totals include failures.}
+
+\begin{tabular}{lrrr}\hline Method & Mean selected & Median selected & All-attempt total\\\hline
+
+MLE U & 0.0105 & 0.0092 & 0.632\\
+
+MLE R & 0.0099 & 0.0086 & 0.594\\
+
+Independent U & 12.6495 & 10.6131 & 758.968\\
+
+Independent R & 12.4733 & 10.6503 & 748.398\\
+
+Hierarchical U & 75.0175 & 80.7912 & 4513.559\\
+
+Hierarchical R & 80.0591 & 56.9677 & 6421.928\\
+
+\hline\end{tabular}\end{table}
+
+Runtime totals omit file I/O and orchestration; no precise total wall-clock runtime was captured for the initial completion invocation. The additional 128 fit attempts consumed about 2,371.7 summed process-seconds across the three workers. The actual posterior procedures remain substantially more expensive than the analytic/profile MLEs.
+
+\subsubsection*{Interpretation, reproducibility and limitations}
+
+The hierarchy has lower observed shape MSE than MLE and the independent prior in all three scenarios, and its unrestricted estimator has lower MSE for every primary parameter than the independent unrestricted estimator in this study. This is evidence for these particular hyperpriors and this small design, not a universal Bayesian advantage. Independent scale-prior Bayesian estimates do not uniformly improve on MLE. Restriction leaves classical shape and totals unchanged; under the independent prior their posterior distributions are also invariant, up to Monte Carlo error from separate method seeds. The hierarchy does not share that invariance.
+
+All primary accuracy comparisons now use identical full-six data-ID sets. No ranking averages errors across parameters with different scales. Twenty replications per scenario, one sample size, and terminal withdrawals only remain major limits. Prior sensitivity, alternate censoring designs and much larger replication counts are needed before broad claims about estimator or interval superiority. Passing diagnostics is not a proof of convergence, and Monte Carlo error remains nonzero.
+
+\noindent The saved-result analysis is reproduced locally by:
+
+\begin{quote}\small\ttfamily .venv/bin/python -m experiments.completion\_study analyze\end{quote}
+
+The fitting-resume command, dataset-ID registry, full precision tables and figure index are documented in \texttt{docs/SIMULATION\_COMPLETION.md}. Historical results are preserved separately.
+
+\begin{figure}[p]\centering
+
+\includegraphics[width=0.98\textwidth]{results/simulation_completion_v1/latest/figures/mse_strict_order_late.pdf}
+
+\caption{Strict ordering: primary-parameter MSE for all six methods on the same 20 original datasets. U and R denote unrestricted and restricted. Axes start at zero; scales differ by parameter.}
+
+\end{figure}
+
+\begin{figure}[p]\centering
+
+\includegraphics[width=0.98\textwidth]{results/simulation_completion_v1/latest/figures/mse_equality_late.pdf}
+
+\caption{Equality: primary-parameter MSE for all six methods on the same 20 original datasets. U and R denote unrestricted and restricted. Axes start at zero; scales differ by parameter.}
+
+\end{figure}
+
+\begin{figure}[p]\centering
+
+\includegraphics[width=0.98\textwidth]{results/simulation_completion_v1/latest/figures/mse_violation_late.pdf}
+
+\caption{Ordering violation: primary-parameter MSE for all six methods on the same 20 original datasets. U and R denote unrestricted and restricted. Axes start at zero; scales differ by parameter.}
+
+\end{figure}
+
+\clearpage
